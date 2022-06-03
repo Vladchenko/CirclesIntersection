@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.ConcurrentModificationException;
 
 import static circlesintersection.GeometryUtils.*;
+import static circlesintersection.Settings.DEBUG_ENABLED;
 
 /**
  * Represents physical model. Instantiates and computes intersections of {@link Arc}s.
@@ -282,7 +283,7 @@ public class Arcs {
             anglePairsList.clear();
         }
 
-        if (Settings.getDEBUG()) {
+        if (DEBUG_ENABLED) {
             System.out.println("List of an intersecting circles:");
             printAnglePairs();
             System.out.println();
@@ -297,7 +298,7 @@ public class Arcs {
         } catch (ConcurrentModificationException ex) {
             System.out.println(ex.getMessage());
         }
-        if (Settings.getDEBUG()) {
+        if (DEBUG_ENABLED) {
             System.out.println("List of a sorted intersecting circles:");
             printAnglePairs();
             System.out.println();
@@ -345,7 +346,7 @@ public class Arcs {
             }
         }
 
-        if (Settings.getDEBUG()) {
+        if (DEBUG_ENABLED) {
             System.out.println("Redundant circles have been removed:");
             printAnglePairs();
             System.out.println();
@@ -459,7 +460,7 @@ public class Arcs {
             }
         }
 
-        if (Settings.getDEBUG()) {
+        if (DEBUG_ENABLED) {
             System.out.println("Arcs to be drawn are:");
             printAnglePairsFinal();
             System.out.println();

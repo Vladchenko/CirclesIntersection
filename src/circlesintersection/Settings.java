@@ -9,11 +9,13 @@ import java.awt.Toolkit;
  */
 public class Settings {
 
+    // Switching a debug method
+    public static final boolean DEBUG_ENABLED = false;
+    // To use gradient for drawing
+    public static final boolean GRADIENT_ENABLED = true;
     public static final String APPLICATION_TITLE = "Circles Intersecting v1.1";
 
     //<editor-fold defaultstate="collapsed" desc="Fields">
-    // Switching a debug method
-    private static final boolean DEBUG = false;     
     /** 
      * Include circles that do not intersect with any other circles into 
      * multiplicity of drawing circles drawn with solid line, not dashed.
@@ -96,10 +98,6 @@ public class Settings {
 
     public DrawKind getDrawKind() {
         return drawKind;
-    }
-
-    public static boolean getDEBUG() {
-        return DEBUG;
     }
 
     public int getIncrement() {
