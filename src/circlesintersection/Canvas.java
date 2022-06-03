@@ -6,6 +6,7 @@ import circlesintersection.listeners.UIUpdateCallbacks;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 import static circlesintersection.Settings.APPLICATION_TITLE;
 
@@ -67,6 +68,9 @@ public class Canvas {
         frame.setBackground(Color.BLACK);
         frame.setTitle(APPLICATION_TITLE);
         frame.setUndecorated(true);
+        frame.setCursor(frame.getToolkit().createCustomCursor(
+                new BufferedImage(3, 3, BufferedImage.TYPE_INT_ARGB), new Point(0, 0),
+                "null"));
     }
 
     private void initializeViews(Settings settings) {
