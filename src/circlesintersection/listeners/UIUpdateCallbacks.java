@@ -15,6 +15,11 @@ public interface UIUpdateCallbacks {
 
     /**
      * Update arcs, compute their intersections and paint them.
+     */
+    void updateArcsAndRepaint();
+
+    /**
+     * Update arcs, compute their intersections and paint them.
      *
      * @param point coordinate for a specific circle
      */

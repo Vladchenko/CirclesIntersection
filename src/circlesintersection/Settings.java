@@ -11,8 +11,6 @@ public class Settings {
 
     // Switching a debug method
     public static final boolean DEBUG_ENABLED = false;
-    // To use gradient for drawing
-    public static final boolean GRADIENT_ENABLED = true;
     public static final String APPLICATION_TITLE = "Circles Intersecting v1.1";
 
     //<editor-fold defaultstate="collapsed" desc="Fields">
@@ -21,6 +19,7 @@ public class Settings {
      * multiplicity of drawing circles drawn with solid line, not dashed.
      */
     private static final boolean INCLUDE_NOT_INTERSECTED = true;
+
     private final int populationMode = 0;  // Circles population mode
     //** Number of circles present on a screen
     private final int circlesQuantity = 80;
@@ -34,6 +33,11 @@ public class Settings {
     private final int canvasHeight = (int) screenSize.getHeight();// - 8; //- (int) screenSize.getHeight() / 9;
     private final int canvasWidthHalf = canvasWidth / 2;// - 10;
     private final int canvasHeightHalf = canvasHeight / 2;// - 24;
+
+    // To use gradient for drawing
+    private boolean gradientEnabled = true;
+    // To use antialiasing for drawing
+    private boolean antiAliasingEnabled = false;
     //** Time stamp of the moment of the beginning of a rendering
     private long timeBegin;
     //** Time stamp of the moment of the ending of a rendering
@@ -50,12 +54,15 @@ public class Settings {
     private final Color subjectCircleColor = new Color(100, 200, 255);
     private static Settings settings;
     //** Kind of drawing of the circles - 
-    private final DrawKind drawKind = DrawKind.both;
+    private DrawKind drawKind = DrawKind.both;
 //</editor-fold>
 
     private Settings() {
     }
 
+    /**
+     * @return Retrieve instance of this class.
+     */
     public static Settings getInstance() {
         if (settings == null) {
             settings = new Settings();
@@ -64,6 +71,22 @@ public class Settings {
     }
 
     //<editor-fold defaultstate="collapsed" desc="Getters & Setters">
+    public boolean isAntiAliasingEnabled() {
+        return antiAliasingEnabled;
+    }
+
+    public void setAntiAliasingEnabled(boolean antiAliasingEnabled) {
+        this.antiAliasingEnabled = antiAliasingEnabled;
+    }
+
+    public boolean isGradientEnabled() {
+        return gradientEnabled;
+    }
+
+    public void setGradientEnabled(boolean gradientEnabled) {
+        this.gradientEnabled = gradientEnabled;
+    }
+
     public long getTimeBegin() {
         return timeBegin;
     }
@@ -148,4 +171,19 @@ public class Settings {
         return INCLUDE_NOT_INTERSECTED;
     }
     //</editor-fold>
+
+    /**
+     * Changing a mode for drawing
+     */
+    public void changeDrawingMode() {
+        if (drawKind == DrawKind.arcs) {
+            drawKind = DrawKind.circles;
+        } else
+        if (drawKind == DrawKind.circles) {
+            drawKind = DrawKind.both;
+        } else
+        if (drawKind == DrawKind.both) {
+            drawKind = DrawKind.arcs;
+        }
+    }
 }

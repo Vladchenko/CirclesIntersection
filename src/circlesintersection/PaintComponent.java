@@ -11,7 +11,6 @@ import java.awt.geom.Arc2D;
 import java.util.ArrayList;
 
 import static circlesintersection.Settings.DEBUG_ENABLED;
-import static circlesintersection.Settings.GRADIENT_ENABLED;
 
 /**
  * TODO
@@ -49,31 +48,28 @@ public class PaintComponent extends JPanel implements UIUpdateCallbacks {
 
         g2.setColor(settings.getFadedArcsColor());
 
-        RadialGradientPaint gradientPaint;
-
-        // Smooths the picture, but slows down drawing a lot
-//        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        if (settings.getDrawKind().equals(DrawKind.circles)
-                || settings.getDrawKind().equals(DrawKind.both)) {
-            for (int i = 0; i < arcs.getArcsArray().length; i++) {
-                drawCircle(g2, arcs.getArcsArray()[i], settings.getArcsColor(), settings.getFadedArcsColor());
-                if (DEBUG_ENABLED) {
-                    if (i < 10) {
-                        g2.drawString(Integer.toString(i), (int) arcs.getArcsArray()[i].getX() - 3, (int) arcs.getArcsArray()[i].getY() - 7);
-                    } else {
-                        g2.drawString(Integer.toString(i), (int) arcs.getArcsArray()[i].getX() - 6, (int) arcs.getArcsArray()[i].getY() - 7);
-                    }
+        if (settings.isAntiAliasingEnabled()) {
+            // Smooths the picture, but slows down drawing a lot
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        }
+        for (int i = 0; i < arcs.getArcsArray().length; i++) {
+            drawCircle(g2, arcs.getArcsArray()[i], settings.getArcsColor(), settings.getFadedArcsColor());
+            if (DEBUG_ENABLED) {
+                if (i < 10) {
+                    g2.drawString(Integer.toString(i), (int) arcs.getArcsArray()[i].getX() - 3, (int) arcs.getArcsArray()[i].getY() - 7);
+                } else {
+                    g2.drawString(Integer.toString(i), (int) arcs.getArcsArray()[i].getX() - 6, (int) arcs.getArcsArray()[i].getY() - 7);
                 }
             }
-            // Drawing a last circle with a different colors, since it is the one taking a mouse coordinates for its position.
-            drawCircle(g2, arcs.getArcsArray()[arcs.getArcsArray().length-1], settings.getSubjectCircleColor(), settings.getFadedSubjectCircleColor());
         }
+        // Drawing a last circle with a different colors, since it is the one taking a mouse coordinates for its position.
+        drawCircle(g2, arcs.getArcsArray()[arcs.getArcsArray().length - 1], settings.getSubjectCircleColor(), settings.getFadedSubjectCircleColor());
 
         g2.setStroke(       //new BasicStroke(2));
-        new BasicStroke(3,
-                BasicStroke.CAP_ROUND,
-                BasicStroke.JOIN_ROUND,
-                2, null, 0.0f));
+                new BasicStroke(3,
+                        BasicStroke.CAP_ROUND,
+                        BasicStroke.JOIN_ROUND,
+                        2, null, 0.0f));
         g2.setColor(settings.getArcsColor());
 
         // Drawing an arcs for a not intersected areas of circles
@@ -89,13 +85,16 @@ public class PaintComponent extends JPanel implements UIUpdateCallbacks {
 
         //* Time taken in nanoseconds to draw a frame.
         settings.setTimeTemp(System.nanoTime() - settings.getTimeBegin());
-        g2.drawString("Nanoseconds for frame: " + settings.getTimeTemp() / 1_000_000
-                + "."
-                + Long.toString(settings.getTimeTemp() / 1_000).substring(1), 10, 40);
+        g2.drawString("Frame render: " + settings.getTimeTemp() / 1_000_000
+                        + "."
+                        + Long.toString(settings.getTimeTemp() / 10_000).substring(1)
+                        + " nanoseconds",
+                10,
+                40);
     }
 
     private void drawCircle(Graphics2D g2, Arc arc, Color mainColor, Color fadedColor) {
-        if (GRADIENT_ENABLED) {
+        if (settings.isGradientEnabled()) {
             RadialGradientPaint gradientPaint = new RadialGradientPaint(
                     (float) arc.getX(),
                     (float) arc.getY(),
@@ -108,17 +107,34 @@ public class PaintComponent extends JPanel implements UIUpdateCallbacks {
                     (int) arc.getY() - (int) arc.getDiameter() / 2,
                     (int) arc.getDiameter(), (int) arc.getDiameter());
         }
-        g2.setPaint(fadedColor);
-        // Drawing an intersected arc of circle
-        // 1) Since both the diameters (x and y ) match, lets use oval instead of circle
-        // 2) CPU cost for drawing an arc is more than drawing a circle, this is why here we draw a circle.
-        // Anyway, a not intersected arc will be drawn later in a code and, overdraw the needed circle area.
-        g2.drawOval((int) arc.getX() - (int) arc.getDiameter() / 2,
-                (int) arc.getY() - (int) arc.getDiameter() / 2,
-                (int) arc.getDiameter(), (int) arc.getDiameter());
+        if (settings.getDrawKind().equals(DrawKind.circles)
+                || settings.getDrawKind().equals(DrawKind.both)) {
+            g2.setPaint(fadedColor);
+            // Drawing an intersected arc of circle
+            // 1) Since both the diameters (x and y ) match, lets use oval instead of circle
+            // 2) CPU cost for drawing an arc is more than drawing a circle, this is why here we draw a circle.
+            // Anyway, a not intersected arc will be drawn later in a code and, overdraw the needed circle area.
+            g2.drawOval((int) arc.getX() - (int) arc.getDiameter() / 2,
+                    (int) arc.getY() - (int) arc.getDiameter() / 2,
+                    (int) arc.getDiameter(), (int) arc.getDiameter());
+        }
         g2.setPaint(mainColor);
         // Drawing a center of a circle.
-        g2.drawOval((int) arc.getX(), (int) arc.getY(), 1,1);
+        g2.drawOval((int) arc.getX(), (int) arc.getY(), 1, 1);
+    }
+
+    @Override
+    public void createNewArcsAndRepaint() {
+        settings.setTimeBegin(System.nanoTime());
+        arcs = new Arcs(settings);
+        arcs.runRendering();
+        repaint();
+    }
+
+    @Override
+    public void updateArcsAndRepaint() {
+        settings.setTimeBegin(System.nanoTime());
+        repaint();
     }
 
     @Override
@@ -163,14 +179,6 @@ public class PaintComponent extends JPanel implements UIUpdateCallbacks {
             arcs.getArcsArray()[settings.getCirclesQuantity() - 1].setDiameter(
                     arcs.getArcsArray()[settings.getCirclesQuantity() - 1].getDiameter() + 10);
         }
-        arcs.runRendering();
-        repaint();
-    }
-
-    @Override
-    public void createNewArcsAndRepaint() {
-        settings.setTimeBegin(System.nanoTime());
-        arcs = new Arcs(settings);
         arcs.runRendering();
         repaint();
     }

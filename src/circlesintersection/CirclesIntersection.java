@@ -19,7 +19,7 @@ public class CirclesIntersection {
         new Canvas(
                 settings,
                 new MouseOpsListener(paintComponent),
-                new KeyboardOpsListener(paintComponent),
+                new KeyboardOpsListener(paintComponent, settings),
                 paintComponent
         ).initializeRendering();
     }

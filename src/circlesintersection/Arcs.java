@@ -6,9 +6,8 @@ import circlesintersection.models.Arc;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.PointerInfo;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.ConcurrentModificationException;
+import java.lang.reflect.Array;
+import java.util.*;
 
 import static circlesintersection.GeometryUtils.*;
 import static circlesintersection.Settings.DEBUG_ENABLED;
@@ -314,7 +313,7 @@ public class Arcs {
              * circles, then it means that a circle [circleIndex2] is immersed
              * into (or placed inside) of a circle [circleIndex1]. If that is so,
              * then circle [circleIndex2] is marked "Excluded". It also means that
-             * this circle will not regarded as the one to be checked
+             * this circle will not be regarded as the one to be checked
              * an intersections with.
              */
             if (arcs[circleIndex1].getDiameter() / 2 > computeDistance(arcs[circleIndex1], arcs[circleIndex2])
@@ -454,9 +453,7 @@ public class Arcs {
                             anglePairsListFinal.add(anglePair);
                         }
                     }
-
                 }
-
             }
         }
 
