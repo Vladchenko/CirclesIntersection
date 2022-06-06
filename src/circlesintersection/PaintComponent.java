@@ -38,7 +38,8 @@ public class PaintComponent extends JPanel implements UiUpdateListener {
     public void paintComponent(Graphics g) {
 
         super.setBackground(Color.BLACK);
-//        super.paintComponent(g);  // Seems not needed
+        // Erasing a previous drawing
+        super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
         // Changing appearance for a measuring lines
