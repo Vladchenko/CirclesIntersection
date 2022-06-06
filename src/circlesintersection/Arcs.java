@@ -158,7 +158,7 @@ public class Arcs {
         anglePairsListArray.add(anglePairsListNew);
     }
 
-    //** Debug method. Prints anglePairs to console.
+    /** Debug method. Prints anglePairs to console. */
     private void printAnglePairs() {
         for (ArrayList<AnglePair> anglePairs : anglePairsListArray) {
 //            System.out.println("Arc #" + i++ + " inters-s with arcs #"+ itArray.next());
@@ -212,10 +212,10 @@ public class Arcs {
          */
         AnglePair anglePair = new AnglePair();
 
-        //** Passing through all the circles */
+        // Passing through all the circles */
         for (int i = 0; i < settings.getCirclesQuantity(); i++) {
             intersected = false;
-            //** If circle(arc) is not excluded */
+            // If circle(arc) is not excluded */
             if (!arcsArray[i].isExcluded()) {
                 for (int j = 0; j < settings.getCirclesQuantity(); j++) {
                     if (i != j && !arcsArray[j].isExcluded()) {
@@ -227,7 +227,7 @@ public class Arcs {
                         if ((arcsArray[i].getDiameter() / 2 + arcsArray[j].getDiameter() / 2 > l)) {
                             radius1 = arcsArray[i].getDiameter() / 2;
                             radius2 = arcsArray[j].getDiameter() / 2;
-                            //** Computing angle between circles oArcs[i] and oArcs[j]
+                            // Computing angle between circles oArcs[i] and oArcs[j]
                             intermediateAnglesArray[i] = computeAngle(arcsArray[i], arcsArray[j], AngleKind.RAD);
                             /*
                              * Computing a beginning and an ending angles of an
@@ -243,9 +243,9 @@ public class Arcs {
                             anglePair.setAngleBegin(convertRadToGrad(beta));
                             anglePair.setAngleEnd(convertRadToGrad(gamma));
 
-                            //** To see the number of an intersecting circle */
+                            // To see the number of an intersecting circle */
                             //anglePair.number = oArcs[j].getNumber();
-                            //** To see the number of own circle */
+                            // To see the number of own circle */
                             anglePair.setNumber(arcsArray[i].getNumber());
 
                             if (!Double.isNaN(anglePair.getAngleBegin())) {
@@ -265,9 +265,9 @@ public class Arcs {
              */
             if (!intersected
                     && Settings.isINCLUDE_NOT_INTERSECTED()) {
-                //** To see the number of an intersecting circle
+                // To see the number of an intersecting circle
                 // anglePair.number = oArcs[j].getNumber();
-                //** To see the number of own circle
+                // To see the number of own circle
                 anglePair.setNumber(arcsArray[i].getNumber());
                 anglePair.setAngleBegin(0);
                 anglePair.setAngleEnd(0);

@@ -48,7 +48,7 @@ public class AnglePair {
     }
 
     /**
-     * Comparator for angle pairs.
+     * Comparator for instances of this class.
      */
     public static class AnglePairComparator implements Comparator<AnglePair> {
 

@@ -1,21 +1,22 @@
 package circlesintersection.listeners;
 
+import java.awt.*;
 import java.awt.event.*;
 
 /**
- * TODO
+ * Listener for a mouse clicks and wheel rotating.
  */
 public class MouseOpsListener implements MouseListener, MouseMotionListener, MouseWheelListener {
 
-    private final UIUpdateCallbacks callbacks;
+    private final UiUpdateListener uiUpdateListener;
 
     /**
-     * TODO
+     * Public constructor
      *
-     * @param callbacks
+     * @param uiUpdateListener listener for UI updating callbacks
      */
-    public MouseOpsListener(UIUpdateCallbacks callbacks) {
-        this.callbacks = callbacks;
+    public MouseOpsListener(UiUpdateListener uiUpdateListener) {
+        this.uiUpdateListener = uiUpdateListener;
     }
 
     @Override
@@ -28,7 +29,7 @@ public class MouseOpsListener implements MouseListener, MouseMotionListener, Mou
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        callbacks.createNewArcsAndRepaint();
+        uiUpdateListener.createNewArcsAndRepaint();
     }
 
     @Override
@@ -45,11 +46,11 @@ public class MouseOpsListener implements MouseListener, MouseMotionListener, Mou
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        callbacks.updateArcsAndRepaint(e.getPoint());
+        uiUpdateListener.updateArcsAndRepaint(e.getPoint());
     }
 
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
-        callbacks.updateArcsAndRepaint(e);
+        uiUpdateListener.updateArcsAndRepaint(e.getPoint(), e.getWheelRotation());
     }
 }

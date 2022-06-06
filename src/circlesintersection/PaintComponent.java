@@ -1,6 +1,6 @@
 package circlesintersection;
 
-import circlesintersection.listeners.UIUpdateCallbacks;
+import circlesintersection.listeners.UiUpdateListener;
 import circlesintersection.models.AnglePair;
 import circlesintersection.models.Arc;
 
@@ -13,17 +13,19 @@ import java.util.ArrayList;
 import static circlesintersection.Settings.DEBUG_ENABLED;
 
 /**
- * TODO
+ * Component that draws the arcs (circles).
  */
-public class PaintComponent extends JPanel implements UIUpdateCallbacks {
+public class PaintComponent extends JPanel implements UiUpdateListener {
 
     private Arcs arcs;
     private final Settings settings;
+    private final static GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[0];
+
 
     /**
-     * TODO
+     * Public constructor.
      *
-     * @param arcs
+     * @param arcs  an arcs to be drawn on a canvas.
      * @param settings different values to tune the program.
      */
     public PaintComponent(Arcs arcs, Settings settings) {
@@ -39,7 +41,7 @@ public class PaintComponent extends JPanel implements UIUpdateCallbacks {
 //        super.paintComponent(g);  // Seems not needed
         Graphics2D g2 = (Graphics2D) g;
 
-        //** Changing appearance for a measuring lines
+        // Changing appearance for a measuring lines
         float[] dash1 = {4.0f, 3.0f};
         g2.setStroke(new BasicStroke(2,
                 BasicStroke.CAP_ROUND,
@@ -83,12 +85,13 @@ public class PaintComponent extends JPanel implements UIUpdateCallbacks {
             }
         }
 
-        //* Time taken in nanoseconds to draw a frame.
+        // Time taken in nanoseconds to draw a frame.
         settings.setTimeTemp(System.nanoTime() - settings.getTimeBegin());
-        g2.drawString("Frame render: " + settings.getTimeTemp() / 1_000_000
+        g2.setPaint(Color.GRAY);
+        g2.drawString("Frame render time: " + settings.getTimeTemp() / 1_000_000
                         + "."
                         + Long.toString(settings.getTimeTemp() / 10_000).substring(1)
-                        + " nanoseconds",
+                        + " milliseconds",
                 10,
                 40);
     }
@@ -151,36 +154,47 @@ public class PaintComponent extends JPanel implements UIUpdateCallbacks {
         }
         arcs.runRendering();
         repaint();
-        //TODO Get an access to these labels somehow.
-        // UPDATE - this is replaced with g2.drawString(...)
-        // So, need to remove these labels
-//        timeSpentLabel.setText(timeSpent);
-//        fpsLabel.setText(fps);
     }
 
     @Override
-    public void updateArcsAndRepaint(MouseWheelEvent event) {
+    public void updateArcsAndRepaint(Point point, int wheelRotationValue) {
         settings.setTimeBegin(System.nanoTime());
         arcs.setAnglePairsListArray(new ArrayList<>(settings.getCirclesQuantity()));
         arcs.setAnglePairsListFinal(new ArrayList<>());
         arcs.setAnglePairsList(new ArrayList<>());
-        SwingUtilities.convertPointToScreen(event.getPoint(), this);
-        arcs.getArcsArray()[settings.getCirclesQuantity() - 1].setX(event.getX());
-        arcs.getArcsArray()[settings.getCirclesQuantity() - 1].setY(event.getY());
+        SwingUtilities.convertPointToScreen(point, this);
+        arcs.getArcsArray()[settings.getCirclesQuantity() - 1].setX(point.getX());
+        arcs.getArcsArray()[settings.getCirclesQuantity() - 1].setY(point.getY());
         for (int i = 0; i < arcs.getArcsArray().length; i++) {
             arcs.getArcsArray()[i].setExcluded(false);
         }
-        if (event.getWheelRotation() > 0
+        if (wheelRotationValue > 0
                 && arcs.getArcsArray()[settings.getCirclesQuantity() - 1].getDiameter() > 20) {
             arcs.getArcsArray()[settings.getCirclesQuantity() - 1].setDiameter(
                     arcs.getArcsArray()[settings.getCirclesQuantity() - 1].getDiameter() - 10);
         }
-        if (event.getWheelRotation() < 0) {
+        if (wheelRotationValue < 0) {
             arcs.getArcsArray()[settings.getCirclesQuantity() - 1].setDiameter(
                     arcs.getArcsArray()[settings.getCirclesQuantity() - 1].getDiameter() + 10);
         }
         arcs.runRendering();
         repaint();
+    }
+
+    @Override
+    public void toggleFullScreen() {
+        JFrame frame = (JFrame)SwingUtilities.getRoot(this);
+        if (device.getFullScreenWindow() == null) {  // Go to full screen mode
+            frame.dispose();
+            frame.setUndecorated(true);
+            device.setFullScreenWindow(frame);
+            frame.setVisible(true);
+        } else { // back to windowed mode
+            frame.dispose();
+            frame.setUndecorated(true);
+            device.setFullScreenWindow(null);
+            frame.setVisible(true);
+        }
     }
 
     private Arc2D createArc2D(AnglePair anglePair) {

@@ -2,7 +2,7 @@ package circlesintersection;
 
 import circlesintersection.listeners.KeyboardOpsListener;
 import circlesintersection.listeners.MouseOpsListener;
-import circlesintersection.listeners.UIUpdateCallbacks;
+import circlesintersection.listeners.UiUpdateListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,35 +11,30 @@ import java.awt.image.BufferedImage;
 import static circlesintersection.Settings.APPLICATION_TITLE;
 
 /**
- * TODO
+ * Provides a {@link JFrame} to draw a circles, having a keyboard and mouse listeners attached to it.
  */
 public class Canvas {
 
-    private final JFrame frame = new JFrame();
-    private final JLabel timeSpentLabel = new JLabel();
-    private final JLabel fpsLabel = new JLabel();
+    private final JFrame frame;
 
-    private final Settings settings;
-    private final UIUpdateCallbacks callbacks;
+    private final UiUpdateListener uiUpdateListener;
     private final MouseOpsListener mouseOpsListener;
     private final KeyboardOpsListener keyboardListener;
 
     /**
-     * TODO
+     * Public constructor.
      *
-     * @param settings different values to tune the program.
-     * @param mouseOpsListener
-     * @param keyboardListener
-     * @param callbacks
+     * @param mouseOpsListener listener for a mouse clicks and wheel rotating.
+     * @param keyboardListener listener for a keyboard keys operating.
+     * @param uiUpdateListener callbacks to UI to update and repaint it.
      */
-    public Canvas(Settings settings,
-                  MouseOpsListener mouseOpsListener,
+    public Canvas(MouseOpsListener mouseOpsListener,
                   KeyboardOpsListener keyboardListener,
-                  UIUpdateCallbacks callbacks) {
-        this.settings = settings;
+                  UiUpdateListener uiUpdateListener) {
+        frame = new JFrame();
         this.mouseOpsListener = mouseOpsListener;
         this.keyboardListener = keyboardListener;
-        this.callbacks = callbacks;
+        this.uiUpdateListener = uiUpdateListener;
     }
 
     /**
@@ -47,39 +42,24 @@ public class Canvas {
      */
     public void initializeRendering() {
         initializeFrame();
-
-        initializeViews(settings);
-        frame.add(timeSpentLabel);
-        frame.add(fpsLabel);
-
         addListeners();
-
-        callbacks.createNewArcsAndRepaint();
+        uiUpdateListener.createNewArcsAndRepaint();
     }
 
     private void initializeFrame() {
-        frame.setContentPane((JPanel) callbacks);
+        frame.setContentPane((JPanel) uiUpdateListener);
         frame.setLayout(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // +24 pixels are added because of an upper stripe of a window
-        frame.setSize(settings.getCanvasWidth(), settings.getCanvasHeight());
+        frame.setSize(Toolkit.getDefaultToolkit().getScreenSize());
         frame.setLocationRelativeTo(null);
         frame.setResizable(false);
         frame.setBackground(Color.BLACK);
         frame.setTitle(APPLICATION_TITLE);
         frame.setUndecorated(true);
+        // Hiding a mouse cursor
         frame.setCursor(frame.getToolkit().createCustomCursor(
                 new BufferedImage(3, 3, BufferedImage.TYPE_INT_ARGB), new Point(0, 0),
                 "null"));
-    }
-
-    private void initializeViews(Settings settings) {
-        timeSpentLabel.setSize(160, 15);
-        timeSpentLabel.setForeground(Color.GRAY);
-        timeSpentLabel.setLocation(settings.getCanvasWidth() - 160, 0);
-        fpsLabel.setSize(160, 15);
-        fpsLabel.setForeground(Color.GRAY);
-        fpsLabel.setLocation(settings.getCanvasWidth() - 160, 35);
     }
 
     private void addListeners() {
@@ -89,10 +69,4 @@ public class Canvas {
         frame.addMouseWheelListener(mouseOpsListener);
         frame.setVisible(true);
     }
-
-//    @Override
-//    public void updateLabelsData(String fps, String timeSpent) {
-//        timeSpentLabel.setText(timeSpent);
-//        fpsLabel.setText(fps);
-//    }
 }

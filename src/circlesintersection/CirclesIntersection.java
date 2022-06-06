@@ -17,7 +17,6 @@ public class CirclesIntersection {
         Settings settings = Settings.getInstance();
         final PaintComponent paintComponent = new PaintComponent(new Arcs(settings), settings);
         new Canvas(
-                settings,
                 new MouseOpsListener(paintComponent),
                 new KeyboardOpsListener(paintComponent, settings),
                 paintComponent

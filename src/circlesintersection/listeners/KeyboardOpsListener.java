@@ -6,20 +6,22 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 /**
- * TODO
+ * Listener for a keyboard keys operating.
  */
 public class KeyboardOpsListener implements KeyListener {
 
-    private final UIUpdateCallbacks callbacks;
     private final Settings settings;
+    private final UiUpdateListener uiUpdateListener;
 
     /**
-     * TODO
+     * Public constructor
      *
-     * @param callbacks
+     * @param uiUpdateListener  listener for UI updating callbacks
+     * @param settings  class that keeps all the settings for the application
      */
-    public KeyboardOpsListener(UIUpdateCallbacks callbacks, Settings settings) {
-        this.callbacks = callbacks;
+    public KeyboardOpsListener(UiUpdateListener uiUpdateListener,
+                               Settings settings) {
+        this.uiUpdateListener = uiUpdateListener;
         this.settings = settings;
     }
 
@@ -29,24 +31,30 @@ public class KeyboardOpsListener implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-            callbacks.createNewArcsAndRepaint();
-        }
-        if (e.getKeyCode() == KeyEvent.VK_G) {
-            settings.setGradientEnabled(!settings.isGradientEnabled());
-            callbacks.updateArcsAndRepaint();
-        }
-        if (e.getKeyCode() == KeyEvent.VK_A) {
-            settings.setAntiAliasingEnabled(!settings.isAntiAliasingEnabled());
-            callbacks.updateArcsAndRepaint();
-        }
-        if (e.getKeyCode() == KeyEvent.VK_M) {
-            settings.changeDrawingMode();
-            callbacks.updateArcsAndRepaint();
-        }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+            uiUpdateListener.createNewArcsAndRepaint();
+        }
+        if (e.getKeyCode() == KeyEvent.VK_G) {
+            settings.setGradientEnabled(!settings.isGradientEnabled());
+            uiUpdateListener.updateArcsAndRepaint();
+        }
+        if (e.getKeyCode() == KeyEvent.VK_A) {
+            settings.setAntiAliasingEnabled(!settings.isAntiAliasingEnabled());
+            uiUpdateListener.updateArcsAndRepaint();
+        }
+        if (e.getKeyCode() == KeyEvent.VK_M) {
+            settings.changeDrawingMode();
+            uiUpdateListener.updateArcsAndRepaint();
+        }
+        if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            System.exit(0);
+        }
+        if (e.getKeyCode() == KeyEvent.VK_F) {
+            uiUpdateListener.toggleFullScreen();
+        }
     }
 }

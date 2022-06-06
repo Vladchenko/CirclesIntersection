@@ -1,5 +1,19 @@
 package circlesintersection;
 
+/**
+ * Defines what kind of drawing is applied.
+ */
 public enum DrawKind {
-    circles, arcs, both
+    /**
+     * Only dashed circles are drawn.
+     */
+    circles,
+    /**
+     * Only intersected arcs are drawn.
+     */
+    arcs,
+    /**
+     * Both - dashed circles and intersected arcs.
+     */
+    both
 };

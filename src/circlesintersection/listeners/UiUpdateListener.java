@@ -1,12 +1,11 @@
 package circlesintersection.listeners;
 
 import java.awt.*;
-import java.awt.event.MouseWheelEvent;
 
 /**
  * Callbacks to UI to update and repaint it.
  */
-public interface UIUpdateCallbacks {
+public interface UiUpdateListener {
 
     /**
      * Create new arcs, compute their intersections and paint them.
@@ -28,7 +27,13 @@ public interface UIUpdateCallbacks {
     /**
      * Update arcs, compute their intersections and paint them.
      *
-     * @param event on a mouse wheel moving that provides data on position of mouse and
+     * @param point mouse x,y position
+     * @param wheelRotationValue    mouse wheel moved value
      */
-    void updateArcsAndRepaint(MouseWheelEvent event);
+    void updateArcsAndRepaint(Point point, int wheelRotationValue);
+
+    /**
+     * Sets full screen mode to be on or off.
+     */
+    void toggleFullScreen();
 }

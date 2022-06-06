@@ -5,13 +5,13 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 
 /**
- *
+ * Represents value needed for the domain.
  */
 public class Settings {
 
     // Switching a debug method
     public static final boolean DEBUG_ENABLED = false;
-    public static final String APPLICATION_TITLE = "Circles Intersecting v1.1";
+    public static final String APPLICATION_TITLE = "Circles Intersecting v1.2";
 
     //<editor-fold defaultstate="collapsed" desc="Fields">
     /** 
@@ -21,9 +21,9 @@ public class Settings {
     private static final boolean INCLUDE_NOT_INTERSECTED = true;
 
     private final int populationMode = 0;  // Circles population mode
-    //** Number of circles present on a screen
+    // Number of circles present on a screen
     private final int circlesQuantity = 80;
-    //** This value defines a range that a "defaultDiameter" field to be changed at.
+    // Defines a range that a "defaultDiameter" field to be changed at.
     private final int diameterSpan = 150;
     private final int defaultDiameter = 200;
     private final int angleBeginSpan = 180;
@@ -38,25 +38,26 @@ public class Settings {
     private boolean gradientEnabled = true;
     // To use antialiasing for drawing
     private boolean antiAliasingEnabled = false;
-    //** Time stamp of the moment of the beginning of a rendering
+    // Time stamp of the moment of the beginning of a rendering
     private long timeBegin;
-    //** Time stamp of the moment of the ending of a rendering
+    // Time stamp of the moment of the ending of a rendering
     private long timeTemp;
-    //** Value that stands for an increment for a diameter of a circles.
+    // Value that stands for an increment for a diameter of a circles.
     private final int increment = 50;
-    //** Color for an areas where the arcs are absent (for an array of circles)
+    // Color for an areas where the arcs are absent (for an array of circles)
     private final Color fadedArcsColor = new Color(25, 61, 25);
-    //** Color for an areas where the arcs are present (for an array of circles)
+    // Color for an areas where the arcs are present (for an array of circles)
     private final Color arcsColor = new Color(100, 255, 100);
-    //** Color for an areas where the arcs are absent (for a subject circle)
+    // Color for an areas where the arcs are absent (for a subject circle)
     private final Color fadedSubjectCircleColor = new Color(25, 50, 61);
-    //** Color for an areas where the arcs are present (for a subject circle)
+    // Color for an areas where the arcs are present (for a subject circle)
     private final Color subjectCircleColor = new Color(100, 200, 255);
     private static Settings settings;
-    //** Kind of drawing of the circles - 
+    // Kind of drawing of the circles
     private DrawKind drawKind = DrawKind.both;
 //</editor-fold>
 
+    // Utility class should not be instantiated through a constructor.
     private Settings() {
     }
 
@@ -173,7 +174,7 @@ public class Settings {
     //</editor-fold>
 
     /**
-     * Changing a mode for drawing
+     * Circle through a mode for drawing.
      */
     public void changeDrawingMode() {
         if (drawKind == DrawKind.arcs) {

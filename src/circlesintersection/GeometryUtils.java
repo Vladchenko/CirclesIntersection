@@ -32,8 +32,8 @@ public final class GeometryUtils {
     }
 
     /**
-     * @param arc
-     * @param arc2
+     * @param arc   {@link Arc} to compute a distance from.
+     * @param arc2  {@link Arc} to compute a distance to.
      *
      * @return distance between arcs
      */
@@ -54,7 +54,7 @@ public final class GeometryUtils {
         double deltaX = arc2.getX() - arc.getX();
         double deltaY = arc2.getY() - arc.getY();
         angle = Math.atan(Math.abs(deltaY) / Math.abs(deltaX));
-        //* Adjusting the angle
+        // Adjusting the angle
         if (deltaX < 0 && deltaY < 0) {
             angle = -angle + Math.PI;
         }
