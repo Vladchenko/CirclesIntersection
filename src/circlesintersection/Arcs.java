@@ -6,7 +6,6 @@ import circlesintersection.models.Arc;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.PointerInfo;
-import java.lang.reflect.Array;
 import java.util.*;
 
 import static circlesintersection.GeometryUtils.*;
@@ -20,7 +19,7 @@ public class Arcs {
     //<editor-fold defaultstate="collapsed" desc="Fields">
     private final Arc[] arcsArray;
     private final Settings settings;
-    private final double[] intermediateAnglesArray;
+    private double[] intermediateAnglesArray;
     private ArrayList<AnglePair> anglePairsList;
     private ArrayList<AnglePair> anglePairsListFinal;
     private ArrayList<ArrayList<AnglePair>> anglePairsListArray;
@@ -34,52 +33,15 @@ public class Arcs {
     public Arcs(Settings settings) {
         this.settings = settings;
         arcsArray = new Arc[settings.getCirclesQuantity()];
-        intermediateAnglesArray = new double[settings.getCirclesQuantity()];
-        anglePairsList = new ArrayList<>();
-        anglePairsListFinal = new ArrayList<>();
-        anglePairsListArray = new ArrayList<>(settings.getCirclesQuantity());
-        if (arcsArray[0] == null) {
-            for (int i = 0; i < arcsArray.length; i++) {
-                arcsArray[i] = new Arc();
-                arcsArray[i].setNumber(i);
-            }
-        }
-        int increment = 0;
+        prepareArcsAccompanyingLists();
+
         for (Arc arc : arcsArray) {
             arc.setX(Math.random() * (settings.getCanvasWidth() - settings.getDiameterSpan() * 2) + settings.getDiameterSpan());
             arc.setY(Math.random() * (settings.getCanvasHeight() - settings.getDiameterSpan() * 2) + settings.getDiameterSpan());
             arc.setDiameter(Math.random() * settings.getDiameterSpan() + settings.getIncrement());
-            switch (settings.getPopulationMode()) {
-                case 0: {
-                    setArcAngles(arc, 0, 360);
-                }
-                break;
-                case 1: {
-                    setArcAngles(arc,
-                            Math.random() * settings.getAngleBeginSpan(),
-                            Math.random() * settings.getAngleValidSpan() + settings.getAngleBeginSpan());
-                }
-                break;
-                case 2: {
-                    setArcAngles(arc, 0, 360);
-                    arc.setX(settings.getCanvasWidthHalf() + increment);
-                    arc.setY(settings.getCanvasHeightHalf() + increment);
-                    arc.setDiameter(settings.getDefaultDiameter());
-                }
-                break;
-            }
-            /*
-             * When a last circle is considered, make it to have a mouse
-             * cursor's coordinate, for it could look that this circle is
-             * controlled by a mouse.
-             */
-            if (arc.getNumber() == settings.getCirclesQuantity() - 1) {
-                PointerInfo a = MouseInfo.getPointerInfo();
-                Point b = a.getLocation();
-                arc.setX((int) b.getX());
-                arc.setY((int) b.getY());
-            }
         }
+        // Setting mouse cursor location to last arc in array
+        setArcToMousePosition(arcsArray[arcsArray.length - 1]);
     }
 
     //region getters & setters
@@ -102,11 +64,31 @@ public class Arcs {
     public void setAnglePairsListFinal(ArrayList<AnglePair> anglePairsListFinal) {
         this.anglePairsListFinal = anglePairsListFinal;
     }
-    //endregion getters & setters
 
     private void setArcAngles(Arc arc, double beginAngle, double validAngle) {
         arc.setAngleBegin(beginAngle);
         arc.setAngleSpan(validAngle);
+    }
+    //endregion getters & setters
+
+    private void setArcToMousePosition(Arc arc) {
+        PointerInfo a = MouseInfo.getPointerInfo();
+        Point b = a.getLocation();
+        arc.setX((int) b.getX());
+        arc.setY((int) b.getY());
+    }
+
+    private void prepareArcsAccompanyingLists() {
+        intermediateAnglesArray = new double[settings.getCirclesQuantity()];
+        anglePairsList = new ArrayList<>();
+        anglePairsListFinal = new ArrayList<>();
+        anglePairsListArray = new ArrayList<>(settings.getCirclesQuantity());
+        if (arcsArray[0] == null) {
+            for (int i = 0; i < arcsArray.length; i++) {
+                arcsArray[i] = new Arc();
+                arcsArray[i].setNumber(i);
+            }
+        }
     }
 
     /**
@@ -158,7 +140,9 @@ public class Arcs {
         anglePairsListArray.add(anglePairsListNew);
     }
 
-    /** Debug method. Prints anglePairs to console. */
+    /**
+     * Debug method. Prints anglePairs to console.
+     */
     private void printAnglePairs() {
         for (ArrayList<AnglePair> anglePairs : anglePairsListArray) {
 //            System.out.println("Arc #" + i++ + " inters-s with arcs #"+ itArray.next());
@@ -465,9 +449,24 @@ public class Arcs {
     }
 
     /**
+     * When circles rotated, arcs have to be recomputed.
+     */
+    public void prepareArcsWhenCirclesRotated() {
+        prepareArcsAccompanyingLists();
+        setArcToMousePosition(arcsArray[arcsArray.length - 1]);
+    }
+
+    /**
+     * When circles dragged, arcs have to be recomputed.
+     */
+    public void prepareArcsWhenCirclesDragged() {
+        prepareArcsAccompanyingLists();
+    }
+
+    /**
      * Perform required computations to draw an arcs.
      */
-    public void runRendering() {
+    public void computeIntersections() {
         checkIntersection();
         removeRedundancy();
         prepareArcs();

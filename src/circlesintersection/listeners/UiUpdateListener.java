@@ -33,6 +33,20 @@ public interface UiUpdateListener {
     void updateArcsAndRepaint(Point point, int wheelRotationValue);
 
     /**
+     * Rotate arcs around a chosen arc and repaint a canvas.
+     *
+     * @param wheelRotation which way a mouse is rotated
+     */
+    void rotateArcsAndRepaint(int wheelRotation);
+
+    /**
+     * Scale the arcs relatively to chosen one and repaint a canvas.
+     *
+     * @param wheelRotation which way a mouse is rotated
+     */
+    void scaleArcsAndRepaint(int wheelRotation);
+
+    /**
      * Sets full screen mode to be on or off.
      */
     void toggleFullScreen();

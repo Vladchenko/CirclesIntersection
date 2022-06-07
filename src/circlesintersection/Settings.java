@@ -55,6 +55,10 @@ public class Settings {
     private static Settings settings;
     // Kind of drawing of the circles
     private DrawKind drawKind = DrawKind.both;
+    // Flag checks if a Ctrl key is pressed.
+    private boolean keyCtrl = false;
+    // Flag checks if a Shift key is pressed.
+    private boolean keyShift = false;
 //</editor-fold>
 
     // Utility class should not be instantiated through a constructor.
@@ -170,6 +174,22 @@ public class Settings {
     
     public static boolean isINCLUDE_NOT_INTERSECTED() {
         return INCLUDE_NOT_INTERSECTED;
+    }
+
+    public boolean isKeyCtrl() {
+        return keyCtrl;
+    }
+
+    public void setKeyCtrl(boolean keyCtrl) {
+        this.keyCtrl = keyCtrl;
+    }
+
+    public boolean isKeyShift() {
+        return keyShift;
+    }
+
+    public void setKeyShift(boolean keyShift) {
+        this.keyShift = keyShift;
     }
     //</editor-fold>
 

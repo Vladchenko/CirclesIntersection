@@ -19,7 +19,7 @@ OPERATING:
         Moving one circle around with a mouse.
         Changing a radius of a circle attached to a mouse cursor.
         Entering, exiting full screen.
-        Toggling gradient, arcs(circles) drawing mode.
+        Toggling gradient, arcs(circles) drawing mode, scaling, rotating.
 
 USER INTERACTION:
         Keyboard:
@@ -28,15 +28,22 @@ USER INTERACTION:
 			- F     - Toggles fullscreen
 			- G     - Toggles gradient
 			- M     - Toggles arcs(circles) drawing mode
+			- CTRL + Mouse wheel
+			        - Triggers arcs(circles) rotation mode (using mouse wheel)
+			- SHIFT + Mouse wheel
+			        - Triggers arcs(circles) rotation mode (using mouse wheel)
 	    Mouse:
 		    - Left mouse button
 			    Redraws and reinitiates the field of an arcs all over again
 		    - Wheel
-			    Increasing / decreasing a diameter of a regarded circle
+			    - No any key down   - Increase / decrease a diameter of a regarded circle
+			    - CTRL down         - Triggers arcs(circles) rotation mode (using mouse wheel)
+			    - SHIFT down        - Triggers arcs(circles) rotation mode (using mouse wheel)
             - Moving a mouse around
                 Redraws and reinitiates the field of an arcs all over again
 
 AMBITION:
+    - Implement dragging of arcs
     - Implement an arcs(circles) moving in clockwise or counter-clockwise direction relatively to a selected circle
     by a mouse wheel move.
 	- Move a timeSpent Jlabel to the left and make it gray. (declined, as of now, this label is located on a left-hand

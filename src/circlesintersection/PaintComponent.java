@@ -6,10 +6,10 @@ import circlesintersection.models.Arc;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseWheelEvent;
 import java.awt.geom.Arc2D;
 import java.util.ArrayList;
 
+import static circlesintersection.GeometryUtils.*;
 import static circlesintersection.Settings.DEBUG_ENABLED;
 
 /**
@@ -21,7 +21,6 @@ public class PaintComponent extends JPanel implements UiUpdateListener {
     private final Settings settings;
     private final static GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[0];
 
-
     /**
      * Public constructor.
      *
@@ -31,7 +30,7 @@ public class PaintComponent extends JPanel implements UiUpdateListener {
     public PaintComponent(Arcs arcs, Settings settings) {
         this.arcs = arcs;
         this.settings = settings;
-        arcs.runRendering();
+        arcs.computeIntersections();
     }
 
     @Override
@@ -131,7 +130,7 @@ public class PaintComponent extends JPanel implements UiUpdateListener {
     public void createNewArcsAndRepaint() {
         settings.setTimeBegin(System.nanoTime());
         arcs = new Arcs(settings);
-        arcs.runRendering();
+        arcs.computeIntersections();
         repaint();
     }
 
@@ -153,7 +152,7 @@ public class PaintComponent extends JPanel implements UiUpdateListener {
         for (int i = 0; i < arcs.getArcsArray().length; i++) {
             arcs.getArcsArray()[i].setExcluded(false);
         }
-        arcs.runRendering();
+        arcs.computeIntersections();
         repaint();
     }
 
@@ -169,21 +168,70 @@ public class PaintComponent extends JPanel implements UiUpdateListener {
         for (int i = 0; i < arcs.getArcsArray().length; i++) {
             arcs.getArcsArray()[i].setExcluded(false);
         }
-        if (wheelRotationValue > 0
+        if (wheelRotationValue < 0
                 && arcs.getArcsArray()[settings.getCirclesQuantity() - 1].getDiameter() > 20) {
             arcs.getArcsArray()[settings.getCirclesQuantity() - 1].setDiameter(
                     arcs.getArcsArray()[settings.getCirclesQuantity() - 1].getDiameter() - 10);
         }
-        if (wheelRotationValue < 0) {
+        if (wheelRotationValue > 0) {
             arcs.getArcsArray()[settings.getCirclesQuantity() - 1].setDiameter(
                     arcs.getArcsArray()[settings.getCirclesQuantity() - 1].getDiameter() + 10);
         }
-        arcs.runRendering();
+        arcs.computeIntersections();
+        repaint();
+    }
+
+    @Override
+    public void rotateArcsAndRepaint(int wheelRotation) {
+        settings.setTimeBegin(System.nanoTime());
+        double newAngle;
+        double extraAngle;
+        double distance;
+        arcs.prepareArcsWhenCirclesRotated();
+        if (wheelRotation > 0) {
+            extraAngle = 0.04;
+        } else {
+            extraAngle = -0.04;
+        }
+        for (int i = 0; i < arcs.getArcsArray().length - 1; i++) {
+            newAngle = computeAngle(arcs.getArcsArray()[arcs.getArcsArray().length - 1], arcs.getArcsArray()[i], AngleKind.RAD) + extraAngle;
+            distance = computeDistance(arcs.getArcsArray()[i], arcs.getArcsArray()[arcs.getArcsArray().length - 1]);
+            computeAndSetDekartCoordinates(
+                    distance, newAngle,
+                    arcs.getArcsArray()[i],
+                    arcs.getArcsArray()[arcs.getArcsArray().length - 1]);
+        }
+        arcs.computeIntersections();
+        repaint();
+    }
+
+    @Override
+    public void scaleArcsAndRepaint(int wheelRotation) {
+        settings.setTimeBegin(System.nanoTime());
+        double newAngle;
+        double distance;
+        arcs.prepareArcsWhenCirclesRotated();
+        for (int i = 0; i < arcs.getArcsArray().length - 1; i++) {
+            arcs.getArcsArray()[i].setExcluded(false);
+            newAngle = computeAngle(arcs.getArcsArray()[arcs.getArcsArray().length - 1], arcs.getArcsArray()[i], AngleKind.RAD);
+            distance = computeDistance(arcs.getArcsArray()[i], arcs.getArcsArray()[arcs.getArcsArray().length - 1]);
+            if (wheelRotation > 0) {
+                distance = distance + distance/15;
+            } else {
+                distance = distance - distance/15;
+            }
+            computeAndSetDekartCoordinates(
+                    distance, newAngle,
+                    arcs.getArcsArray()[i],
+                    arcs.getArcsArray()[arcs.getArcsArray().length - 1]);
+        }
+        arcs.computeIntersections();
         repaint();
     }
 
     @Override
     public void toggleFullScreen() {
+        settings.setTimeBegin(System.nanoTime());
         JFrame frame = (JFrame)SwingUtilities.getRoot(this);
         if (device.getFullScreenWindow() == null) {  // Go to full screen mode
             frame.dispose();

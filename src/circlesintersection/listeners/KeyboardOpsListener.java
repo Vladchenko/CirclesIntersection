@@ -31,6 +31,12 @@ public class KeyboardOpsListener implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
+            settings.setKeyCtrl(true);
+        }
+        if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
+            settings.setKeyShift(true);
+        }
     }
 
     @Override
@@ -55,6 +61,12 @@ public class KeyboardOpsListener implements KeyListener {
         }
         if (e.getKeyCode() == KeyEvent.VK_F) {
             uiUpdateListener.toggleFullScreen();
+        }
+        if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
+            settings.setKeyCtrl(false);
+        }
+        if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
+            settings.setKeyShift(false);
         }
     }
 }

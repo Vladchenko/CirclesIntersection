@@ -1,6 +1,7 @@
 package circlesintersection.listeners;
 
-import java.awt.*;
+import circlesintersection.Settings;
+
 import java.awt.event.*;
 
 /**
@@ -8,19 +9,24 @@ import java.awt.event.*;
  */
 public class MouseOpsListener implements MouseListener, MouseMotionListener, MouseWheelListener {
 
+    private final Settings settings;
     private final UiUpdateListener uiUpdateListener;
 
     /**
      * Public constructor
      *
      * @param uiUpdateListener listener for UI updating callbacks
+     * @param settings         class that keeps all the settings for the application
      */
-    public MouseOpsListener(UiUpdateListener uiUpdateListener) {
+    public MouseOpsListener(UiUpdateListener uiUpdateListener,
+                            Settings settings) {
+        this.settings = settings;
         this.uiUpdateListener = uiUpdateListener;
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
+        uiUpdateListener.createNewArcsAndRepaint();
     }
 
     @Override
@@ -29,7 +35,6 @@ public class MouseOpsListener implements MouseListener, MouseMotionListener, Mou
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        uiUpdateListener.createNewArcsAndRepaint();
     }
 
     @Override
@@ -42,6 +47,7 @@ public class MouseOpsListener implements MouseListener, MouseMotionListener, Mou
 
     @Override
     public void mouseDragged(MouseEvent e) {
+        uiUpdateListener.updateArcsAndRepaint(e.getPoint());
     }
 
     @Override
@@ -51,6 +57,15 @@ public class MouseOpsListener implements MouseListener, MouseMotionListener, Mou
 
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
-        uiUpdateListener.updateArcsAndRepaint(e.getPoint(), e.getWheelRotation());
+        if (settings.isKeyCtrl()) {
+            uiUpdateListener.rotateArcsAndRepaint(e.getWheelRotation());
+        }
+        if (settings.isKeyShift()) {
+            uiUpdateListener.scaleArcsAndRepaint(e.getWheelRotation());
+        }
+        if (!settings.isKeyCtrl()
+            && !settings.isKeyShift()) {
+            uiUpdateListener.updateArcsAndRepaint(e.getPoint(), e.getWheelRotation());
+        }
     }
 }

@@ -78,4 +78,17 @@ public final class GeometryUtils {
         }
         return (angleKind == AngleKind.RAD) ? angle : angle * 180 / Math.PI;
     }
+
+    /**
+     * Compute dekart coordinates for arcs(circles)
+     *
+     * @param distance  between a selected arc and a considered arc
+     * @param angle     between a selected arc and a considered arc
+     * @param arc       considered arc
+     * @param arcSelected   selected arc
+     */
+    static void computeAndSetDekartCoordinates(double distance, double angle, Arc arc, Arc arcSelected) {
+        arc.setX(arcSelected.getX() + Math.cos(angle) * distance);
+        arc.setY(arcSelected.getY() - Math.sin(angle) * distance);
+    }
 }
