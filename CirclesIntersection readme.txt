@@ -1,7 +1,7 @@
 Project name: 	Circles Intersection 
 Version kind: 	release
 IDE used:	    NetBeans v7.3.1 (as of now IntelliJ Idea v2021.2)
-Release Date:	2014-08-22 (last on 2022-06-06)
+Release Date:	2014-08-22 (last on 2022-06-07)
 Author:		    Yanchenko Vlad
 
 TODO
@@ -19,7 +19,7 @@ OPERATING:
         Moving one circle around with a mouse.
         Changing a radius of a circle attached to a mouse cursor.
         Entering, exiting full screen.
-        Toggling gradient, arcs(circles) drawing mode, scaling, rotating.
+        Toggling gradient, arcs(circles) drawing mode, scaling, rotating, dragging.
 
 USER INTERACTION:
         Keyboard:
@@ -41,6 +41,8 @@ USER INTERACTION:
 			    - SHIFT down        - Triggers arcs(circles) rotation mode (using mouse wheel)
             - Moving a mouse around
                 Redraws and reinitiates the field of an arcs all over again
+            - Drag and drop
+                Dragging all arcs(circles)
 
 AMBITION:
     - Implement dragging of arcs
@@ -55,6 +57,7 @@ AMBITION:
 	wheel moved or keyboard key pushed)
 
 ISSUES:
+    - 2016-06-07 When drag and drop, right after drop, all arcs turn to a blue color (not only a "mouse-selected" one)
 	- On a slow PCs there are exceptions described below.
 	- 2016-01-27 NullPointerException in Arcs.java, AnglePairComparator class at line return Double.compare(oAnglePair1.angleBegin, oAnglePair2.angleBegin);
 	- 2016-01-27 ConcurrentModificationException in Arcs.java, in checkIntersection() method, at line for (ArrayList<AnglePair> anglePairsListArray1 : anglePairsListArray).
@@ -63,8 +66,11 @@ ISSUES:
         - 2014-06-06 Last arc of a circle doesn't fit to the first one. It's like it is shifted to the left for one pixel. That is distinctly seen on a picture. I have no idea on how to get a reason of why it is drawn like that. Due to this problem, I put this program a version 0.99 .
 
 
-
 Releases
+
+2022-06-07 v1.3
+    - New mouse features
+        Dragging, rotating, scaling the arcs(circles)
 
 2022-06-03 v1.2
     - New keyboard keys

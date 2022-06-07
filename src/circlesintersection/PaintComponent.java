@@ -24,7 +24,7 @@ public class PaintComponent extends JPanel implements UiUpdateListener {
     /**
      * Public constructor.
      *
-     * @param arcs  an arcs to be drawn on a canvas.
+     * @param arcs     an arcs to be drawn on a canvas.
      * @param settings different values to tune the program.
      */
     public PaintComponent(Arcs arcs, Settings settings) {
@@ -42,7 +42,7 @@ public class PaintComponent extends JPanel implements UiUpdateListener {
         Graphics2D g2 = (Graphics2D) g;
 
         // Changing appearance for a measuring lines
-        float[] dash1 = {4.0f, 3.0f};
+        float[] dash1 = {2.0f, 4.0f};
         g2.setStroke(new BasicStroke(2,
                 BasicStroke.CAP_ROUND,
                 BasicStroke.JOIN_ROUND,
@@ -68,10 +68,10 @@ public class PaintComponent extends JPanel implements UiUpdateListener {
         drawCircle(g2, arcs.getArcsArray()[arcs.getArcsArray().length - 1], settings.getSubjectCircleColor(), settings.getFadedSubjectCircleColor());
 
         g2.setStroke(       //new BasicStroke(2));
-                new BasicStroke(3,
+                new BasicStroke(4,
                         BasicStroke.CAP_ROUND,
                         BasicStroke.JOIN_ROUND,
-                        2, null, 0.0f));
+                        2, null, 2.0f));
         g2.setColor(settings.getArcsColor());
 
         // Drawing an arcs for a not intersected areas of circles
@@ -99,15 +99,15 @@ public class PaintComponent extends JPanel implements UiUpdateListener {
     private void drawCircle(Graphics2D g2, Arc arc, Color mainColor, Color fadedColor) {
         if (settings.isGradientEnabled()) {
             RadialGradientPaint gradientPaint = new RadialGradientPaint(
-                    (float) arc.getX(),
-                    (float) arc.getY(),
+                    (float) arc.getX() - (int) arcs.getMouseDraggedDeltaX(),
+                    (float) arc.getY() - (int) arcs.getMouseDraggedDeltaY(),
                     (float) (arc.getDiameter() / 2),
                     new float[]{(float) 0.0, (float) 1.0},
                     new Color[]{fadedColor, new Color(0, 0, 0, 0)});
             g2.setPaint(gradientPaint);
             // Drawing a circled gradient at the center за circle
-            g2.fillOval((int) arc.getX() - (int) arc.getDiameter() / 2,
-                    (int) arc.getY() - (int) arc.getDiameter() / 2,
+            g2.fillOval((int) arc.getX() - (int) arcs.getMouseDraggedDeltaX() - (int) arc.getDiameter() / 2,
+                    (int) arc.getY() - (int) arcs.getMouseDraggedDeltaY() - (int) arc.getDiameter() / 2,
                     (int) arc.getDiameter(), (int) arc.getDiameter());
         }
         if (settings.getDrawKind().equals(DrawKind.circles)
@@ -117,13 +117,14 @@ public class PaintComponent extends JPanel implements UiUpdateListener {
             // 1) Since both the diameters (x and y ) match, lets use oval instead of circle
             // 2) CPU cost for drawing an arc is more than drawing a circle, this is why here we draw a circle.
             // Anyway, a not intersected arc will be drawn later in a code and, overdraw the needed circle area.
-            g2.drawOval((int) arc.getX() - (int) arc.getDiameter() / 2,
-                    (int) arc.getY() - (int) arc.getDiameter() / 2,
+            g2.drawOval((int) arc.getX() - (int) arcs.getMouseDraggedDeltaX() - (int) arc.getDiameter() / 2,
+                    (int) arc.getY() - (int) arcs.getMouseDraggedDeltaY() - (int) arc.getDiameter() / 2,
                     (int) arc.getDiameter(), (int) arc.getDiameter());
         }
         g2.setPaint(mainColor);
         // Drawing a center of a circle.
-        g2.drawOval((int) arc.getX(), (int) arc.getY(), 1, 1);
+        g2.drawOval((int) arc.getX() - (int) arcs.getMouseDraggedDeltaX(),
+                (int) arc.getY() - (int) arcs.getMouseDraggedDeltaY(), 1, 1);
     }
 
     @Override
@@ -216,9 +217,9 @@ public class PaintComponent extends JPanel implements UiUpdateListener {
             newAngle = computeAngle(arcs.getArcsArray()[arcs.getArcsArray().length - 1], arcs.getArcsArray()[i], AngleKind.RAD);
             distance = computeDistance(arcs.getArcsArray()[i], arcs.getArcsArray()[arcs.getArcsArray().length - 1]);
             if (wheelRotation > 0) {
-                distance = distance + distance/15;
+                distance = distance + distance / 15;
             } else {
-                distance = distance - distance/15;
+                distance = distance - distance / 15;
             }
             computeAndSetDekartCoordinates(
                     distance, newAngle,
@@ -230,9 +231,32 @@ public class PaintComponent extends JPanel implements UiUpdateListener {
     }
 
     @Override
+    public void dragArcsAndRepaint(Point point) {
+        settings.setTimeBegin(System.nanoTime());
+        arcs.prepareArcsWhenCirclesDragged();
+        arcs.setMouseDraggedDeltaX(arcs.getArcsArray()[arcs.getArcsArray().length - 1].getX() - point.getX());
+        arcs.setMouseDraggedDeltaY(arcs.getArcsArray()[arcs.getArcsArray().length - 1].getY() - point.getY());
+        arcs.computeIntersections();
+        repaint();
+    }
+
+    @Override
+    public void dropArcsAndRepaint() {
+        settings.setTimeBegin(System.nanoTime());
+        for (int i = 0; i < arcs.getArcsArray().length; i++) {
+            arcs.getArcsArray()[i].setX(arcs.getArcsArray()[i].getX() - arcs.getMouseDraggedDeltaX());
+            arcs.getArcsArray()[i].setY(arcs.getArcsArray()[i].getY() - arcs.getMouseDraggedDeltaY());
+        }
+        arcs.setMouseDraggedDeltaX(0);
+        arcs.setMouseDraggedDeltaY(0);
+        arcs.computeIntersections();
+        repaint();
+    }
+
+    @Override
     public void toggleFullScreen() {
         settings.setTimeBegin(System.nanoTime());
-        JFrame frame = (JFrame)SwingUtilities.getRoot(this);
+        JFrame frame = (JFrame) SwingUtilities.getRoot(this);
         if (device.getFullScreenWindow() == null) {  // Go to full screen mode
             frame.dispose();
             frame.setUndecorated(true);
@@ -249,8 +273,10 @@ public class PaintComponent extends JPanel implements UiUpdateListener {
     private Arc2D createArc2D(AnglePair anglePair) {
         return new Arc2D.Double(
                 arcs.getArcsArray()[anglePair.getNumber()].getX()
+                        - arcs.getMouseDraggedDeltaX()
                         - arcs.getArcsArray()[anglePair.getNumber()].getDiameter() / 2,
                 arcs.getArcsArray()[anglePair.getNumber()].getY()
+                        - arcs.getMouseDraggedDeltaY()
                         - arcs.getArcsArray()[anglePair.getNumber()].getDiameter() / 2,
                 arcs.getArcsArray()[anglePair.getNumber()].getDiameter(),
                 arcs.getArcsArray()[anglePair.getNumber()].getDiameter(),

@@ -8,24 +8,24 @@ import java.awt.*;
 public interface UiUpdateListener {
 
     /**
-     * Create new arcs, compute their intersections and paint them.
+     * Create new arcs, compute their intersections and repaint a canvas.
      */
     void createNewArcsAndRepaint();
 
     /**
-     * Update arcs, compute their intersections and paint them.
+     * Update arcs, compute their intersections and repaint a canvas.
      */
     void updateArcsAndRepaint();
 
     /**
-     * Update arcs, compute their intersections and paint them.
+     * Update arcs, compute their intersections and repaint a canvas.
      *
      * @param point coordinate for a specific circle
      */
     void updateArcsAndRepaint(Point point);
 
     /**
-     * Update arcs, compute their intersections and paint them.
+     * Update arcs, compute their intersections and repaint a canvas.
      *
      * @param point mouse x,y position
      * @param wheelRotationValue    mouse wheel moved value
@@ -47,7 +47,19 @@ public interface UiUpdateListener {
     void scaleArcsAndRepaint(int wheelRotation);
 
     /**
-     * Sets full screen mode to be on or off.
+     * Drag mouse and repaint a canvas.
+     *
+     * @param point mouse cursor location
+     */
+    void dragArcsAndRepaint(Point point);
+
+    /**
+     * Drop mouse dragging and repaint a canvas.
+     */
+    void dropArcsAndRepaint();
+
+    /**
+     * Toggles full screen mode.
      */
     void toggleFullScreen();
 }

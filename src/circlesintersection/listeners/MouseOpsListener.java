@@ -35,6 +35,7 @@ public class MouseOpsListener implements MouseListener, MouseMotionListener, Mou
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        uiUpdateListener.dropArcsAndRepaint();
     }
 
     @Override
@@ -47,7 +48,7 @@ public class MouseOpsListener implements MouseListener, MouseMotionListener, Mou
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        uiUpdateListener.updateArcsAndRepaint(e.getPoint());
+        uiUpdateListener.dragArcsAndRepaint(e.getPoint());
     }
 
     @Override

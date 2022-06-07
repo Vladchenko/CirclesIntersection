@@ -19,6 +19,8 @@ public class Arcs {
     //<editor-fold defaultstate="collapsed" desc="Fields">
     private final Arc[] arcsArray;
     private final Settings settings;
+    private double mouseDraggedDeltaX;
+    private double mouseDraggedDeltaY;
     private double[] intermediateAnglesArray;
     private ArrayList<AnglePair> anglePairsList;
     private ArrayList<AnglePair> anglePairsListFinal;
@@ -68,6 +70,22 @@ public class Arcs {
     private void setArcAngles(Arc arc, double beginAngle, double validAngle) {
         arc.setAngleBegin(beginAngle);
         arc.setAngleSpan(validAngle);
+    }
+
+    public double getMouseDraggedDeltaX() {
+        return mouseDraggedDeltaX;
+    }
+
+    public void setMouseDraggedDeltaX(double mouseDraggedDeltaX) {
+        this.mouseDraggedDeltaX = mouseDraggedDeltaX;
+    }
+
+    public double getMouseDraggedDeltaY() {
+        return mouseDraggedDeltaY;
+    }
+
+    public void setMouseDraggedDeltaY(double mouseDraggedDeltaY) {
+        this.mouseDraggedDeltaY = mouseDraggedDeltaY;
     }
     //endregion getters & setters
 
