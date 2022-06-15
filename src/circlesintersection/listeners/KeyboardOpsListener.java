@@ -2,6 +2,7 @@ package circlesintersection.listeners;
 
 import circlesintersection.Settings;
 
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -11,17 +12,17 @@ import java.awt.event.KeyListener;
 public class KeyboardOpsListener implements KeyListener {
 
     private final Settings settings;
-    private final UiUpdateListener uiUpdateListener;
+    private final ArcsRendererListener rendererListener;
 
     /**
      * Public constructor
      *
-     * @param uiUpdateListener  listener for UI updating callbacks
+     * @param rendererListener  listener for UI updating callbacks
      * @param settings  class that keeps all the settings for the application
      */
-    public KeyboardOpsListener(UiUpdateListener uiUpdateListener,
+    public KeyboardOpsListener(ArcsRendererListener rendererListener,
                                Settings settings) {
-        this.uiUpdateListener = uiUpdateListener;
+        this.rendererListener = rendererListener;
         this.settings = settings;
     }
 
@@ -42,25 +43,25 @@ public class KeyboardOpsListener implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-            uiUpdateListener.createNewArcsAndRepaint();
+            rendererListener.createNewArcsAndRepaint();
         }
         if (e.getKeyCode() == KeyEvent.VK_G) {
             settings.setGradientEnabled(!settings.isGradientEnabled());
-            uiUpdateListener.updateArcsAndRepaint();
+            rendererListener.updateArcsAndRepaint(null);
         }
         if (e.getKeyCode() == KeyEvent.VK_A) {
             settings.setAntiAliasingEnabled(!settings.isAntiAliasingEnabled());
-            uiUpdateListener.updateArcsAndRepaint();
+            rendererListener.updateArcsAndRepaint(null);
         }
         if (e.getKeyCode() == KeyEvent.VK_M) {
             settings.changeDrawingMode();
-            uiUpdateListener.updateArcsAndRepaint();
+            rendererListener.updateArcsAndRepaint(null);
         }
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
             System.exit(0);
         }
         if (e.getKeyCode() == KeyEvent.VK_F) {
-            uiUpdateListener.toggleFullScreen();
+            rendererListener.toggleFullScreen();
         }
         if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
             settings.setKeyCtrl(false);

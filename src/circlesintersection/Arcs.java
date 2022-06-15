@@ -36,12 +36,7 @@ public class Arcs {
         this.settings = settings;
         arcsArray = new Arc[settings.getCirclesQuantity()];
         prepareArcsAccompanyingLists();
-
-        for (Arc arc : arcsArray) {
-            arc.setX(Math.random() * (settings.getCanvasWidth() - settings.getDiameterSpan() * 2) + settings.getDiameterSpan());
-            arc.setY(Math.random() * (settings.getCanvasHeight() - settings.getDiameterSpan() * 2) + settings.getDiameterSpan());
-            arc.setDiameter(Math.random() * settings.getDiameterSpan() + settings.getIncrement());
-        }
+        randomizeArcs(arcsArray);
         // Setting mouse cursor location to last arc in array
         setArcToMousePosition(arcsArray[arcsArray.length - 1]);
     }
@@ -67,11 +62,6 @@ public class Arcs {
         this.anglePairsListFinal = anglePairsListFinal;
     }
 
-    private void setArcAngles(Arc arc, double beginAngle, double validAngle) {
-        arc.setAngleBegin(beginAngle);
-        arc.setAngleSpan(validAngle);
-    }
-
     public double getMouseDraggedDeltaX() {
         return mouseDraggedDeltaX;
     }
@@ -88,6 +78,14 @@ public class Arcs {
         this.mouseDraggedDeltaY = mouseDraggedDeltaY;
     }
     //endregion getters & setters
+
+    private void randomizeArcs(Arc[] arcsArray) {
+        for (Arc arc : arcsArray) {
+            arc.setX(Math.random() * (settings.getCanvasWidth() - settings.getDiameterSpan() * 2) + settings.getDiameterSpan());
+            arc.setY(Math.random() * (settings.getCanvasHeight() - settings.getDiameterSpan() * 2) + settings.getDiameterSpan());
+            arc.setDiameter(Math.random() * settings.getDiameterSpan() + settings.getIncrement());
+        }
+    }
 
     private void setArcToMousePosition(Arc arc) {
         PointerInfo a = MouseInfo.getPointerInfo();
@@ -156,30 +154,6 @@ public class Arcs {
             System.out.println("anglePairsList size is: " + anglePairsList.size());
         }
         anglePairsListArray.add(anglePairsListNew);
-    }
-
-    /**
-     * Debug method. Prints anglePairs to console.
-     */
-    private void printAnglePairs() {
-        for (ArrayList<AnglePair> anglePairs : anglePairsListArray) {
-//            System.out.println("Arc #" + i++ + " inters-s with arcs #"+ itArray.next());
-            System.out.println(anglePairs);
-        }
-
-    }
-
-    /**
-     * Debug method. Prints resulting array of anglePairs, i.e. AnglePairsFinal to console.
-     */
-    private void printAnglePairsFinal() {
-        for (int i = 0; i < anglePairsListFinal.size(); i++) {
-            System.out.print(anglePairsListFinal.get(i) + "\t");
-            if (i % 5 == 0 && i != 0) {
-                System.out.println();
-            }
-        }
-
     }
 
     /**
@@ -286,7 +260,7 @@ public class Arcs {
 
         if (DEBUG_ENABLED) {
             System.out.println("List of an intersecting circles:");
-            printAnglePairs();
+            Logger.printAnglePairs(anglePairsListArray);
             System.out.println();
         }
         try {
@@ -301,7 +275,7 @@ public class Arcs {
         }
         if (DEBUG_ENABLED) {
             System.out.println("List of a sorted intersecting circles:");
-            printAnglePairs();
+            Logger.printAnglePairsFinal(anglePairsListFinal);
             System.out.println();
         }
 
@@ -349,7 +323,7 @@ public class Arcs {
 
         if (DEBUG_ENABLED) {
             System.out.println("Redundant circles have been removed:");
-            printAnglePairs();
+            Logger.printAnglePairs(anglePairsListArray);
             System.out.println();
         }
     }
@@ -461,7 +435,7 @@ public class Arcs {
 
         if (DEBUG_ENABLED) {
             System.out.println("Arcs to be drawn are:");
-            printAnglePairsFinal();
+            Logger.printAnglePairsFinal(anglePairsListFinal);
             System.out.println();
         }
     }

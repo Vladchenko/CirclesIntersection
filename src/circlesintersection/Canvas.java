@@ -43,7 +43,6 @@ public class Canvas {
     public void initializeRendering() {
         initializeFrame();
         addListeners();
-        uiUpdateListener.createNewArcsAndRepaint();
     }
 
     private void initializeFrame() {

@@ -14,11 +14,13 @@ public class CirclesIntersection {
      * @param args command line parameters.
      */
     public static void main(String[] args) {
-        Settings settings = Settings.getInstance();
-        final PaintComponent paintComponent = new PaintComponent(new Arcs(settings), settings);
+        final Settings settings = Settings.getInstance();
+        final Arcs arcs = new Arcs(settings);
+        final PaintComponent paintComponent = new PaintComponent(arcs, settings);
+        final ArcsRenderer renderer = new ArcsRenderer(arcs, settings, paintComponent);
         new Canvas(
-                new MouseOpsListener(paintComponent, settings),
-                new KeyboardOpsListener(paintComponent, settings),
+                new MouseOpsListener(renderer, settings),
+                new KeyboardOpsListener(renderer, settings),
                 paintComponent
         ).initializeRendering();
     }

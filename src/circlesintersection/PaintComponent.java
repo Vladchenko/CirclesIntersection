@@ -96,6 +96,29 @@ public class PaintComponent extends JPanel implements UiUpdateListener {
                 40);
     }
 
+    @Override
+    public void updateArcsAndRepaint(Arcs arcs) {
+        this.arcs = arcs;
+        repaint();
+    }
+
+    @Override
+    public void toggleFullScreen() {
+        settings.setTimeBegin(System.nanoTime());
+        JFrame frame = (JFrame) SwingUtilities.getRoot(this);
+        if (device.getFullScreenWindow() == null) {  // Go to full screen mode
+            frame.dispose();
+            frame.setUndecorated(true);
+            device.setFullScreenWindow(frame);
+            frame.setVisible(true);
+        } else { // back to windowed mode
+            frame.dispose();
+            frame.setUndecorated(true);
+            device.setFullScreenWindow(null);
+            frame.setVisible(true);
+        }
+    }
+
     private void drawCircle(Graphics2D g2, Arc arc, Color mainColor, Color fadedColor) {
         if (settings.isGradientEnabled()) {
             RadialGradientPaint gradientPaint = new RadialGradientPaint(
@@ -125,149 +148,6 @@ public class PaintComponent extends JPanel implements UiUpdateListener {
         // Drawing a center of a circle.
         g2.drawOval((int) arc.getX() - (int) arcs.getMouseDraggedDeltaX(),
                 (int) arc.getY() - (int) arcs.getMouseDraggedDeltaY(), 1, 1);
-    }
-
-    @Override
-    public void createNewArcsAndRepaint() {
-        settings.setTimeBegin(System.nanoTime());
-        arcs = new Arcs(settings);
-        arcs.computeIntersections();
-        repaint();
-    }
-
-    @Override
-    public void updateArcsAndRepaint() {
-        settings.setTimeBegin(System.nanoTime());
-        repaint();
-    }
-
-    @Override
-    public void updateArcsAndRepaint(Point point) {
-        settings.setTimeBegin(System.nanoTime());
-        arcs.setAnglePairsListArray(new ArrayList<>(settings.getCirclesQuantity()));
-        arcs.setAnglePairsListFinal(new ArrayList<>());
-        arcs.setAnglePairsList(new ArrayList<>());
-        SwingUtilities.convertPointToScreen(point, this);
-        arcs.getArcsArray()[settings.getCirclesQuantity() - 1].setX(point.getX());
-        arcs.getArcsArray()[settings.getCirclesQuantity() - 1].setY(point.getY());
-        for (int i = 0; i < arcs.getArcsArray().length; i++) {
-            arcs.getArcsArray()[i].setExcluded(false);
-        }
-        arcs.computeIntersections();
-        repaint();
-    }
-
-    @Override
-    public void updateArcsAndRepaint(Point point, int wheelRotationValue) {
-        settings.setTimeBegin(System.nanoTime());
-        arcs.setAnglePairsListArray(new ArrayList<>(settings.getCirclesQuantity()));
-        arcs.setAnglePairsListFinal(new ArrayList<>());
-        arcs.setAnglePairsList(new ArrayList<>());
-        SwingUtilities.convertPointToScreen(point, this);
-        arcs.getArcsArray()[settings.getCirclesQuantity() - 1].setX(point.getX());
-        arcs.getArcsArray()[settings.getCirclesQuantity() - 1].setY(point.getY());
-        for (int i = 0; i < arcs.getArcsArray().length; i++) {
-            arcs.getArcsArray()[i].setExcluded(false);
-        }
-        if (wheelRotationValue < 0
-                && arcs.getArcsArray()[settings.getCirclesQuantity() - 1].getDiameter() > 20) {
-            arcs.getArcsArray()[settings.getCirclesQuantity() - 1].setDiameter(
-                    arcs.getArcsArray()[settings.getCirclesQuantity() - 1].getDiameter() - 10);
-        }
-        if (wheelRotationValue > 0) {
-            arcs.getArcsArray()[settings.getCirclesQuantity() - 1].setDiameter(
-                    arcs.getArcsArray()[settings.getCirclesQuantity() - 1].getDiameter() + 10);
-        }
-        arcs.computeIntersections();
-        repaint();
-    }
-
-    @Override
-    public void rotateArcsAndRepaint(int wheelRotation) {
-        settings.setTimeBegin(System.nanoTime());
-        double newAngle;
-        double extraAngle;
-        double distance;
-        arcs.prepareArcsWhenCirclesRotated();
-        if (wheelRotation > 0) {
-            extraAngle = 0.04;
-        } else {
-            extraAngle = -0.04;
-        }
-        for (int i = 0; i < arcs.getArcsArray().length - 1; i++) {
-            newAngle = computeAngle(arcs.getArcsArray()[arcs.getArcsArray().length - 1], arcs.getArcsArray()[i], AngleKind.RAD) + extraAngle;
-            distance = computeDistance(arcs.getArcsArray()[i], arcs.getArcsArray()[arcs.getArcsArray().length - 1]);
-            computeAndSetDekartCoordinates(
-                    distance, newAngle,
-                    arcs.getArcsArray()[i],
-                    arcs.getArcsArray()[arcs.getArcsArray().length - 1]);
-        }
-        arcs.computeIntersections();
-        repaint();
-    }
-
-    @Override
-    public void scaleArcsAndRepaint(int wheelRotation) {
-        settings.setTimeBegin(System.nanoTime());
-        double newAngle;
-        double distance;
-        arcs.prepareArcsWhenCirclesRotated();
-        for (int i = 0; i < arcs.getArcsArray().length - 1; i++) {
-            arcs.getArcsArray()[i].setExcluded(false);
-            newAngle = computeAngle(arcs.getArcsArray()[arcs.getArcsArray().length - 1], arcs.getArcsArray()[i], AngleKind.RAD);
-            distance = computeDistance(arcs.getArcsArray()[i], arcs.getArcsArray()[arcs.getArcsArray().length - 1]);
-            if (wheelRotation > 0) {
-                distance = distance + distance / 15;
-            } else {
-                distance = distance - distance / 15;
-            }
-            computeAndSetDekartCoordinates(
-                    distance, newAngle,
-                    arcs.getArcsArray()[i],
-                    arcs.getArcsArray()[arcs.getArcsArray().length - 1]);
-        }
-        arcs.computeIntersections();
-        repaint();
-    }
-
-    @Override
-    public void dragArcsAndRepaint(Point point) {
-        settings.setTimeBegin(System.nanoTime());
-        arcs.prepareArcsWhenCirclesDragged();
-        arcs.setMouseDraggedDeltaX(arcs.getArcsArray()[arcs.getArcsArray().length - 1].getX() - point.getX());
-        arcs.setMouseDraggedDeltaY(arcs.getArcsArray()[arcs.getArcsArray().length - 1].getY() - point.getY());
-        arcs.computeIntersections();
-        repaint();
-    }
-
-    @Override
-    public void dropArcsAndRepaint() {
-        settings.setTimeBegin(System.nanoTime());
-        for (int i = 0; i < arcs.getArcsArray().length; i++) {
-            arcs.getArcsArray()[i].setX(arcs.getArcsArray()[i].getX() - arcs.getMouseDraggedDeltaX());
-            arcs.getArcsArray()[i].setY(arcs.getArcsArray()[i].getY() - arcs.getMouseDraggedDeltaY());
-        }
-        arcs.setMouseDraggedDeltaX(0);
-        arcs.setMouseDraggedDeltaY(0);
-        arcs.computeIntersections();
-        repaint();
-    }
-
-    @Override
-    public void toggleFullScreen() {
-        settings.setTimeBegin(System.nanoTime());
-        JFrame frame = (JFrame) SwingUtilities.getRoot(this);
-        if (device.getFullScreenWindow() == null) {  // Go to full screen mode
-            frame.dispose();
-            frame.setUndecorated(true);
-            device.setFullScreenWindow(frame);
-            frame.setVisible(true);
-        } else { // back to windowed mode
-            frame.dispose();
-            frame.setUndecorated(true);
-            device.setFullScreenWindow(null);
-            frame.setVisible(true);
-        }
     }
 
     private Arc2D createArc2D(AnglePair anglePair) {
