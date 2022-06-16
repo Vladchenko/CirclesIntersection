@@ -15,11 +15,11 @@ import static circlesintersection.Settings.APPLICATION_TITLE;
  */
 public class Canvas {
 
-    private final JFrame frame;
+    private final JFrame mFrame;
 
-    private final UiUpdateListener uiUpdateListener;
-    private final MouseOpsListener mouseOpsListener;
-    private final KeyboardOpsListener keyboardListener;
+    private final UiUpdateListener mUiUpdateListener;
+    private final MouseOpsListener mMouseOpsListener;
+    private final KeyboardOpsListener mKeyboardListener;
 
     /**
      * Public constructor.
@@ -31,14 +31,14 @@ public class Canvas {
     public Canvas(MouseOpsListener mouseOpsListener,
                   KeyboardOpsListener keyboardListener,
                   UiUpdateListener uiUpdateListener) {
-        frame = new JFrame();
-        this.mouseOpsListener = mouseOpsListener;
-        this.keyboardListener = keyboardListener;
-        this.uiUpdateListener = uiUpdateListener;
+        mFrame = new JFrame();
+        mMouseOpsListener = mouseOpsListener;
+        mKeyboardListener = keyboardListener;
+        mUiUpdateListener = uiUpdateListener;
     }
 
     /**
-     * TODO
+     * Makes an initialization of program.
      */
     public void initializeRendering() {
         initializeFrame();
@@ -46,26 +46,26 @@ public class Canvas {
     }
 
     private void initializeFrame() {
-        frame.setContentPane((JPanel) uiUpdateListener);
-        frame.setLayout(null);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(Toolkit.getDefaultToolkit().getScreenSize());
-        frame.setLocationRelativeTo(null);
-        frame.setResizable(false);
-        frame.setBackground(Color.BLACK);
-        frame.setTitle(APPLICATION_TITLE);
-        frame.setUndecorated(true);
+        mFrame.setContentPane((JPanel) mUiUpdateListener);
+        mFrame.setLayout(null);
+        mFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mFrame.setSize(Toolkit.getDefaultToolkit().getScreenSize());
+        mFrame.setLocationRelativeTo(null);
+        mFrame.setResizable(false);
+        mFrame.setBackground(Color.BLACK);
+        mFrame.setTitle(APPLICATION_TITLE);
+        mFrame.setUndecorated(true);
         // Hiding a mouse cursor
-        frame.setCursor(frame.getToolkit().createCustomCursor(
+        mFrame.setCursor(mFrame.getToolkit().createCustomCursor(
                 new BufferedImage(3, 3, BufferedImage.TYPE_INT_ARGB), new Point(0, 0),
                 "null"));
+        mFrame.setVisible(true);
     }
 
     private void addListeners() {
-        frame.addKeyListener(keyboardListener);
-        frame.addMouseListener(mouseOpsListener);
-        frame.addMouseMotionListener(mouseOpsListener);
-        frame.addMouseWheelListener(mouseOpsListener);
-        frame.setVisible(true);
+        mFrame.addKeyListener(mKeyboardListener);
+        mFrame.addMouseListener(mMouseOpsListener);
+        mFrame.addMouseMotionListener(mMouseOpsListener);
+        mFrame.addMouseWheelListener(mMouseOpsListener);
     }
 }

@@ -1,5 +1,7 @@
 package circlesintersection;
 
+import circlesintersection.models.DrawKind;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -9,30 +11,22 @@ import java.awt.Toolkit;
  */
 public class Settings {
 
+    //<editor-fold defaultstate="collapsed" desc="Fields">
     // Switching a debug method
     public static final boolean DEBUG_ENABLED = false;
-    public static final String APPLICATION_TITLE = "Circles Intersecting v1.2";
-
-    //<editor-fold defaultstate="collapsed" desc="Fields">
-    /** 
-     * Include circles that do not intersect with any other circles into 
-     * multiplicity of drawing circles drawn with solid line, not dashed.
+    public static final String APPLICATION_TITLE = "Circles Intersecting v1.3";
+    /*
+     * Draw circles that do not intersect with any other circles with a solid line, not a dashed one.
      */
-    private static final boolean INCLUDE_NOT_INTERSECTED = true;
+    public static final boolean DRAW_NOT_INTERSECTED_SOLID = true;
 
-    private final int populationMode = 0;  // Circles population mode
     // Number of circles present on a screen
     private final int circlesQuantity = 80;
-    // Defines a range that a "defaultDiameter" field to be changed at.
+    // Range that a "defaultDiameter" field to be changed at.
     private final int diameterSpan = 150;
-    private final int defaultDiameter = 200;
-    private final int angleBeginSpan = 180;
-    private final int angleValidSpan = 360;
     private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     private final int canvasWidth = (int) screenSize.getWidth();// - 10; //- (int) screenSize.getWidth() / 12;
     private final int canvasHeight = (int) screenSize.getHeight();// - 8; //- (int) screenSize.getHeight() / 9;
-    private final int canvasWidthHalf = canvasWidth / 2;// - 10;
-    private final int canvasHeightHalf = canvasHeight / 2;// - 24;
 
     // To use gradient for drawing
     private boolean gradientEnabled = true;
@@ -54,7 +48,7 @@ public class Settings {
     private final Color subjectCircleColor = new Color(100, 200, 255);
     private static Settings settings;
     // Kind of drawing of the circles
-    private DrawKind drawKind = DrawKind.both;
+    private DrawKind drawKind = DrawKind.BOTH;
     // Flag checks if a Ctrl key is pressed.
     private boolean keyCtrl = false;
     // Flag checks if a Shift key is pressed.
@@ -132,18 +126,6 @@ public class Settings {
         return increment;
     }
     
-    public int getDefaultDiameter() {
-        return defaultDiameter;
-    }
-    
-    public int getCanvasWidthHalf() {
-        return canvasWidthHalf;
-    }
-    
-    public int getCanvasHeightHalf() {
-        return canvasHeightHalf;
-    }
-    
     public int getCanvasWidth() {
         return canvasWidth;
     }
@@ -158,22 +140,6 @@ public class Settings {
     
     public int getDiameterSpan() {
         return diameterSpan;
-    }
-    
-    public int getPopulationMode() {
-        return populationMode;
-    }
-    
-    public int getAngleBeginSpan() {
-        return angleBeginSpan;
-    }
-    
-    public int getAngleValidSpan() {
-        return angleValidSpan;
-    }
-    
-    public static boolean isINCLUDE_NOT_INTERSECTED() {
-        return INCLUDE_NOT_INTERSECTED;
     }
 
     public boolean isKeyCtrl() {
@@ -197,14 +163,14 @@ public class Settings {
      * Circle through a mode for drawing.
      */
     public void changeDrawingMode() {
-        if (drawKind == DrawKind.arcs) {
-            drawKind = DrawKind.circles;
+        if (drawKind == DrawKind.ARCS) {
+            drawKind = DrawKind.CIRCLES;
         } else
-        if (drawKind == DrawKind.circles) {
-            drawKind = DrawKind.both;
+        if (drawKind == DrawKind.CIRCLES) {
+            drawKind = DrawKind.BOTH;
         } else
-        if (drawKind == DrawKind.both) {
-            drawKind = DrawKind.arcs;
+        if (drawKind == DrawKind.BOTH) {
+            drawKind = DrawKind.ARCS;
         }
     }
 }

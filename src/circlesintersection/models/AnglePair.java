@@ -13,38 +13,38 @@ import java.util.logging.Logger;
  */
 public class AnglePair {
 
-    private int number;
-    private double angleEnd;
-    private double angleBegin;
-    private static final NumberFormat numberFormat = NumberFormat.getNumberInstance();
+    private int mNumber;
+    private double mAngleEnd;
+    private double mAngleBegin;
+    private static final NumberFormat NUMBER_FORMAT = NumberFormat.getNumberInstance();
 
     @Override
     public String toString() {
-        return ("  " + number + ":" + numberFormat.format(angleBegin) + " " + numberFormat.format(angleEnd) + "  ");
+        return ("  " + mNumber + ":" + NUMBER_FORMAT.format(mAngleBegin) + " " + NUMBER_FORMAT.format(mAngleEnd) + "  ");
     }
 
     public void setNumber(int number) {
-        this.number = number;
+        this.mNumber = number;
     }
 
     public int getNumber() {
-        return number;
+        return mNumber;
     }
 
     public double getAngleEnd() {
-        return angleEnd;
+        return mAngleEnd;
     }
 
     public void setAngleEnd(double angleEnd) {
-        this.angleEnd = angleEnd;
+        this.mAngleEnd = angleEnd;
     }
 
     public double getAngleBegin() {
-        return angleBegin;
+        return mAngleBegin;
     }
 
     public void setAngleBegin(double angleBegin) {
-        this.angleBegin = angleBegin;
+        this.mAngleBegin = angleBegin;
     }
 
     /**
@@ -56,7 +56,7 @@ public class AnglePair {
         public int compare(AnglePair o1, AnglePair o2) {
             int value = 0;
             try {
-                value = Double.compare(o1.angleBegin, o2.angleBegin);
+                value = Double.compare(o1.mAngleBegin, o2.mAngleBegin);
             } catch (NullPointerException exception) {
                 Logger.getGlobal().log(Level.SEVERE,exception.getMessage());
             }

@@ -1,11 +1,11 @@
-package circlesintersection;
+package circlesintersection.utils;
 
 import circlesintersection.models.AnglePair;
 
 import java.util.ArrayList;
 
 /**
- * Providers logging methods for debug.
+ * Provides logging methods for debug.
  */
 public final class Logger {
 

@@ -57,6 +57,7 @@ AMBITION:
 	wheel moved or keyboard key pushed)
 
 ISSUES:
+    - 2022-06-17 Moving frame.dispose() out of if statement breaks toggling full screen mode. So code duplication cannot be refactored.
     - 2016-06-07 When drag and drop, right after drop, all arcs turn to a blue color (not only a "mouse-selected" one)
 	- On a slow PCs there are exceptions described below.
 	- 2016-01-27 NullPointerException in Arcs.java, AnglePairComparator class at line return Double.compare(oAnglePair1.angleBegin, oAnglePair2.angleBegin);

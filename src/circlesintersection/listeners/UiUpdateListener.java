@@ -1,6 +1,6 @@
 package circlesintersection.listeners;
 
-import circlesintersection.Arcs;
+import circlesintersection.models.Arcs;
 
 /**
  * Callbacks to UI to update and repaint it.

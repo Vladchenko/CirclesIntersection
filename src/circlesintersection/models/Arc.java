@@ -6,78 +6,78 @@ package circlesintersection.models;
 public class Arc {
 
     //<editor-fold defaultstate="collapsed" desc="Fields">
-    private int number = 0;
+    private int mNumber = 0;
     
-    private double x = 0;
-    private double y = 0;
-    private double diameter = 0;
-    private double angleBegin = 0;
+    private double mX = 0;
+    private double mY = 0;
+    private double mDiameter = 0;
+    private double mAngleBegin = 0;
     /*
      * Value for "span" of angle that begins with "angleBegin" and ends with "angleBegin + angleSpan".
      */
-    private double angleSpan = 0;
+    private double mAngleSpan = 0;
     /*
      * Flag tells whether current circle is to be excluded from checking if it intersects with other circles around.
      * If a circle is inside any other circle, this flag is set to true.
      */
-    private boolean excluded = false;
+    private boolean mExcluded = false;
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Getters & Setters">
     public int getNumber() {
-        return number;
+        return mNumber;
     }
 
     public void setNumber(int number) {
-        this.number = number;
+        mNumber = number;
     }
 
     public double getX() {
-        return x;
+        return mX;
     }
     
     public void setX(double x) {
-        this.x = x;
+        mX = x;
     }
     
     public double getY() {
-        return y;
+        return mY;
     }
     
     public void setY(double y) {
-        this.y = y;
+        mY = y;
     }
     
     public double getDiameter() {
-        return diameter;
+        return mDiameter;
     }
     
     public void setDiameter(double r) {
-        this.diameter = r;
+        mDiameter = r;
     }
     
     public double getAngleBegin() {
-        return angleBegin;
+        return mAngleBegin;
     }
     
     public void setAngleBegin(double angleBegin) {
-        this.angleBegin = angleBegin;
+        mAngleBegin = angleBegin;
     }
     
     public double getAngleSpan() {
-        return angleSpan;
+        return mAngleSpan;
     }
     
     public void setAngleSpan(double AngleValid) {
-        this.angleSpan = AngleValid;
+        mAngleSpan = AngleValid;
     }
     
     public boolean isExcluded() {
-        return excluded;
+        return mExcluded;
     }
 
     public void setExcluded(boolean excluded) {
-        this.excluded = excluded;
+        mExcluded = excluded;
     }
     //</editor-fold>
 }

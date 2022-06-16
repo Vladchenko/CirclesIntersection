@@ -1,4 +1,4 @@
-package circlesintersection;
+package circlesintersection.models;
 
 /**
  * Defines what kind of drawing is applied.
@@ -7,13 +7,13 @@ public enum DrawKind {
     /**
      * Only dashed circles are drawn.
      */
-    circles,
+    CIRCLES,
     /**
      * Only intersected arcs are drawn.
      */
-    arcs,
+    ARCS,
     /**
      * Both - dashed circles and intersected arcs.
      */
-    both
+    BOTH
 };

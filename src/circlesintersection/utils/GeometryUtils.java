@@ -1,5 +1,6 @@
-package circlesintersection;
+package circlesintersection.utils;
 
+import circlesintersection.models.AngleKind;
 import circlesintersection.models.Arc;
 
 /**
@@ -17,7 +18,7 @@ public final class GeometryUtils {
      * @param value radian representation
      * @return grad value
      */
-    static double convertRadToGrad(double value) {
+    public static double convertRadToGrad(double value) {
         return (value / Math.PI * 180);
     }
 
@@ -27,7 +28,7 @@ public final class GeometryUtils {
      * @param value grad representation
      * @return radian value
      */
-    static double convertGradToRad(double value) {
+    public static double convertGradToRad(double value) {
         return (value / 180 * Math.PI);
     }
 
@@ -37,7 +38,7 @@ public final class GeometryUtils {
      *
      * @return distance between arcs
      */
-    static double computeDistance(Arc arc, Arc arc2) {
+    public static double computeDistance(Arc arc, Arc arc2) {
         return Math.sqrt(Math.pow(arc.getX() - arc2.getX(), 2)
                 + Math.pow(arc.getY() - arc2.getY(), 2));
     }
@@ -49,7 +50,7 @@ public final class GeometryUtils {
      *
      * @return compute an angle between the centers of a circles. arc stands for a central dot.
      */
-    static double computeAngle(Arc arc, Arc arc2, AngleKind angleKind) {
+    public static double computeAngle(Arc arc, Arc arc2, AngleKind angleKind) {
         double angle;
         double deltaX = arc2.getX() - arc.getX();
         double deltaY = arc2.getY() - arc.getY();
@@ -87,7 +88,7 @@ public final class GeometryUtils {
      * @param arc       considered arc
      * @param arcSelected   selected arc
      */
-    static void computeAndSetDekartCoordinates(double distance, double angle, Arc arc, Arc arcSelected) {
+    public static void computeAndSetDekartCoordinates(double distance, double angle, Arc arc, Arc arcSelected) {
         arc.setX(arcSelected.getX() + Math.cos(angle) * distance);
         arc.setY(arcSelected.getY() - Math.sin(angle) * distance);
     }
