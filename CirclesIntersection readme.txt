@@ -6,9 +6,11 @@ Author:		    Yanchenko Vlad
 
 TODO
         - Unittests
+        - Add polymorphism
+        ? Maybe there is a way for Arc to extend Arc2D
         - Move all the hardcoded values into Settings.java
-        - Maybe use java.util.prefs.Preferences instead of Settings ?
-        - Maybe there is way to refine an algorithm ?
+        ? Maybe use java.util.prefs.Preferences instead of Settings
+        ? Maybe there is way to refine an algorithm
 
 DESCRIPTION: 	
         This program draws a circles that have an intersected areas removed, having one of a circles attached to a mouse cursor.
@@ -45,16 +47,13 @@ USER INTERACTION:
                 Dragging all arcs(circles)
 
 AMBITION:
-    - Implement dragging of arcs
-    - Implement an arcs(circles) moving in clockwise or counter-clockwise direction relatively to a selected circle
-    by a mouse wheel move.
-	- Move a timeSpent Jlabel to the left and make it gray. (declined, as of now, this label is located on a left-hand
-	corner of screen and grayed)
-	- Make it fullscreen. (implemented)
-	- Replace a O(n2) loop that makes all the circles not "excluded" with a list.
-	- Java millisecs for one frame. (implemented)
-	- Add FPS counter. (cannot be done, since app doesn't draw canvas constantly, only when there was a mouse cursor or
-	wheel moved or keyboard key pushed)
+    - Implement an arcs(circles) moving in clockwise or counter-clockwise direction relatively to a selected circle by a mouse wheel move.
+    - Replace a O(n2) loop that makes all the circles not "excluded" with a list.
+    - Implement dragging of arcs (implemented).
+	- Make it fullscreen (implemented).
+	- Java millisecs for one frame (implemented).
+	- Move a timeSpent Jlabel to the left and make it gray (declined, as of now, this label is located on a left-hand corner of screen and grayed).
+	- Add FPS counter (cannot be done, since app doesn't draw canvas constantly, only when there was a mouse cursor or wheel moved or keyboard key pushed).
 
 ISSUES:
     - 2022-06-17 Moving frame.dispose() out of if statement breaks toggling full screen mode. So code duplication cannot be refactored.
@@ -62,7 +61,7 @@ ISSUES:
 	- On a slow PCs there are exceptions described below.
 	- 2016-01-27 NullPointerException in Arcs.java, AnglePairComparator class at line return Double.compare(oAnglePair1.angleBegin, oAnglePair2.angleBegin);
 	- 2016-01-27 ConcurrentModificationException in Arcs.java, in checkIntersection() method, at line for (ArrayList<AnglePair> anglePairsListArray1 : anglePairsListArray).
-	- 2014-08-22 AngleMeasurement project shows that arc of 359-360 degrees also performs such bug, this is why I suppose it is a Java's drawback and cannot fixed within a program, it should be changed in an API. Due to this reason, program could be set to a version 1.0
+	- 2014-08-22 AngleMeasurement project shows that arc of 359-360 degrees also performs such bug, this is why I suppose it is a Java's drawback and cannot be fixed within a program, it should be changed in an API. Due to this reason, program could be set to a version 1.0
         - 2014-08-22 When a circle has a large radius, its arcs are not precisely shown. This is because of a drawArc method having an integer parameters for a beginAngle and endAngle. This might be resolved using Arc2D, link for it - http://stackoverflow.com/questions/14666018/java-graphics-drawarc-with-high-precision
         - 2014-06-06 Last arc of a circle doesn't fit to the first one. It's like it is shifted to the left for one pixel. That is distinctly seen on a picture. I have no idea on how to get a reason of why it is drawn like that. Due to this problem, I put this program a version 0.99 .
 

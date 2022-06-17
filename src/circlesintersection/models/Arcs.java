@@ -22,7 +22,6 @@ public class Arcs {
     private final Settings mSettings;
     private double mMouseDraggedDeltaX;
     private double mMouseDraggedDeltaY;
-    private double[] mIntermediateAnglesArray;
     private ArrayList<AnglePair> mAnglePairsList;
     private ArrayList<AnglePair> mAnglePairsListFinal;
     private ArrayList<ArrayList<AnglePair>> mAnglePairsListArray;
@@ -96,7 +95,6 @@ public class Arcs {
     }
 
     private void prepareArcsAccompanyingLists() {
-        mIntermediateAnglesArray = new double[mSettings.getCirclesQuantity()];
         mAnglePairsList = new ArrayList<>();
         mAnglePairsListFinal = new ArrayList<>();
         mAnglePairsListArray = new ArrayList<>(mSettings.getCirclesQuantity());
@@ -111,7 +109,7 @@ public class Arcs {
     /**
      * Create a new anglePair and add it to anglePairsList.
      */
-    private void addNewPair(
+    private void addAnglePair(
             ArrayList<AnglePair> anglePairsList,
             AnglePair anglePair) {
         AnglePair anglePairNew = new AnglePair();
@@ -141,9 +139,9 @@ public class Arcs {
     }
 
     /**
-     * Creates a new instance of an anglePairsList and adds it to anglePairsListArray object
+     * Create a new instance of an anglePairsList and adds it to anglePairsListArray object
      */
-    private void addNewInstanceOfPairsList(
+    private void addAnglePairsList(
             ArrayList<ArrayList<AnglePair>> anglePairsListArray,
             ArrayList<AnglePair> anglePairsList) {
         ArrayList<AnglePair> anglePairsListNew = new ArrayList<>(anglePairsList);
@@ -162,25 +160,10 @@ public class Arcs {
      */
     private void checkIntersection() {
 
-        double l;
-        double l1;
-        double radius1;
-        double radius2;
-        double alpha;
-        double beta;
-        double gamma;
+        double distance;
         boolean intersected;
 
-        /*
-         * This O(n^2) loop checks if there is any circle that thoroughly immersed
-         * inside any of the other circles and marks it as an excluded from
-         * being treated as valid for checking an intersection with it
-         */
-        for (int i = 0; i < mSettings.getCirclesQuantity(); i++) {
-            for (int j = 0; j < mSettings.getCirclesQuantity(); j++) {
-                excludeCircleIfInsideAnotherOne(i, j, mArcsArray);
-            }
-        }
+        excludeInnerCircles(mSettings, mArcsArray);
 
         /*
          * Adding a new pair of angles that arc is to be drawn by, i.e.
@@ -188,44 +171,29 @@ public class Arcs {
          */
         AnglePair anglePair = new AnglePair();
 
-        // Passing through all the circles */
+        // Passing through all the circles
         for (int i = 0; i < mSettings.getCirclesQuantity(); i++) {
             intersected = false;
-            // If circle(arc) is not excluded */
+            // If circle(arc) is not excluded
             if (!mArcsArray[i].isExcluded()) {
                 for (int j = 0; j < mSettings.getCirclesQuantity(); j++) {
                     if (i != j && !mArcsArray[j].isExcluded()) {
-                        l = computeDistance(mArcsArray[i], mArcsArray[j]);
+                        distance = computeDistance(mArcsArray[i], mArcsArray[j]);
                         /*
-                         * If a sum of radiuses of two regarded circles less
+                         * If a sum of radii of two regarded circles less
                          * than distance among them, i.e. if a circles intersect
                          */
-                        if ((mArcsArray[i].getDiameter() / 2 + mArcsArray[j].getDiameter() / 2 > l)) {
-                            radius1 = mArcsArray[i].getDiameter() / 2;
-                            radius2 = mArcsArray[j].getDiameter() / 2;
-                            // Computing angle between circles oArcs[i] and oArcs[j]
-                            mIntermediateAnglesArray[i] = computeAngle(mArcsArray[i], mArcsArray[j], AngleKind.RAD);
-                            /*
-                             * Computing a beginning and an ending angles of an
-                             * arc to be later drawn instead of a circle.
-                             */
-                            l1 = (Math.pow(radius1, 2) - Math.pow(radius2, 2) + l * l) / (2 * l);
-                            alpha = Math.acos(l1 / (mArcsArray[i].getDiameter() / 2));
-                            beta = mIntermediateAnglesArray[i] - alpha;
-                            gamma = mIntermediateAnglesArray[i] + alpha;
-                            if (mIntermediateAnglesArray[i] + alpha >= Math.PI * 2) {
-                                gamma -= Math.PI * 2;
-                            }
-                            anglePair.setAngleBegin(convertRadToGrad(beta));
-                            anglePair.setAngleEnd(convertRadToGrad(gamma));
+                        if ((mArcsArray[i].getDiameter() / 2 + mArcsArray[j].getDiameter() / 2 > distance)) {
 
-                            // To see the number of an intersecting circle */
-                            //anglePair.number = oArcs[j].getNumber();
-                            // To see the number of own circle */
+                            convertAnglesRadToGrad(anglePair,
+                                    mArcsArray[i],
+                                    mArcsArray[j],
+                                    distance);
+
                             anglePair.setNumber(mArcsArray[i].getNumber());
 
                             if (!Double.isNaN(anglePair.getAngleBegin())) {
-                                addNewPair(mAnglePairsList, anglePair);
+                                addAnglePair(mAnglePairsList, anglePair);
                             }
                             intersected = true;
                         }
@@ -236,24 +204,15 @@ public class Arcs {
             }
 
             /*
-             * Checking if a circle intersects with any other circle and if it
-             * doesn't, then it draws or doesn't draw it as an intersected area.
+             * If a circle doesn't intersect with any other, then make it to be a circle, not an arc, i.e. make its
+             * angles to be [0;360] (full circle).
              */
             if (!intersected
                     && Settings.DRAW_NOT_INTERSECTED_SOLID) {
-                // To see the number of an intersecting circle
-                // anglePair.number = oArcs[j].getNumber();
-                // To see the number of own circle
-                anglePair.setNumber(mArcsArray[i].getNumber());
-                anglePair.setAngleBegin(0);
-                anglePair.setAngleEnd(0);
-                if (mArcsArray[i].isExcluded()) {
-                    anglePair.setAngleEnd(360);
-                }
-                addNewPair(mAnglePairsList, anglePair);
+                addAnglePair(mAnglePairsList, getNotIntersectedCircle(anglePair, mArcsArray[i]));
             }
             if (!mAnglePairsList.isEmpty()) {
-                addNewInstanceOfPairsList(mAnglePairsListArray, mAnglePairsList);
+                addAnglePairsList(mAnglePairsListArray, mAnglePairsList);
             }
             mAnglePairsList.clear();
         }
@@ -281,6 +240,25 @@ public class Arcs {
 
     }
 
+    /**
+     * Exclude circles that are placed inside any other circles from a list of regarded circles
+     *
+     * @param settings  {@link Settings}
+     * @param arcsArray array of {@link Arc}
+     */
+    private void excludeInnerCircles(Settings settings, Arc[] arcsArray) {
+        /*
+         * This O(n^2) loop checks if there is any circle that thoroughly immersed
+         * inside any of the other circles and marks it as an excluded from
+         * being treated as valid for checking an intersection with it
+         */
+        for (int i = 0; i < settings.getCirclesQuantity(); i++) {
+            for (int j = 0; j < settings.getCirclesQuantity(); j++) {
+                excludeCircleIfInsideAnotherOne(i, j, arcsArray);
+            }
+        }
+    }
+
     private void excludeCircleIfInsideAnotherOne(int circleIndex1, int circleIndex2, Arc[] arcs) {
         if (circleIndex1 != circleIndex2) {
             /*
@@ -299,11 +277,42 @@ public class Arcs {
         }
     }
 
+    private AnglePair getNotIntersectedCircle(AnglePair anglePair, Arc arc) {
+        anglePair.setNumber(arc.getNumber());
+        anglePair.setAngleBegin(0);
+        anglePair.setAngleEnd(0);
+        if (arc.isExcluded()) {
+            anglePair.setAngleEnd(360);
+        }
+        return anglePair;
+    }
+
     /**
-     * Removes the redundant arcs (the ones that overlap with others). I.e.
+     * Convert a beginning and ending angles of an intersected circles from RAD to GRAD and put them to {@link AnglePair}.
+     *
+     * @param anglePair model to keep computed angles
+     * @param arc       circle(arc) #1
+     * @param arc2      circle(arc) #2 to compute
+     * @param distance  between circles(arcs)
+     */
+    private void convertAnglesRadToGrad(AnglePair anglePair, Arc arc, Arc arc2, double distance) {
+        double angle = computeAngle(arc, arc2, AngleKind.RAD);
+        double l1 = (Math.pow(arc.getDiameter() / 2, 2) - Math.pow(arc2.getDiameter() / 2, 2) + distance * distance) / (2 * distance);
+        double alpha = Math.acos(l1 / (arc.getDiameter() / 2));
+        double beta = angle - alpha;
+        double gamma = angle + alpha;
+        if (angle + alpha >= Math.PI * 2) {
+            gamma -= Math.PI * 2;
+        }
+        anglePair.setAngleBegin(convertRadToGrad(beta));
+        anglePair.setAngleEnd(convertRadToGrad(gamma));
+    }
+
+    /**
+     * Remove the redundant arcs (the ones that overlap with others). I.e.
      * when there are arcs like [30,68] and [49, 105], method will have made a one arc - [30, 105].
      */
-    private void removeRedundancy() {
+    private void removeRedundantArcs() {
         for (int i = 0; i < mAnglePairsListArray.size(); i++) {
             if (mAnglePairsListArray.get(i).size() > 1) {
                 for (int j = 0; j < mAnglePairsListArray.get(i).size() - 1; j++) {
@@ -329,10 +338,10 @@ public class Arcs {
     }
 
     /**
-     * Inverts the arcs, for there could be shown not the ones that intersect,
+     * Invert the arcs, for there could be shown not the ones that intersect,
      * but the ones that free of intersection.
      */
-    private void prepareArcs() {
+    private void invertArcs() {
 
         AnglePair anglePair;
 
@@ -456,11 +465,11 @@ public class Arcs {
     }
 
     /**
-     * Performs required computations to draw an arcs.
+     * Perform required computations to draw an arcs.
      */
     public void computeIntersections() {
         checkIntersection();
-        removeRedundancy();
-        prepareArcs();
+        removeRedundantArcs();
+        invertArcs();
     }
 }

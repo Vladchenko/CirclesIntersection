@@ -6,7 +6,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Pair of arc angles of some circle.
+ * Model for a pair of arc angles of some circle.
  *
  * [angleBegin] initial angle of an arc.
  * [angleEnd] ending angle of an arc.

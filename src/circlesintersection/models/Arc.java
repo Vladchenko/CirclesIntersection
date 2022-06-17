@@ -11,11 +11,6 @@ public class Arc {
     private double mX = 0;
     private double mY = 0;
     private double mDiameter = 0;
-    private double mAngleBegin = 0;
-    /*
-     * Value for "span" of angle that begins with "angleBegin" and ends with "angleBegin + angleSpan".
-     */
-    private double mAngleSpan = 0;
     /*
      * Flag tells whether current circle is to be excluded from checking if it intersects with other circles around.
      * If a circle is inside any other circle, this flag is set to true.
@@ -54,22 +49,6 @@ public class Arc {
     
     public void setDiameter(double r) {
         mDiameter = r;
-    }
-    
-    public double getAngleBegin() {
-        return mAngleBegin;
-    }
-    
-    public void setAngleBegin(double angleBegin) {
-        mAngleBegin = angleBegin;
-    }
-    
-    public double getAngleSpan() {
-        return mAngleSpan;
-    }
-    
-    public void setAngleSpan(double AngleValid) {
-        mAngleSpan = AngleValid;
     }
     
     public boolean isExcluded() {

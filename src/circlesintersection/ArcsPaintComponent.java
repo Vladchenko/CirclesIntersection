@@ -129,7 +129,7 @@ public class ArcsPaintComponent extends JPanel implements UiUpdateListener {
                     new float[]{(float) 0.0, (float) 1.0},
                     new Color[]{fadedColor, new Color(0, 0, 0, 0)});
             g2.setPaint(gradientPaint);
-            // Drawing a circled gradient at the center за circle
+            // Drawing a circled gradient at the center of circle
             g2.fillOval((int) arc.getX() - (int) mArcs.getMouseDraggedDeltaX() - (int) arc.getDiameter() / 2,
                     (int) arc.getY() - (int) mArcs.getMouseDraggedDeltaY() - (int) arc.getDiameter() / 2,
                     (int) arc.getDiameter(), (int) arc.getDiameter());

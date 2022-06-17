@@ -14,7 +14,7 @@ import static circlesintersection.utils.GeometryUtils.*;
 import static circlesintersection.utils.GeometryUtils.computeAndSetDekartCoordinates;
 
 /**
- * Performs operations on arcs, such as creation, update, rotation, scaling and notifies UI about it.
+ * Perform operations on arcs, such as creation, update, rotation, scaling and notify UI about it.
  */
 public class ArcsRenderer implements ArcsRendererListener {
 

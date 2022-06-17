@@ -7,7 +7,7 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 
 /**
- * Represents value needed for the domain.
+ * Represents values needed for the problem domain.
  */
 public class Settings {
 
