@@ -2,6 +2,8 @@ package circlesintersection.utils;
 
 import circlesintersection.models.AnglePair;
 
+import java.awt.*;
+import java.awt.geom.Arc2D;
 import java.util.ArrayList;
 
 /**
@@ -29,11 +31,12 @@ public final class Logger {
     }
 
     /**
+     * FIXME
      * Debug method. Prints resulting array of anglePairs, i.e. AnglePairsFinal to console.
      */
-    public static void printAnglePairsFinal(ArrayList<AnglePair> anglePairsListFinal) {
-        for (int i = 0; i < anglePairsListFinal.size(); i++) {
-            System.out.print(anglePairsListFinal.get(i) + "\t");
+    public static void printAnglePairsFinal(ArrayList<Arc2D> graphicsShapes) {
+        for (int i = 0; i < graphicsShapes.size(); i++) {
+            System.out.print(graphicsShapes.get(i) + "\t");
             if (i % 5 == 0 && i != 0) {
                 System.out.println();
             }

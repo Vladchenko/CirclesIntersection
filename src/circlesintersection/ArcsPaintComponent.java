@@ -1,15 +1,12 @@
 package circlesintersection;
 
 import circlesintersection.listeners.UiUpdateListener;
-import circlesintersection.models.AnglePair;
 import circlesintersection.models.Arc;
 import circlesintersection.models.Arcs;
 import circlesintersection.models.DrawKind;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.Arc2D;
-import java.awt.image.BufferedImage;
 
 import static circlesintersection.Settings.DEBUG_ENABLED;
 
@@ -79,11 +76,9 @@ public class ArcsPaintComponent extends JPanel implements UiUpdateListener {
         // Drawing an arcs for a not intersected areas of circles
         if (mSettings.getDrawKind().equals(DrawKind.ARCS)
                 || mSettings.getDrawKind().equals(DrawKind.BOTH)) {
-            for (int i = 0; i < mArcs.getAnglePairsListFinal().size(); i++) {
-                if ((mArcs.getAnglePairsListFinal().get(i)).getNumber() == mArcs.getArcsArray().length - 1) {
-                    g2.setColor(mSettings.getSubjectCircleColor());
-                }
-                g2.draw(createArc2D(mArcs.getAnglePairsListFinal().get(i)));
+            for (int i = 0; i < mArcs.getArcs2D().size(); i++) {
+                setArcColor(g2, i);
+                g2.draw(mArcs.getArcs2D().get(i));
             }
         }
 
@@ -96,6 +91,22 @@ public class ArcsPaintComponent extends JPanel implements UiUpdateListener {
                         + " milliseconds",
                 10,
                 40);
+    }
+
+    private void setArcColor(Graphics2D g2, int i) {
+        //FIXME Setting color this way is a huge kostil'
+        if (mArcs.getArcsArray()[mArcs.getArcsArray().length - 1].getX()
+                - mArcs.getMouseDraggedDeltaX()
+                - mArcs.getArcsArray()[mArcs.getArcsArray().length - 1].getDiameter() / 2
+                == mArcs.getArcs2D().get(i).getX()
+        && mArcs.getArcsArray()[mArcs.getArcsArray().length - 1].getY()
+                - mArcs.getMouseDraggedDeltaY()
+                - mArcs.getArcsArray()[mArcs.getArcsArray().length - 1].getDiameter() / 2
+                == mArcs.getArcs2D().get(i).getY()) {
+            g2.setColor(mSettings.getSubjectCircleColor());
+        } else {
+            g2.setColor(mSettings.getArcsColor());
+        }
     }
 
     @Override
@@ -149,21 +160,5 @@ public class ArcsPaintComponent extends JPanel implements UiUpdateListener {
         // Drawing a center of a circle.
         g2.drawOval((int) arc.getX() - (int) mArcs.getMouseDraggedDeltaX(),
                 (int) arc.getY() - (int) mArcs.getMouseDraggedDeltaY(), 1, 1);
-    }
-
-    private Arc2D createArc2D(AnglePair anglePair) {
-        return new Arc2D.Double(
-                mArcs.getArcsArray()[anglePair.getNumber()].getX()
-                        - mArcs.getMouseDraggedDeltaX()
-                        - mArcs.getArcsArray()[anglePair.getNumber()].getDiameter() / 2,
-                mArcs.getArcsArray()[anglePair.getNumber()].getY()
-                        - mArcs.getMouseDraggedDeltaY()
-                        - mArcs.getArcsArray()[anglePair.getNumber()].getDiameter() / 2,
-                mArcs.getArcsArray()[anglePair.getNumber()].getDiameter(),
-                mArcs.getArcsArray()[anglePair.getNumber()].getDiameter(),
-                anglePair.getAngleBegin(),
-                (anglePair.getAngleEnd()
-                        - anglePair.getAngleBegin()),
-                Arc2D.OPEN);
     }
 }

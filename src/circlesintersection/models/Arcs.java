@@ -3,9 +3,8 @@ package circlesintersection.models;
 import circlesintersection.Settings;
 import circlesintersection.utils.Logger;
 
-import java.awt.MouseInfo;
-import java.awt.Point;
-import java.awt.PointerInfo;
+import java.awt.*;
+import java.awt.geom.Arc2D;
 import java.util.*;
 
 import static circlesintersection.utils.GeometryUtils.*;
@@ -20,10 +19,10 @@ public class Arcs {
     //<editor-fold defaultstate="collapsed" desc="Fields">
     private final Arc[] mArcsArray;
     private final Settings mSettings;
+    private ArrayList<Arc2D> mArcs2D;
     private double mMouseDraggedDeltaX;
     private double mMouseDraggedDeltaY;
     private ArrayList<AnglePair> mAnglePairsList;
-    private ArrayList<AnglePair> mAnglePairsListFinal;
     private ArrayList<ArrayList<AnglePair>> mAnglePairsListArray;
     //</editor-fold>
 
@@ -54,12 +53,12 @@ public class Arcs {
         mAnglePairsList = anglePairsList;
     }
 
-    public ArrayList<AnglePair> getAnglePairsListFinal() {
-        return mAnglePairsListFinal;
+    public ArrayList<Arc2D> getArcs2D() {
+        return mArcs2D;
     }
 
-    public void setAnglePairsListFinal(ArrayList<AnglePair> anglePairsListFinal) {
-        mAnglePairsListFinal = anglePairsListFinal;
+    public void setAnglePairsListFinal(ArrayList<Arc2D> anglePairsListFinal) {
+        mArcs2D = anglePairsListFinal;
     }
 
     public double getMouseDraggedDeltaX() {
@@ -96,7 +95,7 @@ public class Arcs {
 
     private void prepareArcsAccompanyingLists() {
         mAnglePairsList = new ArrayList<>();
-        mAnglePairsListFinal = new ArrayList<>();
+        mArcs2D = new ArrayList<>();
         mAnglePairsListArray = new ArrayList<>(mSettings.getCirclesQuantity());
         if (mArcsArray[0] == null) {
             for (int i = 0; i < mArcsArray.length; i++) {
@@ -234,7 +233,7 @@ public class Arcs {
         }
         if (DEBUG_ENABLED) {
             System.out.println("List of a sorted intersecting circles:");
-            Logger.printAnglePairsFinal(mAnglePairsListFinal);
+            Logger.printAnglePairsFinal(mArcs2D);
             System.out.println();
         }
 
@@ -347,7 +346,6 @@ public class Arcs {
 
         for (ArrayList<AnglePair> anglePairs : mAnglePairsListArray) {
             for (int j = 0; j < anglePairs.size(); j++) {
-
                 anglePair = new AnglePair();
 
                 if (anglePairs.get(j).getAngleBegin() == 0
@@ -364,7 +362,9 @@ public class Arcs {
                     anglePair.setAngleBegin(0);
                     anglePair.setAngleEnd(anglePairs.get(j).getAngleBegin());
                     anglePair.setNumber(anglePairs.get(j).getNumber());
-                    mAnglePairsListFinal.add(anglePair);
+                    mArcs2D.add(
+                            createArc2D(anglePair)
+                    );
                     continue;
                 }
 
@@ -375,7 +375,9 @@ public class Arcs {
                         anglePair.setAngleBegin(anglePairs.get(j).getAngleEnd());
                         anglePair.setAngleEnd(anglePairs.get(j + 1).getAngleBegin());
                         anglePair.setNumber(anglePairs.get(j).getNumber());
-                        mAnglePairsListFinal.add(anglePair);
+                        mArcs2D.add(
+                                createArc2D(anglePair)
+                        );
                         continue;
                     }
                     if (anglePairs.size() == 1
@@ -383,7 +385,9 @@ public class Arcs {
                         anglePair.setAngleBegin(anglePairs.get(j).getAngleEnd());
                         anglePair.setAngleEnd(360);
                         anglePair.setNumber(anglePairs.get(j).getNumber());
-                        mAnglePairsListFinal.add(anglePair);
+                        mArcs2D.add(
+                                createArc2D(anglePair)
+                        );
                         continue;
                     }
                 }
@@ -395,32 +399,42 @@ public class Arcs {
                         if (anglePairs.size() == 1) {
                             anglePair.setAngleBegin(0);
                             anglePair.setAngleEnd(anglePairs.get(j).getAngleBegin());
-                            mAnglePairsListFinal.add(anglePair);
                             anglePair.setNumber(anglePairs.get(j).getNumber());
+                            mArcs2D.add(
+                                    createArc2D(anglePair)
+                            );
                             anglePair = new AnglePair();
                             anglePair.setAngleBegin(anglePairs.get(j).getAngleEnd());
                             anglePair.setAngleEnd(360);
                             anglePair.setNumber(anglePairs.get(j).getNumber());
-                            mAnglePairsListFinal.add(anglePair);
+                            mArcs2D.add(
+                                    createArc2D(anglePair)
+                            );
                             continue;
                         }
                         if (anglePairs.size() > 1) {
                             anglePair.setAngleBegin(0);
                             anglePair.setAngleEnd(anglePairs.get(j).getAngleBegin());
                             anglePair.setNumber(anglePairs.get(j).getNumber());
-                            mAnglePairsListFinal.add(anglePair);
+                            mArcs2D.add(
+                                    createArc2D(anglePair)
+                            );
                             anglePair = new AnglePair();
                             anglePair.setAngleBegin(anglePairs.get(j).getAngleEnd());
                             anglePair.setAngleEnd(anglePairs.get(j + 1).getAngleBegin());
                             anglePair.setNumber(anglePairs.get(j).getNumber());
-                            mAnglePairsListFinal.add(anglePair);
+                            mArcs2D.add(
+                                    createArc2D(anglePair)
+                            );
                         }
                     } else {
                         if (anglePairs.size() == 2) {
                             anglePair.setAngleBegin(anglePairs.get(j).getAngleEnd());
                             anglePair.setAngleEnd(360);
                             anglePair.setNumber(anglePairs.get(j).getNumber());
-                            mAnglePairsListFinal.add(anglePair);
+                            mArcs2D.add(
+                                    createArc2D(anglePair)
+                            );
                             continue;
                         }
                         if (anglePairs.size() > 2
@@ -428,14 +442,18 @@ public class Arcs {
                             anglePair.setAngleBegin(anglePairs.get(j).getAngleEnd());
                             anglePair.setAngleEnd(anglePairs.get(j + 1).getAngleBegin());
                             anglePair.setNumber(anglePairs.get(j).getNumber());
-                            mAnglePairsListFinal.add(anglePair);
+                            mArcs2D.add(
+                                    createArc2D(anglePair)
+                            );
                             continue;
                         }
                         if (anglePairs.size() == j + 1) {
                             anglePair.setAngleBegin(anglePairs.get(j).getAngleEnd());
                             anglePair.setAngleEnd(360);
                             anglePair.setNumber(anglePairs.get(j).getNumber());
-                            mAnglePairsListFinal.add(anglePair);
+                            mArcs2D.add(
+                                    createArc2D(anglePair)
+                            );
                         }
                     }
                 }
@@ -444,9 +462,25 @@ public class Arcs {
 
         if (DEBUG_ENABLED) {
             System.out.println("Arcs to be drawn are:");
-            Logger.printAnglePairsFinal(mAnglePairsListFinal);
+            Logger.printAnglePairsFinal(mArcs2D);
             System.out.println();
         }
+    }
+
+    private Arc2D createArc2D(AnglePair anglePair) {
+        return new Arc2D.Double(
+                mArcsArray[anglePair.getNumber()].getX()
+                        - mMouseDraggedDeltaX
+                        - mArcsArray[anglePair.getNumber()].getDiameter() / 2,
+                mArcsArray[anglePair.getNumber()].getY()
+                        - mMouseDraggedDeltaY
+                        - mArcsArray[anglePair.getNumber()].getDiameter() / 2,
+                mArcsArray[anglePair.getNumber()].getDiameter(),
+                mArcsArray[anglePair.getNumber()].getDiameter(),
+                anglePair.getAngleBegin(),
+                (anglePair.getAngleEnd()
+                        - anglePair.getAngleBegin()),
+                Arc2D.OPEN);
     }
 
     /**
