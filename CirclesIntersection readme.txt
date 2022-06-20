@@ -108,11 +108,10 @@ Releases
 	- Release version of a program with reinitiating and redrawing of a canvas.
 
 
-
-
-Algorithm
+Formulation of problem:
     One is to create an app that shows an intersected circles that have their intersected areas (arcs) removed.
 
+Algorithm
     1. Create an array of a following struct:
     [
     	1. Coordinates of a circle.

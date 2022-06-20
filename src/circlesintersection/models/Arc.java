@@ -1,7 +1,7 @@
 package circlesintersection.models;
 
 /**
- * Class represents a part of a circle.
+ * Class represents a circle.
  */
 public class Arc {
 

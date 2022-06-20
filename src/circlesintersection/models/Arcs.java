@@ -17,7 +17,7 @@ import static circlesintersection.Settings.DEBUG_ENABLED;
 public class Arcs {
 
     //<editor-fold defaultstate="collapsed" desc="Fields">
-    private final Arc[] mArcsArray;
+    private final Arc[] mCirclesArray;
     private final Settings mSettings;
     private ArrayList<Arc2D> mArcs2D;
     private double mMouseDraggedDeltaX;
@@ -33,11 +33,11 @@ public class Arcs {
      */
     public Arcs(Settings settings) {
         mSettings = settings;
-        mArcsArray = new Arc[settings.getCirclesQuantity()];
+        mCirclesArray = new Arc[settings.getCirclesQuantity()];
         prepareArcsAccompanyingLists();
-        randomizeArcs(mArcsArray);
+        randomizeCircles(mCirclesArray);
         // Setting mouse cursor location to last arc in array
-        setArcToMousePosition(mArcsArray[mArcsArray.length - 1]);
+        setArcToMousePosition(mCirclesArray[mCirclesArray.length - 1]);
     }
 
     //region getters & setters
@@ -46,7 +46,7 @@ public class Arcs {
     }
 
     public Arc[] getArcsArray() {
-        return mArcsArray;
+        return mCirclesArray;
     }
 
     public void setAnglePairsList(ArrayList<AnglePair> anglePairsList) {
@@ -78,7 +78,7 @@ public class Arcs {
     }
     //endregion getters & setters
 
-    private void randomizeArcs(Arc[] arcsArray) {
+    private void randomizeCircles(Arc[] arcsArray) {
         for (Arc arc : arcsArray) {
             arc.setX(Math.random() * (mSettings.getCanvasWidth() - mSettings.getDiameterSpan() * 2) + mSettings.getDiameterSpan());
             arc.setY(Math.random() * (mSettings.getCanvasHeight() - mSettings.getDiameterSpan() * 2) + mSettings.getDiameterSpan());
@@ -97,10 +97,10 @@ public class Arcs {
         mAnglePairsList = new ArrayList<>();
         mArcs2D = new ArrayList<>();
         mAnglePairsListArray = new ArrayList<>(mSettings.getCirclesQuantity());
-        if (mArcsArray[0] == null) {
-            for (int i = 0; i < mArcsArray.length; i++) {
-                mArcsArray[i] = new Arc();
-                mArcsArray[i].setNumber(i);
+        if (mCirclesArray[0] == null) {
+            for (int i = 0; i < mCirclesArray.length; i++) {
+                mCirclesArray[i] = new Arc();
+                mCirclesArray[i].setNumber(i);
             }
         }
     }
@@ -162,7 +162,7 @@ public class Arcs {
         double distance;
         boolean intersected;
 
-        excludeInnerCircles(mSettings, mArcsArray);
+        excludeInnerCircles(mCirclesArray);
 
         /*
          * Adding a new pair of angles that arc is to be drawn by, i.e.
@@ -174,22 +174,22 @@ public class Arcs {
         for (int i = 0; i < mSettings.getCirclesQuantity(); i++) {
             intersected = false;
             // If circle(arc) is not excluded
-            if (!mArcsArray[i].isExcluded()) {
+            if (!mCirclesArray[i].isExcluded()) {
                 for (int j = 0; j < mSettings.getCirclesQuantity(); j++) {
-                    if (i != j && !mArcsArray[j].isExcluded()) {
-                        distance = computeDistance(mArcsArray[i], mArcsArray[j]);
+                    if (i != j && !mCirclesArray[j].isExcluded()) {
+                        distance = computeDistance(mCirclesArray[i], mCirclesArray[j]);
                         /*
                          * If a sum of radii of two regarded circles less
                          * than distance among them, i.e. if a circles intersect
                          */
-                        if ((mArcsArray[i].getDiameter() / 2 + mArcsArray[j].getDiameter() / 2 > distance)) {
+                        if ((mCirclesArray[i].getDiameter() / 2 + mCirclesArray[j].getDiameter() / 2 > distance)) {
 
                             convertAnglesRadToGrad(anglePair,
-                                    mArcsArray[i],
-                                    mArcsArray[j],
+                                    mCirclesArray[i],
+                                    mCirclesArray[j],
                                     distance);
 
-                            anglePair.setNumber(mArcsArray[i].getNumber());
+                            anglePair.setNumber(mCirclesArray[i].getNumber());
 
                             if (!Double.isNaN(anglePair.getAngleBegin())) {
                                 addAnglePair(mAnglePairsList, anglePair);
@@ -208,7 +208,7 @@ public class Arcs {
              */
             if (!intersected
                     && Settings.DRAW_NOT_INTERSECTED_SOLID) {
-                addAnglePair(mAnglePairsList, getNotIntersectedCircle(anglePair, mArcsArray[i]));
+                addAnglePair(mAnglePairsList, getNotIntersectedCircle(anglePair, mCirclesArray[i]));
             }
             if (!mAnglePairsList.isEmpty()) {
                 addAnglePairsList(mAnglePairsListArray, mAnglePairsList);
@@ -242,17 +242,16 @@ public class Arcs {
     /**
      * Exclude circles that are placed inside any other circles from a list of regarded circles
      *
-     * @param settings  {@link Settings}
      * @param arcsArray array of {@link Arc}
      */
-    private void excludeInnerCircles(Settings settings, Arc[] arcsArray) {
+    private void excludeInnerCircles(Arc[] arcsArray) {
         /*
          * This O(n^2) loop checks if there is any circle that thoroughly immersed
          * inside any of the other circles and marks it as an excluded from
          * being treated as valid for checking an intersection with it
          */
-        for (int i = 0; i < settings.getCirclesQuantity(); i++) {
-            for (int j = 0; j < settings.getCirclesQuantity(); j++) {
+        for (int i = 0; i < arcsArray.length; i++) {
+            for (int j = 0; j < arcsArray.length; j++) {
                 excludeCircleIfInsideAnotherOne(i, j, arcsArray);
             }
         }
@@ -469,14 +468,14 @@ public class Arcs {
 
     private Arc2D createArc2D(AnglePair anglePair) {
         return new Arc2D.Double(
-                mArcsArray[anglePair.getNumber()].getX()
+                mCirclesArray[anglePair.getNumber()].getX()
                         - mMouseDraggedDeltaX
-                        - mArcsArray[anglePair.getNumber()].getDiameter() / 2,
-                mArcsArray[anglePair.getNumber()].getY()
+                        - mCirclesArray[anglePair.getNumber()].getDiameter() / 2,
+                mCirclesArray[anglePair.getNumber()].getY()
                         - mMouseDraggedDeltaY
-                        - mArcsArray[anglePair.getNumber()].getDiameter() / 2,
-                mArcsArray[anglePair.getNumber()].getDiameter(),
-                mArcsArray[anglePair.getNumber()].getDiameter(),
+                        - mCirclesArray[anglePair.getNumber()].getDiameter() / 2,
+                mCirclesArray[anglePair.getNumber()].getDiameter(),
+                mCirclesArray[anglePair.getNumber()].getDiameter(),
                 anglePair.getAngleBegin(),
                 (anglePair.getAngleEnd()
                         - anglePair.getAngleBegin()),
@@ -488,7 +487,7 @@ public class Arcs {
      */
     public void prepareArcsWhenCirclesRotated() {
         prepareArcsAccompanyingLists();
-        setArcToMousePosition(mArcsArray[mArcsArray.length - 1]);
+        setArcToMousePosition(mCirclesArray[mCirclesArray.length - 1]);
     }
 
     /**
