@@ -24,21 +24,23 @@ public class Canvas {
     /**
      * Public constructor.
      *
+     * @param frame            to have a JPanel on it, to draw a graphics shapes.
      * @param mouseOpsListener listener for a mouse clicks and wheel rotating.
      * @param keyboardListener listener for a keyboard keys operating.
      * @param uiUpdateListener callbacks to UI to update and repaint it.
      */
-    public Canvas(MouseOpsListener mouseOpsListener,
+    public Canvas(JFrame frame,
+                  MouseOpsListener mouseOpsListener,
                   KeyboardOpsListener keyboardListener,
                   UiUpdateListener uiUpdateListener) {
-        mFrame = new JFrame();
+        mFrame = frame;
         mMouseOpsListener = mouseOpsListener;
         mKeyboardListener = keyboardListener;
         mUiUpdateListener = uiUpdateListener;
     }
 
     /**
-     * Makes an initialization of program.
+     * Perform an initialization of program.
      */
     public void initializeRendering() {
         initializeFrame();

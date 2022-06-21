@@ -9,33 +9,35 @@ import java.awt.event.*;
  */
 public class MouseOpsListener implements MouseListener, MouseMotionListener, MouseWheelListener {
 
-    private final Settings settings;
-    private final ArcsRendererListener rendererListener;
+    private final Settings mSettings;
+    private final CirclesRendererListener mRendererListener;
 
     /**
      * Public constructor
      *
      * @param rendererListener listener for UI updating callbacks
-     * @param settings         class that keeps all the settings for the application
+     * @param settings         all the settings for the application
      */
-    public MouseOpsListener(ArcsRendererListener rendererListener,
+    public MouseOpsListener(CirclesRendererListener rendererListener,
                             Settings settings) {
-        this.settings = settings;
-        this.rendererListener = rendererListener;
+        mSettings = settings;
+        mRendererListener = rendererListener;
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        rendererListener.createNewArcsAndRepaint();
+        mRendererListener.scatterCirclesComputeArcsAndRepaint();
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
+        mSettings.setMouseX(e.getX());
+        mSettings.setMouseY(e.getY());
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        rendererListener.dropArcsAndRepaint();
+        mRendererListener.dropCirclesAndRepaint();
     }
 
     @Override
@@ -48,25 +50,25 @@ public class MouseOpsListener implements MouseListener, MouseMotionListener, Mou
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        rendererListener.dragArcsAndRepaint(e.getPoint());
+        mRendererListener.dragCirclesAndRepaint(e.getPoint());
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        rendererListener.updateArcsAndRepaint(e.getPoint());
+        mRendererListener.updateCirclesAndRepaint(e.getPoint());
     }
 
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
-        if (settings.isKeyCtrl()) {
-            rendererListener.rotateArcsAndRepaint(e.getWheelRotation());
+        if (mSettings.isKeyCtrl()) {
+            mRendererListener.rotateCirclesAndRepaint(e.getWheelRotation());
         }
-        if (settings.isKeyShift()) {
-            rendererListener.scaleArcsAndRepaint(e.getWheelRotation());
+        if (mSettings.isKeyShift()) {
+            mRendererListener.scaleCirclesAndRepaint(e.getWheelRotation());
         }
-        if (!settings.isKeyCtrl()
-            && !settings.isKeyShift()) {
-            rendererListener.updateArcsAndRepaint(e.getPoint(), e.getWheelRotation());
+        if (!mSettings.isKeyCtrl()
+                && !mSettings.isKeyShift()) {
+            mRendererListener.updateCirclesAndRepaint(e.getPoint(), e.getWheelRotation());
         }
     }
 }

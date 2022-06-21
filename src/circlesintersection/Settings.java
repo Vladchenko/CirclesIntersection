@@ -11,23 +11,30 @@ import java.awt.Toolkit;
  */
 public class Settings {
 
-    //<editor-fold defaultstate="collapsed" desc="Fields">
+    // region Constants
     // Switching a debug method
     public static final boolean DEBUG_ENABLED = false;
     public static final String APPLICATION_TITLE = "Circles Intersecting v1.3";
-    /*
-     * Draw circles that do not intersect with any other circles with a solid line, not a dashed one.
-     */
+    // Draw circles that do not intersect with any other circles with a solid line, not a dashed one.
     public static final boolean DRAW_NOT_INTERSECTED_SOLID = true;
+    // endregion Constants
 
-    // Number of circles present on a screen
+    //region Fields
+    private static Settings settings;
+    // Number of circles present
     private final int circlesQuantity = 80;
     // Range that a "defaultDiameter" field to be changed at.
     private final int diameterSpan = 150;
+    // Value that stands for an increment for a diameter of a circles.
+    private final int increment = 50;
     private final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     private final int canvasWidth = (int) screenSize.getWidth();// - 10; //- (int) screenSize.getWidth() / 12;
     private final int canvasHeight = (int) screenSize.getHeight();// - 8; //- (int) screenSize.getHeight() / 9;
 
+    private int mouseX;
+    private int mouseY;
+    private int mouseDeltaX;
+    private int mouseDeltaY;
     // To use gradient for drawing
     private boolean gradientEnabled = true;
     // To use antialiasing for drawing
@@ -36,8 +43,14 @@ public class Settings {
     private long timeBegin;
     // Time stamp of the moment of the ending of a rendering
     private long timeTemp;
-    // Value that stands for an increment for a diameter of a circles.
-    private final int increment = 50;
+
+    // Kind of drawing of the circles
+    private DrawKind drawKind = DrawKind.BOTH;
+    // Flag checks if a Ctrl key is pressed.
+    private boolean keyCtrl = false;
+    // Flag checks if a Shift key is pressed.
+    private boolean keyShift = false;
+
     // Color for an areas where the arcs are absent (for an array of circles)
     private final Color fadedArcsColor = new Color(25, 61, 25);
     // Color for an areas where the arcs are present (for an array of circles)
@@ -46,16 +59,8 @@ public class Settings {
     private final Color fadedSubjectCircleColor = new Color(25, 50, 61);
     // Color for an areas where the arcs are present (for a subject circle)
     private final Color subjectCircleColor = new Color(100, 200, 255);
-    private static Settings settings;
-    // Kind of drawing of the circles
-    private DrawKind drawKind = DrawKind.BOTH;
-    // Flag checks if a Ctrl key is pressed.
-    private boolean keyCtrl = false;
-    // Flag checks if a Shift key is pressed.
-    private boolean keyShift = false;
-//</editor-fold>
+    //endregion Fields
 
-    // Utility class should not be instantiated through a constructor.
     private Settings() {
     }
 
@@ -69,7 +74,39 @@ public class Settings {
         return settings;
     }
 
-    //<editor-fold defaultstate="collapsed" desc="Getters & Setters">
+    //region Getters & Setters
+    public int getMouseDeltaX() {
+        return mouseDeltaX;
+    }
+
+    public void setMouseDeltaX(int mouseDeltaX) {
+        this.mouseDeltaX = mouseDeltaX;
+    }
+
+    public int getMouseDeltaY() {
+        return mouseDeltaY;
+    }
+
+    public void setMouseDeltaY(int mouseDeltaY) {
+        this.mouseDeltaY = mouseDeltaY;
+    }
+
+    public int getMouseX() {
+        return mouseX;
+    }
+
+    public void setMouseX(int mouseX) {
+        this.mouseX = mouseX;
+    }
+
+    public int getMouseY() {
+        return mouseY;
+    }
+
+    public void setMouseY(int mouseY) {
+        this.mouseY = mouseY;
+    }
+
     public boolean isAntiAliasingEnabled() {
         return antiAliasingEnabled;
     }
@@ -125,19 +162,19 @@ public class Settings {
     public int getIncrement() {
         return increment;
     }
-    
+
     public int getCanvasWidth() {
         return canvasWidth;
     }
-    
+
     public int getCanvasHeight() {
         return canvasHeight;
     }
-    
+
     public int getCirclesQuantity() {
         return circlesQuantity;
     }
-    
+
     public int getDiameterSpan() {
         return diameterSpan;
     }
@@ -157,7 +194,7 @@ public class Settings {
     public void setKeyShift(boolean keyShift) {
         this.keyShift = keyShift;
     }
-    //</editor-fold>
+    //endregion Getters & Setters
 
     /**
      * Circle through a mode for drawing.
@@ -165,11 +202,9 @@ public class Settings {
     public void changeDrawingMode() {
         if (drawKind == DrawKind.ARCS) {
             drawKind = DrawKind.CIRCLES;
-        } else
-        if (drawKind == DrawKind.CIRCLES) {
+        } else if (drawKind == DrawKind.CIRCLES) {
             drawKind = DrawKind.BOTH;
-        } else
-        if (drawKind == DrawKind.BOTH) {
+        } else if (drawKind == DrawKind.BOTH) {
             drawKind = DrawKind.ARCS;
         }
     }

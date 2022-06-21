@@ -1,6 +1,8 @@
 package circlesintersection.listeners;
 
-import circlesintersection.models.Arcs;
+import circlesintersection.models.CircleWithArcs;
+
+import java.util.List;
 
 /**
  * Callbacks to UI to update and repaint it.
@@ -8,9 +10,9 @@ import circlesintersection.models.Arcs;
 public interface UiUpdateListener {
 
     /**
-     * Update arcs, compute their intersections and repaint a canvas.
+     * Update circles, compute their intersections(i.e. arcs) and repaint a canvas.
      */
-    void updateArcsAndRepaint(Arcs arcs);
+    void updateCirclesAndRepaint(List<CircleWithArcs> circleWithArcsList);
 
     /**
      * Toggles full screen mode.

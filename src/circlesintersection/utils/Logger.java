@@ -1,10 +1,10 @@
 package circlesintersection.utils;
 
-import circlesintersection.models.AnglePair;
+import circlesintersection.models.Arc;
+import circlesintersection.models.CircleWithArcs;
 
-import java.awt.*;
 import java.awt.geom.Arc2D;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Provides logging methods for debug.
@@ -15,31 +15,38 @@ public final class Logger {
      * Private constructor, since no instance
      */
     private Logger() {
-        throw new RuntimeException("Utils class cannot be instantiated");
+        throw new RuntimeException("Utils class should not be instantiated");
     }
 
     /**
-     * Debug method. Prints anglePairs to console.
-     * @param anglePairsListArray   2d arraylist of {@link AnglePair}. It tells what arcs
-     *                              are there for every circle.
+     * Prints arcs of every circle to console.
+     *
+     * @param circleWithArcsList list of circles that consists list of intersections (arcs).
      */
-    public static void printAnglePairs(ArrayList<ArrayList<AnglePair>> anglePairsListArray) {
-        for (ArrayList<AnglePair> anglePairs : anglePairsListArray) {
-//            System.out.println("Arc #" + i++ + " inters-s with arcs #"+ itArray.next());
-            System.out.println(anglePairs);
+    public static void printArcs(List<CircleWithArcs> circleWithArcsList) {
+        System.out.println("All arcs for all circles: ");
+        for (int i = 0; i < circleWithArcsList.size(); i++) {
+            System.out.print(i + ":  ");
+            for (Arc arc : circleWithArcsList.get(i).getArcsList()) {
+                System.out.format("[%.2f:%.2f] ", arc.getAngleBegin(), arc.getAngleEnd());
+            }
+            System.out.println();
         }
     }
 
     /**
-     * FIXME
-     * Debug method. Prints resulting array of anglePairs, i.e. AnglePairsFinal to console.
+     * Prints resulting list of arcs ({@link Arc2D} list) to console.
+     *
+     * @param circleWithArcsList list of circles that consists list of intersections (arcs).
      */
-    public static void printAnglePairsFinal(ArrayList<Arc2D> graphicsShapes) {
-        for (int i = 0; i < graphicsShapes.size(); i++) {
-            System.out.print(graphicsShapes.get(i) + "\t");
-            if (i % 5 == 0 && i != 0) {
-                System.out.println();
+    public static void printArcs2DAngles(List<CircleWithArcs> circleWithArcsList) {
+        System.out.println("All Arc2D for all circles: ");
+        for (int i = 0; i < circleWithArcsList.size(); i++) {
+            System.out.print(i + ":  ");
+            for (Arc2D arc2D : circleWithArcsList.get(i).getArcs2D()) {
+                System.out.format("[%.2f:%.2f] ", arc2D.getAngleStart() , arc2D.getAngleExtent());
             }
+            System.out.println();
         }
     }
 }

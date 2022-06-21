@@ -5,9 +5,14 @@ Release Date:	2014-08-22 (last on 2022-06-07)
 Author:		    Yanchenko Vlad
 
 TODO
+        ? Probably Settings can be moved out of PaintComponent
+        - Split Settings into smaller ones
+        - Turn drawShapesForLastCircle(...) and drawShapesForAllCirclesBeforeLastOne(...) into one method.
         - Unittests
         - Add polymorphism
+            ! Seems useless
         ? Maybe there is a way for Arc to extend Arc2D
+            ! Then one cannot use Arc2D.Double class to instantiate, so bad idea
         - Move all the hardcoded values into Settings.java
         ? Maybe use java.util.prefs.Preferences instead of Settings
         ? Maybe there is way to refine an algorithm
@@ -47,7 +52,8 @@ USER INTERACTION:
                 Dragging all arcs(circles)
 
 AMBITION:
-    - Implement an arcs(circles) moving in clockwise or counter-clockwise direction relatively to a selected circle by a mouse wheel move.
+    - Make circles to be clickable and a clicked one becomes controlled to mouse cursor.
+    - Implement an arcs(circles) moving in clockwise or counter-clockwise direction relatively to a selected circle by a mouse wheel move (implemented).
     - Replace a O(n2) loop that makes all the circles not "excluded" with a list.
     - Implement dragging of arcs (implemented).
 	- Make it fullscreen (implemented).
@@ -67,6 +73,16 @@ ISSUES:
 
 
 Releases
+
+2022-06-07 v1.3.2
+    - Global refactoring is underway
+        - AnglePair renamed to Arc
+        - Several classes are split
+
+2022-06-07 v1.3.1
+    - Global refactoring is underway
+        - Arcs replaced with List<CircleWithArcs>
+        - AnglePair renamed to Arc
 
 2022-06-07 v1.3
     - New mouse features
@@ -116,7 +132,7 @@ Algorithm
     [
     	1. Coordinates of a circle.
     	2. Array of a circles that intersect with such circle.
-    	3. Array of a beginning angle and ending angle of an intersecting circles, so called anglePair.
+    	3. Array of a beginning angle and ending angle of an intersecting circles, so called arc.
     ]
 
     2. Create an array of objects of that struct.
@@ -126,7 +142,7 @@ Algorithm
     	3.1 Check if there are circles thoroughly immersed inside other circles and mark them "Excluded". This is done for these circles coudn't be regarded when checking intersection.
     	O(n^2)
 
-    	3.2 Creating new anglePair
+    	3.2 Creating new arc
     	O(1)
 
     	3.3 Pass through all the circles O(n)
