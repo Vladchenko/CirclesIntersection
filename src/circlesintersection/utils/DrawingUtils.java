@@ -19,7 +19,7 @@ public class DrawingUtils {
     /**
      * Public constructor.
      *
-     * @param settings
+     * @param settings all the settings for the application.
      */
     public DrawingUtils(Settings settings) {
         mSettings = settings;
@@ -97,9 +97,9 @@ public class DrawingUtils {
         g2d.setColor(mSettings.getArcsColor());
         for (int i = 0; i < circlesList.size(); i++) {
             if (i < 10) {
-                g2d.drawString(Integer.toString(i), circlesList.get(i).getX() - 3, circlesList.get(i).getY() - 7);
+                drawDebugString(g2d, i, circlesList.get(i), 3,7);
             } else {
-                g2d.drawString(Integer.toString(i), circlesList.get(i).getX() - 6, circlesList.get(i).getY() - 7);
+                drawDebugString(g2d, i, circlesList.get(i), 6,7);
             }
         }
     }
@@ -154,6 +154,17 @@ public class DrawingUtils {
                 BasicStroke.CAP_ROUND,
                 BasicStroke.JOIN_ROUND,
                 2, dash1, 0.0f));
+    }
+
+    private void drawDebugString(Graphics2D g2d,
+                                 int circlePosition,
+                                 CircleWithArcs circle,
+                                 int deltaX, int deltaY) {
+        g2d.drawString(
+                Integer.toString(circlePosition),
+                (int)(circle.getX() - deltaX),
+                (int)(circle.getY() - deltaY)
+        );
     }
 
     private void drawCirclesCenterDots(Graphics2D g2d, java.util.List<CircleWithArcs> circlesList) {

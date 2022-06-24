@@ -43,7 +43,7 @@ public final class GeometryUtils {
      * @param y2 second ordinate of object to compute a distance to.
      * @return distance between object by given coordinates
      */
-    public static double computeDistance(int x, int y, int x2, int y2) {
+    public static double computeDistance(double x, double y, double x2, double y2) {
         return Math.sqrt(Math.pow(x - x2, 2)
                 + Math.pow(y - y2, 2));
     }
@@ -96,7 +96,7 @@ public final class GeometryUtils {
                                                       double angle,
                                                       CircleWithArcs circle,
                                                       CircleWithArcs circleSelected) {
-        circle.setX((int) (circleSelected.getX() + Math.cos(angle) * distance));
-        circle.setY((int) (circleSelected.getY() - Math.sin(angle) * distance));
+        circle.setX(circleSelected.getX() + Math.cos(angle) * distance);
+        circle.setY(circleSelected.getY() - Math.sin(angle) * distance);
     }
 }

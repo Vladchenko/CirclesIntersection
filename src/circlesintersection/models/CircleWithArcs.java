@@ -10,8 +10,8 @@ import java.util.ArrayList;
 public class CircleWithArcs {
 
     // region Fields
-    private int mX = 0;
-    private int mY = 0;
+    private double mX = 0;
+    private double mY = 0;
     private double mDiameter = 0;
     /*
      * Flag tells whether current circle is to be excluded from checking if it intersects with other circles around.
@@ -32,19 +32,19 @@ public class CircleWithArcs {
     }
 
     // region Getters & Setters
-    public int getX() {
+    public double getX() {
         return mX;
     }
 
-    public void setX(int x) {
+    public void setX(double x) {
         mX = x;
     }
 
-    public int getY() {
+    public double getY() {
         return mY;
     }
 
-    public void setY(int y) {
+    public void setY(double y) {
         mY = y;
     }
 
@@ -115,7 +115,7 @@ public class CircleWithArcs {
      * @param g2d Graphics component to perform drawing.
      */
     public void drawCircleCenter(Graphics2D g2d, int deltaX, int deltaY) {
-        g2d.drawOval(mX - deltaX, mY - deltaY, 1, 1);
+        g2d.drawOval((int)(mX - deltaX), (int)(mY - deltaY), 1, 1);
     }
 
     /**
@@ -124,8 +124,8 @@ public class CircleWithArcs {
      * @param g2d Graphics component to perform drawing.
      */
     public void drawCircle(Graphics2D g2d, int mouseX, int mouseY) {
-        g2d.drawOval(mX - mouseX - (int) (mDiameter / 2),
-                mY - mouseY - (int) (mDiameter / 2),
+        g2d.drawOval((int)(mX - mouseX) - (int) (mDiameter / 2),
+                (int)(mY - mouseY) - (int) (mDiameter / 2),
                 (int) mDiameter, (int) mDiameter);
     }
 
@@ -147,8 +147,8 @@ public class CircleWithArcs {
                 new float[]{(float) 0.0, (float) 1.0},
                 new Color[]{color, new Color(0, 0, 0, 0)});
         g2d.setPaint(gradientPaint);
-        g2d.fillOval(mX - deltaX - (int) (mDiameter / 2),
-                mY - deltaY - (int) (mDiameter / 2),
+        g2d.fillOval((int)(mX - deltaX) - (int) (mDiameter / 2),
+                (int)(mY - deltaY) - (int) (mDiameter / 2),
                 (int) mDiameter, (int) mDiameter);
     }
     // endregion Methods
