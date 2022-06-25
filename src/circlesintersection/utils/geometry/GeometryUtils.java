@@ -3,10 +3,6 @@ package circlesintersection.utils.geometry;
 import circlesintersection.models.AngleKind;
 import circlesintersection.models.CircleWithArcs;
 
-import java.util.List;
-
-import static circlesintersection.utils.CircleUtils.prepareCirclesWhenRotated;
-
 /**
  * Geometry utility class.
  */
@@ -58,6 +54,36 @@ public final class GeometryUtils {
         double angle;
         double deltaX = circle2.getX() - circle.getX();
         double deltaY = circle2.getY() - circle.getY();
+        angle = Math.atan(Math.abs(deltaY) / Math.abs(deltaX));
+        // Adjusting the angle
+        if (deltaX < 0 && deltaY < 0) {
+            angle = -angle + Math.PI;
+        }
+        if (deltaX < 0 && deltaY > 0) {
+            angle = angle + Math.PI;
+        }
+        if (deltaX > 0 && deltaY > 0) {
+            angle = -angle + Math.PI * 2;
+        }
+        if (deltaX == 0 && deltaY > 0) {
+            angle = Math.PI * 1.5;
+        }
+        if (deltaX == 0 && deltaY < 0) {
+            angle = Math.PI / 2;
+        }
+        if (deltaX < 0 && deltaY == 0) {
+            angle = Math.PI;
+        }
+        if (deltaX > 0 && deltaY == 0) {
+            angle = 0;
+        }
+        return (angleKind == AngleKind.RAD) ? angle : angle * 180 / Math.PI;
+    }
+
+    public static double computeAngle(double x1, double y1,double x2, double y2, AngleKind angleKind) {
+        double angle;
+        double deltaX = x2 - x1;
+        double deltaY = y2 - y1;
         angle = Math.atan(Math.abs(deltaY) / Math.abs(deltaX));
         // Adjusting the angle
         if (deltaX < 0 && deltaY < 0) {

@@ -8,7 +8,7 @@ import com.sun.istack.internal.Nullable;
 import java.awt.*;
 import java.util.List;
 
-import static circlesintersection.utils.CircleUtils.*;
+import static circlesintersection.utils.circlewitharcs.CircleUtils.*;
 import static circlesintersection.utils.geometry.CirclesGeometryUtils.*;
 import static circlesintersection.utils.geometry.IntersectionUtils.computeIntersections;
 
@@ -77,7 +77,7 @@ public class CirclesWithArcsRenderer implements CirclesRendererListener {
     @Override
     public void scaleCirclesAndRepaint(int wheelRotation) {
         mSettings.setTimeBegin(System.nanoTime());
-        prepareCirclesWhenRotated(mCirclesList);
+        prepareCirclesWhenRotatedOrScaled(mCirclesList);
         scaleCircles(mCirclesList, wheelRotation);
         computeIntersectionsAndRepaintCanvas(0, 0);
     }

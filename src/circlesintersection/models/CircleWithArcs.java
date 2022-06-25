@@ -82,7 +82,6 @@ public class CircleWithArcs {
     // endregion getters & setters
 
     // region Methods
-
     /**
      * Add new {@link Arc} for current circle.
      *
@@ -107,49 +106,6 @@ public class CircleWithArcs {
                         - arc.getAngleBegin()),
                 Arc2D.OPEN)
         );
-    }
-
-    /**
-     * Draw a center of a circle.
-     *
-     * @param g2d Graphics component to perform drawing.
-     */
-    public void drawCircleCenter(Graphics2D g2d, int deltaX, int deltaY) {
-        g2d.drawOval((int)(mX - deltaX), (int)(mY - deltaY), 1, 1);
-    }
-
-    /**
-     * Draw a circle.
-     *
-     * @param g2d Graphics component to perform drawing.
-     */
-    public void drawCircle(Graphics2D g2d, int mouseX, int mouseY) {
-        g2d.drawOval((int)(mX - mouseX) - (int) (mDiameter / 2),
-                (int)(mY - mouseY) - (int) (mDiameter / 2),
-                (int) mDiameter, (int) mDiameter);
-    }
-
-    /**
-     * Drawing a circled gradient at the center of circle
-     *
-     * @param g2d    Graphics component to perform drawing.
-     * @param deltaX Extra X ordinate pixels.
-     * @param deltaY Extra Y ordinate pixels.
-     * @param color  Circle's gradient color
-     */
-    public void drawCircleGradient(Graphics2D g2d,
-                                   int deltaX, int deltaY,
-                                   Color color) {
-        RadialGradientPaint gradientPaint = new RadialGradientPaint(
-                (float) mX - deltaX,
-                (float) mY - deltaY,
-                (float) (mDiameter / 2),
-                new float[]{(float) 0.0, (float) 1.0},
-                new Color[]{color, new Color(0, 0, 0, 0)});
-        g2d.setPaint(gradientPaint);
-        g2d.fillOval((int)(mX - deltaX) - (int) (mDiameter / 2),
-                (int)(mY - deltaY) - (int) (mDiameter / 2),
-                (int) mDiameter, (int) mDiameter);
     }
     // endregion Methods
 }

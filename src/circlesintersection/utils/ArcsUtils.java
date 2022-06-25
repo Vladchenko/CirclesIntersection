@@ -186,11 +186,11 @@ public class ArcsUtils {
     }
 
     /**
-     * @param arc    arc for not intersected circle
      * @param circle Circle that is not to be intersected to any other circles
      * @return Circle that is not intersected to any other circles
      */
-    public static Arc getNotIntersectedCircle(Arc arc, CircleWithArcs circle) {
+    public static Arc getNotIntersectedCircle(CircleWithArcs circle) {
+        Arc arc = new Arc();
         arc.setAngleBegin(0);
         arc.setAngleEnd(0);
         if (circle.isExcluded()) {

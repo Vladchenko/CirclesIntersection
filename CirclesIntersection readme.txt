@@ -1,11 +1,10 @@
 Project name: 	Circles Intersection 
 Version kind: 	release
-IDE used:	    NetBeans v7.3.1 (as of now IntelliJ Idea v2021.2)
+IDE used:	    IntelliJ Idea v2021.2 (previously NetBeans v7.3.1)
 Release Date:	2014-08-22 (last on 2022-06-07)
 Author:		    Yanchenko Vlad
 
 TODO
-        ? Probably Settings can be moved out of PaintComponent
         - Split Settings into smaller ones
         - Turn drawShapesForLastCircle(...) and drawShapesForAllCirclesBeforeLastOne(...) into one method.
         - Unittests
@@ -16,6 +15,7 @@ TODO
         - Move all the hardcoded values into Settings.java
         ? Maybe use java.util.prefs.Preferences instead of Settings
         ? Maybe there is way to refine an algorithm
+        - Check AMBITION
 
 DESCRIPTION: 	
         This program draws a circles that have an intersected areas removed, having one of a circles attached to a mouse cursor.
@@ -53,11 +53,15 @@ USER INTERACTION:
 
 AMBITION:
     - Make circles to be clickable and a clicked one becomes controlled to mouse cursor.
-    - Implement an arcs(circles) moving in clockwise or counter-clockwise direction relatively to a selected circle by a mouse wheel move (implemented).
-    - Replace a O(n2) loop that makes all the circles not "excluded" with a list.
-    - Implement dragging of arcs (implemented).
-	- Make it fullscreen (implemented).
-	- Java millisecs for one frame (implemented).
+    - Implement add/remove circle feature.
+    - Implement attaching one circle with another, by dragging ont circle onto another. While dragging a line pops up from one and dropped onto another.
+    - Implement persisting a state of circles
+    ? Replace O(n2) loop that makes all the circles not "excluded" with a list.
+    Implemented:
+    - Implement an arcs(circles) rotating in clockwise or counter-clockwise direction relatively to a selected circle by a mouse wheel move.
+    - Implement dragging of arcs.
+	- Make it fullscreen.
+	- Millisecs for one frame.
 	- Move a timeSpent Jlabel to the left and make it gray (declined, as of now, this label is located on a left-hand corner of screen and grayed).
 	- Add FPS counter (cannot be done, since app doesn't draw canvas constantly, only when there was a mouse cursor or wheel moved or keyboard key pushed).
 

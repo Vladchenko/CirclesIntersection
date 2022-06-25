@@ -6,7 +6,7 @@ import circlesintersection.models.CircleWithArcs;
 
 import java.util.List;
 
-import static circlesintersection.utils.CircleUtils.prepareCirclesWhenRotated;
+import static circlesintersection.utils.circlewitharcs.CircleUtils.prepareCirclesWhenRotatedOrScaled;
 import static circlesintersection.utils.geometry.GeometryUtils.*;
 
 /**
@@ -30,7 +30,8 @@ public class CirclesGeometryUtils {
         CircleWithArcs lastCircle = circlesList.get(circlesList.size() - 1);
         for (int i = 0; i < circlesList.size() - 1; i++) {
             circlesList.get(i).setExcluded(false);
-            newAngle = computeAngle(lastCircle, circlesList.get(i), AngleKind.RAD);
+            newAngle = computeAngle(lastCircle.getX(), lastCircle.getY(),
+                    circlesList.get(i).getX(), circlesList.get(i).getY(), AngleKind.RAD);
             distance = computeDistance(
                     circlesList.get(i).getX(), circlesList.get(i).getY(),
                     lastCircle.getX(), lastCircle.getY());
@@ -56,7 +57,7 @@ public class CirclesGeometryUtils {
         double newAngle;
         double extraAngle;
         double distance;
-        prepareCirclesWhenRotated(circlesList);
+        prepareCirclesWhenRotatedOrScaled(circlesList);
         if (wheelRotationValue > 0) {
             extraAngle = 0.04;
         } else {
@@ -64,7 +65,8 @@ public class CirclesGeometryUtils {
         }
         CircleWithArcs lastCircle = circlesList.get(circlesList.size() - 1);
         for (int i = 0; i < circlesList.size() - 1; i++) {
-            newAngle = computeAngle(lastCircle, circlesList.get(i), AngleKind.RAD) + extraAngle;
+            newAngle = computeAngle(lastCircle.getX(), lastCircle.getY(),
+                    circlesList.get(i).getX(), circlesList.get(i).getY(), AngleKind.RAD) + extraAngle;
             distance = computeDistance(
                     circlesList.get(i).getX(), circlesList.get(i).getY(),
                     lastCircle.getX(), lastCircle.getY());
@@ -97,12 +99,12 @@ public class CirclesGeometryUtils {
     /**
      * Convert a beginning and ending angles of an intersected circles from RAD to GRAD and put them to {@link Arc}.
      *
-     * @param arc model to keep computed angles
-     * @param circle    circle(arc) #1
-     * @param circle2   circle(arc) #2 to compute
-     * @param distance  between circles(arcs)
+     * @param circle   circle(arc) #1
+     * @param circle2  circle(arc) #2 to compute
+     * @param distance between circles(arcs)
      */
-    public static void convertAnglesRadToGrad(Arc arc, CircleWithArcs circle, CircleWithArcs circle2, double distance) {
+    public static Arc convertAnglesRadToGrad(CircleWithArcs circle, CircleWithArcs circle2, double distance) {
+        Arc arc = new Arc();
         double angle = computeAngle(circle, circle2, AngleKind.RAD);
         double l1 = (Math.pow(circle.getDiameter() / 2, 2) - Math.pow(circle2.getDiameter() / 2, 2) + distance * distance) / (2 * distance);
         double alpha = Math.acos(l1 / (circle.getDiameter() / 2));
@@ -113,5 +115,6 @@ public class CirclesGeometryUtils {
         }
         arc.setAngleBegin(convertRadToGrad(beta));
         arc.setAngleEnd(convertRadToGrad(gamma));
+        return arc;
     }
 }

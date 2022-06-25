@@ -1,33 +1,40 @@
 package circlesintersection;
 
-import circlesintersection.listeners.UiUpdateListener;
 import circlesintersection.models.CircleWithArcs;
-import circlesintersection.utils.DrawingUtils;
-
-import java.util.List;
+import circlesintersection.utils.DebugDrawingHelper;
+import circlesintersection.utils.DrawingHelper;
+import circlesintersection.utils.circlewitharcs.CirclesDrawingHelper;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
 import static circlesintersection.Settings.DEBUG_ENABLED;
 
 /**
  * Component that draws the circles and its intersecting arcs.
  */
-public class CirclesPaintComponent extends JPanel implements UiUpdateListener {
+public class CirclesPaintComponent extends JPanel {
 
     private List<CircleWithArcs> mCirclesList;
-    private final DrawingUtils mDrawingUtils;
+    private final DrawingHelper mDrawingHelper;
+    private final DebugDrawingHelper mDebugDrawingHelper;
+    private final CirclesDrawingHelper mCirclesDrawingHelper;
 
     /**
      * Public constructor.
      *
      * @param circlesList  Circles and its arcs to be drawn on a canvas.
-     * @param drawingUtils Assists in drawing a circles and arcs.
+     * @param drawingHelper Assists in drawing a circles and arcs.
      */
-    public CirclesPaintComponent(List<CircleWithArcs> circlesList, DrawingUtils drawingUtils) {
+    public CirclesPaintComponent(List<CircleWithArcs> circlesList,
+                                 DrawingHelper drawingHelper,
+                                 CirclesDrawingHelper circlesDrawingHelper,
+                                 DebugDrawingHelper debugDrawingHelper) {
         mCirclesList = circlesList;
-        mDrawingUtils = drawingUtils;
+        mDrawingHelper = drawingHelper;
+        mDebugDrawingHelper = debugDrawingHelper;
+        mCirclesDrawingHelper = circlesDrawingHelper;
     }
 
     @Override
@@ -38,27 +45,18 @@ public class CirclesPaintComponent extends JPanel implements UiUpdateListener {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
 
-        mDrawingUtils.changeIntersectedArcsAppearance(g2d);
-        mDrawingUtils.toggleAntiAliasing(g2d);
+        mDrawingHelper.changeIntersectedArcsAppearance(g2d);
+        mDrawingHelper.toggleAntiAliasing(g2d);
 
-        mDrawingUtils.drawShapesForAllCircles(g2d, mCirclesList);
-        mDrawingUtils.drawNotIntersectedArcs(g2d, mCirclesList);
+        mCirclesDrawingHelper.drawShapesForAllCircles(g2d, mCirclesList);
+        mDrawingHelper.drawNotIntersectedArcs(g2d, mCirclesList);
         if (DEBUG_ENABLED) {
-            mDrawingUtils.drawDebugData(g2d, mCirclesList);
+            mDebugDrawingHelper.drawDebugData(g2d, mCirclesList);
         }
-        mDrawingUtils.drawFrameDrawingTime(g2d);
+        mDebugDrawingHelper.drawFrameDrawingTime(g2d);
     }
 
-    @Override
-    public void updateCirclesAndRepaint(List<CircleWithArcs> circlesList) {
+    public void setCirclesList(List<CircleWithArcs> circlesList) {
         mCirclesList = circlesList;
-        repaint();
-    }
-
-    @Override
-    public void toggleFullScreen() {
-        mDrawingUtils.toggleFullScreen(
-                this,
-                GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[0]);
     }
 }
