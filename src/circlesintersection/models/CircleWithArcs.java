@@ -1,6 +1,5 @@
 package circlesintersection.models;
 
-import java.awt.*;
 import java.awt.geom.Arc2D;
 import java.util.ArrayList;
 

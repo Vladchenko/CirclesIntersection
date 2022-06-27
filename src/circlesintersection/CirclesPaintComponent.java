@@ -1,13 +1,11 @@
 package circlesintersection;
 
-import circlesintersection.models.CircleWithArcs;
 import circlesintersection.utils.DebugDrawingHelper;
 import circlesintersection.utils.DrawingHelper;
 import circlesintersection.utils.circlewitharcs.CirclesDrawingHelper;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.List;
 
 import static circlesintersection.Settings.DEBUG_ENABLED;
 
@@ -16,7 +14,6 @@ import static circlesintersection.Settings.DEBUG_ENABLED;
  */
 public class CirclesPaintComponent extends JPanel {
 
-    private List<CircleWithArcs> mCirclesList;
     private final DrawingHelper mDrawingHelper;
     private final DebugDrawingHelper mDebugDrawingHelper;
     private final CirclesDrawingHelper mCirclesDrawingHelper;
@@ -24,14 +21,13 @@ public class CirclesPaintComponent extends JPanel {
     /**
      * Public constructor.
      *
-     * @param circlesList  Circles and its arcs to be drawn on a canvas.
-     * @param drawingHelper Assists in drawing a circles and arcs.
+     * @param drawingHelper         Assists in drawing a circles and arcs.
+     * @param circlesDrawingHelper  Helper methods for CircleWithArcs list drawing.
+     * @param debugDrawingHelper    Helper methods to draw a debug info on canvas.
      */
-    public CirclesPaintComponent(List<CircleWithArcs> circlesList,
-                                 DrawingHelper drawingHelper,
+    public CirclesPaintComponent(DrawingHelper drawingHelper,
                                  CirclesDrawingHelper circlesDrawingHelper,
                                  DebugDrawingHelper debugDrawingHelper) {
-        mCirclesList = circlesList;
         mDrawingHelper = drawingHelper;
         mDebugDrawingHelper = debugDrawingHelper;
         mCirclesDrawingHelper = circlesDrawingHelper;
@@ -48,15 +44,11 @@ public class CirclesPaintComponent extends JPanel {
         mDrawingHelper.changeIntersectedArcsAppearance(g2d);
         mDrawingHelper.toggleAntiAliasing(g2d);
 
-        mCirclesDrawingHelper.drawShapesForAllCircles(g2d, mCirclesList);
-        mDrawingHelper.drawNotIntersectedArcs(g2d, mCirclesList);
+        mCirclesDrawingHelper.drawShapesForAllCircles(g2d);
+        mDrawingHelper.drawNotIntersectedArcs(g2d);
         if (DEBUG_ENABLED) {
-            mDebugDrawingHelper.drawDebugData(g2d, mCirclesList);
+            mDebugDrawingHelper.drawDebugData(g2d);
         }
         mDebugDrawingHelper.drawFrameDrawingTime(g2d);
-    }
-
-    public void setCirclesList(List<CircleWithArcs> circlesList) {
-        mCirclesList = circlesList;
     }
 }

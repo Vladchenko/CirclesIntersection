@@ -16,23 +16,28 @@ public final class DrawingHelper {
 
     private final Settings mSettings;
     private static DrawingHelper sDrawingHelper;
+    private List<CircleWithArcs> mCirclesList;
 
     /**
      * Private constructor.
      *
-     * @param settings all the settings for the application.
+     * @param settings    all the settings for the application.
+     * @param circlesList circles and their arcs to be drawn on a canvas.
      */
-    private DrawingHelper(Settings settings) {
+    private DrawingHelper(Settings settings,
+                          List<CircleWithArcs> circlesList) {
         mSettings = settings;
+        mCirclesList = circlesList;
     }
 
     /**
      * @param settings all the settings for the application.
      * @return Retrieve instance of this class.
      */
-    public static DrawingHelper getInstance(Settings settings) {
+    public static DrawingHelper getInstance(Settings settings,
+                                            List<CircleWithArcs> circlesList) {
         if (sDrawingHelper == null) {
-            sDrawingHelper = new DrawingHelper(settings);
+            sDrawingHelper = new DrawingHelper(settings, circlesList);
         }
         return sDrawingHelper;
     }
@@ -52,10 +57,9 @@ public final class DrawingHelper {
     /**
      * Draw arcs for this circle that do not intersect with any other circle.
      *
-     * @param g2d         Graphics component to perform drawing.
-     * @param circlesList Circles and its arcs to be drawn on a canvas.
+     * @param g2d Graphics component to perform drawing.
      */
-    public void drawNotIntersectedArcs(Graphics2D g2d, List<CircleWithArcs> circlesList) {
+    public void drawNotIntersectedArcs(Graphics2D g2d) {
         g2d.setStroke(       //new BasicStroke(2));
                 new BasicStroke(4,
                         BasicStroke.CAP_ROUND,
@@ -66,16 +70,16 @@ public final class DrawingHelper {
         // Drawing an arcs for a not intersected areas of circles
         if (mSettings.getDrawKind().equals(DrawKind.ARCS)
                 || mSettings.getDrawKind().equals(DrawKind.BOTH)) {
-            for (int i = 0; i < circlesList.size() - 1; i++) {
-                if (!circlesList.get(i).isExcluded()) {
-                    for (Arc2D arc2D : circlesList.get(i).getArcs2D()) {
+            for (int i = 0; i < mCirclesList.size() - 1; i++) {
+                if (!mCirclesList.get(i).isExcluded()) {
+                    for (Arc2D arc2D : mCirclesList.get(i).getArcs2D()) {
                         g2d.draw(arc2D);
                     }
                 }
             }
             g2d.setColor(mSettings.getSubjectCircleColor());
             // Drawing a last circle with a different color
-            CircleWithArcs lastCircle = circlesList.get(circlesList.size() - 1);
+            CircleWithArcs lastCircle = mCirclesList.get(mCirclesList.size() - 1);
             for (int i = 0; i < lastCircle.getArcs2D().size(); i++) {
                 g2d.draw(lastCircle.getArcs2D().get(i));
             }
@@ -115,5 +119,9 @@ public final class DrawingHelper {
                 BasicStroke.CAP_ROUND,
                 BasicStroke.JOIN_ROUND,
                 2, dash1, 0.0f));
+    }
+
+    public void setCirclesList(List<CircleWithArcs> circlesList) {
+        mCirclesList = circlesList;
     }
 }

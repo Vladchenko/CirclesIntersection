@@ -33,13 +33,16 @@ public class CirclesIntersection {
         final Settings settings = Settings.getInstance();
         final List<CircleWithArcs> circleWithArcsList = createAndInitializeCircleWithArcs(settings);
 
-        initializeHelpers(settings);
+        initializeHelpers(settings, circleWithArcsList);
         final CirclesPaintComponent paintComponent = new CirclesPaintComponent(
-                circleWithArcsList,
                 sDrawingHelper,
                 sCirclesDrawingHelper,
                 sDebugDrawingHelper);
-        final PaintComponentListener paintComponentListener = new PaintComponentListener(paintComponent, sDrawingHelper);
+        final PaintComponentListener paintComponentListener = new PaintComponentListener(
+                sDrawingHelper,
+                sDebugDrawingHelper,
+                sCirclesDrawingHelper,
+                paintComponent);
         final CirclesWithArcsRenderer renderer = new CirclesWithArcsRenderer(circleWithArcsList, settings, paintComponentListener);
         new Canvas(
                 new JFrame(),
@@ -60,9 +63,10 @@ public class CirclesIntersection {
         return circleWithArcsList;
     }
 
-    private static void initializeHelpers(Settings settings) {
-        sDrawingHelper = DrawingHelper.getInstance(settings);
-        sDebugDrawingHelper = DebugDrawingHelper.getInstance(settings);
-        sCirclesDrawingHelper = CirclesDrawingHelper.getInstance(settings);
+    private static void initializeHelpers(Settings settings,
+                                          List<CircleWithArcs> circleWithArcsList) {
+        sDrawingHelper = DrawingHelper.getInstance(settings, circleWithArcsList);
+        sDebugDrawingHelper = DebugDrawingHelper.getInstance(settings, circleWithArcsList);
+        sCirclesDrawingHelper = CirclesDrawingHelper.getInstance(settings, circleWithArcsList);
     }
 }
