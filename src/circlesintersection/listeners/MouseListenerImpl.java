@@ -7,7 +7,7 @@ import java.awt.event.*;
 /**
  * Listener for a mouse clicks and wheel rotating.
  */
-public class MouseOpsListener implements MouseListener, MouseMotionListener, MouseWheelListener {
+public class MouseListenerImpl implements MouseListener, MouseMotionListener, MouseWheelListener {
 
     private final Settings mSettings;
     private final CirclesRendererListener mRendererListener;
@@ -18,8 +18,8 @@ public class MouseOpsListener implements MouseListener, MouseMotionListener, Mou
      * @param rendererListener listener for UI updating callbacks
      * @param settings         all the settings for the application
      */
-    public MouseOpsListener(CirclesRendererListener rendererListener,
-                            Settings settings) {
+    public MouseListenerImpl(CirclesRendererListener rendererListener,
+                             Settings settings) {
         mSettings = settings;
         mRendererListener = rendererListener;
     }

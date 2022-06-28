@@ -1,14 +1,14 @@
 package circlesintersection;
 
 import circlesintersection.listeners.CirclesRendererListener;
-import circlesintersection.listeners.UiUpdateListener;
+import circlesintersection.presentation.UiUpdateListener;
 import circlesintersection.models.CircleWithArcs;
 import com.sun.istack.internal.Nullable;
 
 import java.awt.*;
 import java.util.List;
 
-import static circlesintersection.utils.circlewitharcs.CircleUtils.*;
+import static circlesintersection.utils.CircleUtils.*;
 import static circlesintersection.utils.geometry.CirclesGeometryUtils.*;
 import static circlesintersection.utils.geometry.IntersectionUtils.computeIntersections;
 

@@ -1,8 +1,8 @@
-package circlesintersection;
+package circlesintersection.presentation;
 
-import circlesintersection.utils.DebugDrawingHelper;
-import circlesintersection.utils.DrawingHelper;
-import circlesintersection.utils.circlewitharcs.CirclesDrawingHelper;
+import circlesintersection.presentation.drawing.CirclesDrawingHelper;
+import circlesintersection.presentation.drawing.DebugDrawingHelper;
+import circlesintersection.presentation.drawing.DrawingHelper;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,7 +12,7 @@ import static circlesintersection.Settings.DEBUG_ENABLED;
 /**
  * Component that draws the circles and its intersecting arcs.
  */
-public class CirclesPaintComponent extends JPanel {
+public class PaintComponent extends JPanel {
 
     private final DrawingHelper mDrawingHelper;
     private final DebugDrawingHelper mDebugDrawingHelper;
@@ -25,9 +25,9 @@ public class CirclesPaintComponent extends JPanel {
      * @param circlesDrawingHelper  Helper methods for CircleWithArcs list drawing.
      * @param debugDrawingHelper    Helper methods to draw a debug info on canvas.
      */
-    public CirclesPaintComponent(DrawingHelper drawingHelper,
-                                 CirclesDrawingHelper circlesDrawingHelper,
-                                 DebugDrawingHelper debugDrawingHelper) {
+    public PaintComponent(DrawingHelper drawingHelper,
+                          CirclesDrawingHelper circlesDrawingHelper,
+                          DebugDrawingHelper debugDrawingHelper) {
         mDrawingHelper = drawingHelper;
         mDebugDrawingHelper = debugDrawingHelper;
         mCirclesDrawingHelper = circlesDrawingHelper;

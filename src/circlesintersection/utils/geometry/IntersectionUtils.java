@@ -9,7 +9,7 @@ import java.util.List;
 
 import static circlesintersection.Settings.DEBUG_ENABLED;
 import static circlesintersection.utils.ArcsUtils.*;
-import static circlesintersection.utils.circlewitharcs.CircleUtils.excludeInnerCircles;
+import static circlesintersection.utils.CircleUtils.excludeInnerCircles;
 import static circlesintersection.utils.geometry.CirclesGeometryUtils.convertAnglesRadToGrad;
 import static circlesintersection.utils.geometry.GeometryUtils.*;
 

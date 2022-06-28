@@ -8,7 +8,7 @@ import java.awt.event.KeyListener;
 /**
  * Listener for a keyboard keys operating.
  */
-public class KeyboardOpsListener implements KeyListener {
+public class KeyboardListenerImpl implements KeyListener {
 
     private final Settings mSettings;
     private final CirclesRendererListener mRendererListener;
@@ -19,8 +19,8 @@ public class KeyboardOpsListener implements KeyListener {
      * @param rendererListener listener for UI updating callbacks
      * @param settings         all the settings for the application.
      */
-    public KeyboardOpsListener(CirclesRendererListener rendererListener,
-                               Settings settings) {
+    public KeyboardListenerImpl(CirclesRendererListener rendererListener,
+                                Settings settings) {
         mRendererListener = rendererListener;
         mSettings = settings;
     }

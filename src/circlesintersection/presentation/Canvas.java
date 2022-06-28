@@ -1,7 +1,7 @@
-package circlesintersection;
+package circlesintersection.presentation;
 
-import circlesintersection.listeners.KeyboardOpsListener;
-import circlesintersection.listeners.MouseOpsListener;
+import circlesintersection.listeners.KeyboardListenerImpl;
+import circlesintersection.listeners.MouseListenerImpl;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,9 +16,9 @@ public class Canvas {
 
     private final JFrame mFrame;
 
-    private final CirclesPaintComponent mCirclesPaintComponent;
-    private final MouseOpsListener mMouseOpsListener;
-    private final KeyboardOpsListener mKeyboardListener;
+    private final PaintComponent mPaintComponent;
+    private final MouseListenerImpl mMouseOpsListener;
+    private final KeyboardListenerImpl mKeyboardListener;
 
     /**
      * Public constructor.
@@ -29,13 +29,13 @@ public class Canvas {
      * @param paintComponent callbacks to UI to update and repaint it.
      */
     public Canvas(JFrame frame,
-                  MouseOpsListener mouseOpsListener,
-                  KeyboardOpsListener keyboardListener,
-                  CirclesPaintComponent paintComponent) {
+                  MouseListenerImpl mouseOpsListener,
+                  KeyboardListenerImpl keyboardListener,
+                  PaintComponent paintComponent) {
         mFrame = frame;
         mMouseOpsListener = mouseOpsListener;
         mKeyboardListener = keyboardListener;
-        mCirclesPaintComponent = paintComponent;
+        mPaintComponent = paintComponent;
     }
 
     /**
@@ -47,7 +47,7 @@ public class Canvas {
     }
 
     private void initializeFrame() {
-        mFrame.setContentPane((JPanel) mCirclesPaintComponent);
+        mFrame.setContentPane((JPanel) mPaintComponent);
         mFrame.setLayout(null);
         mFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mFrame.setSize(Toolkit.getDefaultToolkit().getScreenSize());

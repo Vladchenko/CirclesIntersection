@@ -1,12 +1,13 @@
 package circlesintersection.utils.geometry;
 
+import circlesintersection.Settings;
 import circlesintersection.models.AngleKind;
 import circlesintersection.models.Arc;
 import circlesintersection.models.CircleWithArcs;
 
 import java.util.List;
 
-import static circlesintersection.utils.circlewitharcs.CircleUtils.prepareCirclesWhenRotatedOrScaled;
+import static circlesintersection.utils.CircleUtils.prepareCirclesWhenRotatedOrScaled;
 import static circlesintersection.utils.geometry.GeometryUtils.*;
 
 /**
@@ -36,9 +37,9 @@ public class CirclesGeometryUtils {
                     circlesList.get(i).getX(), circlesList.get(i).getY(),
                     lastCircle.getX(), lastCircle.getY());
             if (wheelRotationValue > 0) {
-                distance += distance / 15;
+                distance += distance / Settings.SCALE_DISTANCE_DIVISION_FACTOR;
             } else {
-                distance -= distance / 15;
+                distance -= distance / Settings.SCALE_DISTANCE_DIVISION_FACTOR;
             }
             computeAndSetDekartCoordinates(
                     distance, newAngle,
@@ -59,9 +60,9 @@ public class CirclesGeometryUtils {
         double distance;
         prepareCirclesWhenRotatedOrScaled(circlesList);
         if (wheelRotationValue > 0) {
-            extraAngle = 0.04;
+            extraAngle = Settings.ROTATION_ANGLE_STEP;
         } else {
-            extraAngle = -0.04;
+            extraAngle = -Settings.ROTATION_ANGLE_STEP;
         }
         CircleWithArcs lastCircle = circlesList.get(circlesList.size() - 1);
         for (int i = 0; i < circlesList.size() - 1; i++) {
@@ -101,17 +102,19 @@ public class CirclesGeometryUtils {
      *
      * @param circle   circle(arc) #1
      * @param circle2  circle(arc) #2 to compute
-     * @param distance between circles(arcs)
+     * @param distance between circles
      */
     public static Arc convertAnglesRadToGrad(CircleWithArcs circle, CircleWithArcs circle2, double distance) {
+        final double Pi2 = Math.PI * 2;
         Arc arc = new Arc();
         double angle = computeAngle(circle, circle2, AngleKind.RAD);
-        double l1 = (Math.pow(circle.getDiameter() / 2, 2) - Math.pow(circle2.getDiameter() / 2, 2) + distance * distance) / (2 * distance);
+        double l1 = (Math.pow(circle.getDiameter() / 2, 2) - Math.pow(circle2.getDiameter() / 2, 2) + distance * distance)
+                / (2 * distance);
         double alpha = Math.acos(l1 / (circle.getDiameter() / 2));
         double beta = angle - alpha;
         double gamma = angle + alpha;
-        if (angle + alpha >= Math.PI * 2) {
-            gamma -= Math.PI * 2;
+        if (angle + alpha >= Pi2) {
+            gamma -= Pi2;
         }
         arc.setAngleBegin(convertRadToGrad(beta));
         arc.setAngleEnd(convertRadToGrad(gamma));

@@ -1,19 +1,19 @@
 package circlesintersection;
 
-import circlesintersection.listeners.KeyboardOpsListener;
-import circlesintersection.listeners.MouseOpsListener;
-import circlesintersection.listeners.PaintComponentListener;
+import circlesintersection.listeners.KeyboardListenerImpl;
+import circlesintersection.listeners.MouseListenerImpl;
+import circlesintersection.presentation.UiUpdateListenerImpl;
 import circlesintersection.models.CircleWithArcs;
-import circlesintersection.utils.DebugDrawingHelper;
-import circlesintersection.utils.DrawingHelper;
-import circlesintersection.utils.circlewitharcs.CirclesDrawingHelper;
+import circlesintersection.presentation.Canvas;
+import circlesintersection.presentation.PaintComponent;
+import circlesintersection.presentation.drawing.*;
 
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static circlesintersection.utils.circlewitharcs.CircleUtils.populateCircles;
-import static circlesintersection.utils.circlewitharcs.CircleUtils.randomizeCircles;
+import static circlesintersection.utils.CircleUtils.populateCircles;
+import static circlesintersection.utils.CircleUtils.randomizeCircles;
 
 /**
  * Application entry point class.
@@ -34,20 +34,20 @@ public class CirclesIntersection {
         final List<CircleWithArcs> circleWithArcsList = createAndInitializeCircleWithArcs(settings);
 
         initializeHelpers(settings, circleWithArcsList);
-        final CirclesPaintComponent paintComponent = new CirclesPaintComponent(
+        final PaintComponent paintComponent = new PaintComponent(
                 sDrawingHelper,
                 sCirclesDrawingHelper,
                 sDebugDrawingHelper);
-        final PaintComponentListener paintComponentListener = new PaintComponentListener(
+        final UiUpdateListenerImpl uiUpdateListenerImpl = new UiUpdateListenerImpl(
                 sDrawingHelper,
                 sDebugDrawingHelper,
                 sCirclesDrawingHelper,
                 paintComponent);
-        final CirclesWithArcsRenderer renderer = new CirclesWithArcsRenderer(circleWithArcsList, settings, paintComponentListener);
+        final CirclesWithArcsRenderer renderer = new CirclesWithArcsRenderer(circleWithArcsList, settings, uiUpdateListenerImpl);
         new Canvas(
                 new JFrame(),
-                new MouseOpsListener(renderer, settings),
-                new KeyboardOpsListener(renderer, settings),
+                new MouseListenerImpl(renderer, settings),
+                new KeyboardListenerImpl(renderer, settings),
                 paintComponent
         ).initializeRendering();
     }

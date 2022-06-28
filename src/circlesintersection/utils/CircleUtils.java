@@ -1,4 +1,4 @@
-package circlesintersection.utils.circlewitharcs;
+package circlesintersection.utils;
 
 import circlesintersection.models.CircleWithArcs;
 

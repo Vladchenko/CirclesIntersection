@@ -1,10 +1,9 @@
-package circlesintersection.listeners;
+package circlesintersection.presentation;
 
-import circlesintersection.CirclesPaintComponent;
 import circlesintersection.models.CircleWithArcs;
-import circlesintersection.utils.DebugDrawingHelper;
-import circlesintersection.utils.DrawingHelper;
-import circlesintersection.utils.circlewitharcs.CirclesDrawingHelper;
+import circlesintersection.presentation.drawing.DebugDrawingHelper;
+import circlesintersection.presentation.drawing.DrawingHelper;
+import circlesintersection.presentation.drawing.CirclesDrawingHelper;
 
 import java.awt.*;
 import java.util.List;
@@ -12,10 +11,10 @@ import java.util.List;
 /**
  * Updates (repaints) paint component, when specific event occurs.
  */
-public class PaintComponentListener implements UiUpdateListener {
+public class UiUpdateListenerImpl implements UiUpdateListener {
 
     private final DrawingHelper mDrawingHelper;
-    private final CirclesPaintComponent mPaintComponent;
+    private final PaintComponent mPaintComponent;
     private final DebugDrawingHelper mDebugDrawingHelper;
     private final CirclesDrawingHelper mCirclesDrawingHelper;
 
@@ -25,10 +24,10 @@ public class PaintComponentListener implements UiUpdateListener {
      * @param paintComponent    Component that draws the circles and its intersecting arcs.
      * @param drawingHelper     Utils methods for drawing the shapes on canvas.
      */
-    public PaintComponentListener(DrawingHelper drawingHelper,
-                                  DebugDrawingHelper debugDrawingHelper,
-                                  CirclesDrawingHelper circlesDrawingHelper,
-                                  CirclesPaintComponent paintComponent) {
+    public UiUpdateListenerImpl(DrawingHelper drawingHelper,
+                                DebugDrawingHelper debugDrawingHelper,
+                                CirclesDrawingHelper circlesDrawingHelper,
+                                PaintComponent paintComponent) {
         mCirclesDrawingHelper = circlesDrawingHelper;
         mDebugDrawingHelper = debugDrawingHelper;
         mPaintComponent = paintComponent;

@@ -1,4 +1,4 @@
-package circlesintersection.utils.circlewitharcs;
+package circlesintersection.presentation.drawing;
 
 import circlesintersection.Settings;
 import circlesintersection.models.CircleWithArcs;
@@ -7,8 +7,8 @@ import circlesintersection.models.DrawKind;
 import java.awt.*;
 import java.util.List;
 
-import static circlesintersection.utils.circlewitharcs.CircleDrawingUtils.*;
-import static circlesintersection.utils.circlewitharcs.CircleDrawingUtils.drawCircleGradient;
+import static circlesintersection.presentation.drawing.CircleDrawingUtils.*;
+import static circlesintersection.presentation.drawing.CircleDrawingUtils.drawCircleGradient;
 
 /**
  * Helper methods for CircleWithArcs list drawing.

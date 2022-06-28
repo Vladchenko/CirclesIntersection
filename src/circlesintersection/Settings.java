@@ -8,6 +8,9 @@ import java.awt.Toolkit;
 
 /**
  * Represents values needed for the problem domain.
+ * FIXME This is an antipattern.
+ * https://www.baeldung.com/java-constants-good-practices
+ * https://stackoverflow.com/questions/6220726/where-do-you-keep-constants-used-throughout-your-application
  */
 public class Settings {
 
@@ -17,6 +20,8 @@ public class Settings {
     public static final String APPLICATION_TITLE = "Circles Intersecting v1.3";
     // Draw circles that do not intersect with any other circles with a solid line, not a dashed one.
     public static final boolean DRAW_NOT_INTERSECTED_SOLID = true;
+    public static final int SCALE_DISTANCE_DIVISION_FACTOR = 15;
+    public static final double ROTATION_ANGLE_STEP = 0.04;
     // endregion Constants
 
     //region Fields
