@@ -1,6 +1,5 @@
-package circlesintersection.utils.geometry;
+package circlesintersection.computation.geometry;
 
-import circlesintersection.models.AngleKind;
 import circlesintersection.models.CircleWithArcs;
 
 /**

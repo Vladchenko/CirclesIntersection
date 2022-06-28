@@ -1,44 +1,45 @@
 package circlesintersection.presentation.drawing;
 
-import circlesintersection.Settings;
+import circlesintersection.presentation.GraphicsSettings;
 import circlesintersection.models.CircleWithArcs;
-import circlesintersection.models.DrawKind;
 
 import java.awt.*;
 import java.util.List;
 
+import static circlesintersection.listeners.MouseListenerImpl.MOUSE_POINTER_DELTA;
 import static circlesintersection.presentation.drawing.CircleDrawingUtils.*;
 import static circlesintersection.presentation.drawing.CircleDrawingUtils.drawCircleGradient;
+import static circlesintersection.presentation.drawing.DrawingConsts.*;
 
 /**
  * Helper methods for CircleWithArcs list drawing.
  */
 public final class CirclesDrawingHelper {
 
-    private final Settings mSettings;
     private List<CircleWithArcs> mCirclesList;
+    private final GraphicsSettings mGraphicsSettings;
     private static CirclesDrawingHelper sCirclesDrawingHelper;
 
     /**
-     * TODO
      * Private constructor.
      *
-     * @param settings all the settings for the application.
+     * @param graphicsSettings Graphics settings for the application.
+     * @param circlesList      Circles and their arcs to be drawn on a canvas.
      */
-    private CirclesDrawingHelper(Settings settings,
+    private CirclesDrawingHelper(GraphicsSettings graphicsSettings,
                                  List<CircleWithArcs> circlesList) {
-        mSettings = settings;
+        mGraphicsSettings = graphicsSettings;
         mCirclesList = circlesList;
     }
 
     /**
-     * @param settings all the settings for the application.
+     * @param graphicsSettings all the settings for the application.
      * @return Retrieve instance of this class.
      */
-    public static CirclesDrawingHelper getInstance(Settings settings,
+    public static CirclesDrawingHelper getInstance(GraphicsSettings graphicsSettings,
                                                    List<CircleWithArcs> circlesList) {
         if (sCirclesDrawingHelper == null) {
-            sCirclesDrawingHelper = new CirclesDrawingHelper(settings, circlesList);
+            sCirclesDrawingHelper = new CirclesDrawingHelper(graphicsSettings, circlesList);
         }
         return sCirclesDrawingHelper;
     }
@@ -49,11 +50,11 @@ public final class CirclesDrawingHelper {
      * @param g2d Graphics to draw shapes on
      */
     public void drawShapesForAllCircles(Graphics2D g2d) {
-        if (mSettings.isGradientEnabled()) {
+        if (mGraphicsSettings.isGradientEnabled()) {
             drawCirclesGradients(g2d);
         }
-        if (mSettings.getDrawKind().equals(DrawKind.CIRCLES)
-                || mSettings.getDrawKind().equals(DrawKind.BOTH)) {
+        if (mGraphicsSettings.getDrawKind().equals(GraphicsSettings.DrawKind.CIRCLES)
+                || mGraphicsSettings.getDrawKind().equals(GraphicsSettings.DrawKind.BOTH)) {
             drawCircles(g2d);
         }
         drawCirclesCenterDots(g2d);
@@ -61,30 +62,30 @@ public final class CirclesDrawingHelper {
 
     private void drawCirclesCenterDots(Graphics2D g2d) {
         CircleWithArcs lastCircle = mCirclesList.get(mCirclesList.size() - 1);
-        g2d.setColor(mSettings.getArcsColor());
+        g2d.setColor(ARCS_COLOR);
         for (int i = 0; i < mCirclesList.size() - 1; i++) {
-            drawCircleCenter(g2d, mCirclesList.get(i), mSettings.getMouseDeltaX(), mSettings.getMouseDeltaY());
+            drawCircleCenter(g2d, mCirclesList.get(i), (int) MOUSE_POINTER_DELTA.getX(), (int) MOUSE_POINTER_DELTA.getY());
         }
-        g2d.setColor(mSettings.getSubjectCircleColor());
-        drawCircleCenter(g2d, lastCircle, mSettings.getMouseDeltaX(), mSettings.getMouseDeltaY());
+        g2d.setColor(SUBJECT_CIRCLE_COLOR);
+        drawCircleCenter(g2d, lastCircle, (int) MOUSE_POINTER_DELTA.getX(), (int) MOUSE_POINTER_DELTA.getY());
     }
 
     private void drawCircles(Graphics2D g2d) {
         CircleWithArcs lastCircle = mCirclesList.get(mCirclesList.size() - 1);
-        g2d.setColor(mSettings.getFadedArcsColor());
+        g2d.setColor(FADED_ARCS_COLOR);
         for (int i = 0; i < mCirclesList.size() - 1; i++) {
-            drawCircle(g2d, mCirclesList.get(i), mSettings.getMouseDeltaX(), mSettings.getMouseDeltaY());
+            drawCircle(g2d, mCirclesList.get(i), (int) MOUSE_POINTER_DELTA.getX(), (int) MOUSE_POINTER_DELTA.getY());
         }
-        g2d.setColor(mSettings.getFadedSubjectCircleColor());
-        drawCircle(g2d, lastCircle, mSettings.getMouseDeltaX(), mSettings.getMouseDeltaY());
+        g2d.setColor(FADED_SUBJECT_CIRCLE_COLOR);
+        drawCircle(g2d, lastCircle, (int) MOUSE_POINTER_DELTA.getX(), (int) MOUSE_POINTER_DELTA.getY());
     }
 
     private void drawCirclesGradients(Graphics2D g2d) {
         CircleWithArcs lastCircle = mCirclesList.get(mCirclesList.size() - 1);
         for (int i = 0; i < mCirclesList.size() - 1; i++) {
-            drawCircleGradient(g2d, mCirclesList.get(i), mSettings.getMouseDeltaX(), mSettings.getMouseDeltaY(), mSettings.getFadedArcsColor());
+            drawCircleGradient(g2d, mCirclesList.get(i), (int) MOUSE_POINTER_DELTA.getX(), (int) MOUSE_POINTER_DELTA.getY(), FADED_ARCS_COLOR);
         }
-        drawCircleGradient(g2d, lastCircle, mSettings.getMouseDeltaX(), mSettings.getMouseDeltaY(), mSettings.getFadedSubjectCircleColor());
+        drawCircleGradient(g2d, lastCircle, (int) MOUSE_POINTER_DELTA.getX(), (int) MOUSE_POINTER_DELTA.getY(), FADED_SUBJECT_CIRCLE_COLOR);
     }
 
     public void setCirclesList(List<CircleWithArcs> circlesList) {

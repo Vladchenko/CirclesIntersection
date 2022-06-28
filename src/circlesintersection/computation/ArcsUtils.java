@@ -1,14 +1,14 @@
-package circlesintersection.utils;
+package circlesintersection.computation;
 
 import circlesintersection.models.Arc;
 import circlesintersection.models.CircleWithArcs;
+import circlesintersection.utils.Logger;
 
-import java.awt.geom.Arc2D;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.List;
 
-import static circlesintersection.Settings.DEBUG_ENABLED;
+import static circlesintersection.presentation.GraphicsSettings.DEBUG_ENABLED;
 
 /**
  * Utils to assist circles' arcs computation.
@@ -187,7 +187,7 @@ public class ArcsUtils {
 
     /**
      * @param circle Circle that is not to be intersected to any other circles
-     * @return Circle that is not intersected to any other circles
+     * @return Circle that is not intersected to any other circles (in fact this is arc, but considered as circle)
      */
     public static Arc getNotIntersectedCircle(CircleWithArcs circle) {
         Arc arc = new Arc();

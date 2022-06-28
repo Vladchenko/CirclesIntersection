@@ -8,6 +8,11 @@ import java.util.ArrayList;
  */
 public class CircleWithArcs {
 
+    // Range that a "defaultDiameter" field to be randomized within.
+    public static final int DIAMETER_RANDOM_RANGE = 150;
+    // Value that is added to a randomized diameter
+    public static final int DIAMETER_MINIMUM = 50;
+
     // region Fields
     private double mX = 0;
     private double mY = 0;

@@ -1,19 +1,20 @@
-package circlesintersection.utils.geometry;
+package circlesintersection.computation.geometry;
 
-import circlesintersection.Settings;
-import circlesintersection.models.AngleKind;
 import circlesintersection.models.Arc;
 import circlesintersection.models.CircleWithArcs;
 
 import java.util.List;
 
-import static circlesintersection.utils.CircleUtils.prepareCirclesWhenRotatedOrScaled;
-import static circlesintersection.utils.geometry.GeometryUtils.*;
+import static circlesintersection.computation.CircleUtils.prepareCirclesWhenRotatedOrScaled;
+import static circlesintersection.computation.geometry.GeometryUtils.*;
 
 /**
  * Circles geometry utils methods, such as scaling, rotating, diameter changing.
  */
 public class CirclesGeometryUtils {
+
+    private static final double ROTATION_ANGLE_STEP = 0.04;
+    private static final int SCALE_DISTANCE_DIVISION_FACTOR = 15;
 
     private CirclesGeometryUtils() {
         throw new RuntimeException("Utils class should not be instantiated");
@@ -37,9 +38,9 @@ public class CirclesGeometryUtils {
                     circlesList.get(i).getX(), circlesList.get(i).getY(),
                     lastCircle.getX(), lastCircle.getY());
             if (wheelRotationValue > 0) {
-                distance += distance / Settings.SCALE_DISTANCE_DIVISION_FACTOR;
+                distance += distance / SCALE_DISTANCE_DIVISION_FACTOR;
             } else {
-                distance -= distance / Settings.SCALE_DISTANCE_DIVISION_FACTOR;
+                distance -= distance / SCALE_DISTANCE_DIVISION_FACTOR;
             }
             computeAndSetDekartCoordinates(
                     distance, newAngle,
@@ -60,9 +61,9 @@ public class CirclesGeometryUtils {
         double distance;
         prepareCirclesWhenRotatedOrScaled(circlesList);
         if (wheelRotationValue > 0) {
-            extraAngle = Settings.ROTATION_ANGLE_STEP;
+            extraAngle = ROTATION_ANGLE_STEP;
         } else {
-            extraAngle = -Settings.ROTATION_ANGLE_STEP;
+            extraAngle = -ROTATION_ANGLE_STEP;
         }
         CircleWithArcs lastCircle = circlesList.get(circlesList.size() - 1);
         for (int i = 0; i < circlesList.size() - 1; i++) {

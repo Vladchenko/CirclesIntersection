@@ -1,7 +1,8 @@
 package circlesintersection.listeners;
 
-import circlesintersection.Settings;
+import circlesintersection.computation.CirclesRendererListener;
 
+import java.awt.*;
 import java.awt.event.*;
 
 /**
@@ -9,18 +10,21 @@ import java.awt.event.*;
  */
 public class MouseListenerImpl implements MouseListener, MouseMotionListener, MouseWheelListener {
 
-    private final Settings mSettings;
+    public static final Point MOUSE_POINTER = new Point(0,0);
+    public static final Point MOUSE_POINTER_DELTA = new Point(0,0);
+
+    private final KeyboardKeysHolder mKeysHolder;
     private final CirclesRendererListener mRendererListener;
 
     /**
      * Public constructor
      *
      * @param rendererListener listener for UI updating callbacks
-     * @param settings         all the settings for the application
+     * @param keysHolder       keys pressed holder
      */
     public MouseListenerImpl(CirclesRendererListener rendererListener,
-                             Settings settings) {
-        mSettings = settings;
+                             KeyboardKeysHolder keysHolder) {
+        mKeysHolder = keysHolder;
         mRendererListener = rendererListener;
     }
 
@@ -31,8 +35,7 @@ public class MouseListenerImpl implements MouseListener, MouseMotionListener, Mo
 
     @Override
     public void mousePressed(MouseEvent e) {
-        mSettings.setMouseX(e.getX());
-        mSettings.setMouseY(e.getY());
+        MOUSE_POINTER.setLocation(e.getX(), e.getY());
     }
 
     @Override
@@ -60,14 +63,14 @@ public class MouseListenerImpl implements MouseListener, MouseMotionListener, Mo
 
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
-        if (mSettings.isKeyCtrl()) {
+        if (mKeysHolder.isKeyCtrl()) {
             mRendererListener.rotateCirclesAndRepaint(e.getWheelRotation());
         }
-        if (mSettings.isKeyShift()) {
+        if (mKeysHolder.isKeyShift()) {
             mRendererListener.scaleCirclesAndRepaint(e.getWheelRotation());
         }
-        if (!mSettings.isKeyCtrl()
-                && !mSettings.isKeyShift()) {
+        if (!mKeysHolder.isKeyCtrl()
+                && !mKeysHolder.isKeyShift()) {
             mRendererListener.updateCirclesAndRepaint(e.getPoint(), e.getWheelRotation());
         }
     }

@@ -1,22 +1,24 @@
-package circlesintersection.utils.geometry;
+package circlesintersection.computation.geometry;
 
-import circlesintersection.Settings;
 import circlesintersection.models.Arc;
 import circlesintersection.models.CircleWithArcs;
 import circlesintersection.utils.Logger;
 
 import java.util.List;
 
-import static circlesintersection.Settings.DEBUG_ENABLED;
-import static circlesintersection.utils.ArcsUtils.*;
-import static circlesintersection.utils.CircleUtils.excludeInnerCircles;
-import static circlesintersection.utils.geometry.CirclesGeometryUtils.convertAnglesRadToGrad;
-import static circlesintersection.utils.geometry.GeometryUtils.*;
+import static circlesintersection.presentation.GraphicsSettings.DEBUG_ENABLED;
+import static circlesintersection.computation.ArcsUtils.*;
+import static circlesintersection.computation.CircleUtils.excludeInnerCircles;
+import static circlesintersection.computation.geometry.CirclesGeometryUtils.convertAnglesRadToGrad;
+import static circlesintersection.computation.geometry.GeometryUtils.*;
 
 /**
  * Helper methods related to computing intersections of circles list ({@link List<CircleWithArcs>})
  */
 public class IntersectionUtils {
+
+    // Draw circles that do not intersect with any other circles with a solid line, not a dashed one.
+    private static final boolean DRAW_NOT_INTERSECTED_SOLID = true;
 
     private IntersectionUtils() {
         throw new RuntimeException("IntersectionUtils should not be instantiated");
@@ -69,7 +71,7 @@ public class IntersectionUtils {
              * angles to be [0;360] (full circle).
              */
             if (!intersected
-                    && Settings.DRAW_NOT_INTERSECTED_SOLID) {
+                    && DRAW_NOT_INTERSECTED_SOLID) {
                 circlesList.get(i).addArc(
                         getNotIntersectedCircle(circlesList.get(i))
                 );

@@ -7,12 +7,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-import static circlesintersection.Settings.APPLICATION_TITLE;
-
 /**
  * Provides a {@link JFrame} to draw a circles, having a keyboard and mouse listeners attached to it.
  */
 public class Canvas {
+
+    private static final String APPLICATION_TITLE = "Circles Intersecting v1.3";
+    private static final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    public static final int CANVAS_WIDTH = (int) screenSize.getWidth();// - 10; //- (int) screenSize.getWidth() / 12;
+    public static final int CANVAS_HEIGHT = (int) screenSize.getHeight();// - 8; //- (int) screenSize.getHeight() / 9;
 
     private final JFrame mFrame;
 
@@ -26,7 +29,7 @@ public class Canvas {
      * @param frame            to have a JPanel on it, to draw a graphics shapes.
      * @param mouseOpsListener listener for a mouse clicks and wheel rotating.
      * @param keyboardListener listener for a keyboard keys operating.
-     * @param paintComponent callbacks to UI to update and repaint it.
+     * @param paintComponent   callbacks to UI to update and repaint it.
      */
     public Canvas(JFrame frame,
                   MouseListenerImpl mouseOpsListener,
@@ -41,13 +44,13 @@ public class Canvas {
     /**
      * Perform an initialization of program.
      */
-    public void initializeRendering() {
+    public void initializeCanvas() {
         initializeFrame();
         addListeners();
     }
 
     private void initializeFrame() {
-        mFrame.setContentPane((JPanel) mPaintComponent);
+        mFrame.setContentPane(mPaintComponent);
         mFrame.setLayout(null);
         mFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mFrame.setSize(Toolkit.getDefaultToolkit().getScreenSize());

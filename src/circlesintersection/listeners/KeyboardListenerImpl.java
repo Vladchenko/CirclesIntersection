@@ -1,6 +1,7 @@
 package circlesintersection.listeners;
 
-import circlesintersection.Settings;
+import circlesintersection.computation.CirclesRendererListener;
+import circlesintersection.presentation.GraphicsSettings;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -10,19 +11,22 @@ import java.awt.event.KeyListener;
  */
 public class KeyboardListenerImpl implements KeyListener {
 
-    private final Settings mSettings;
+    private final GraphicsSettings mGraphicsSettings;
+    private final KeyboardKeysHolder mKeysHolder;
     private final CirclesRendererListener mRendererListener;
 
     /**
      * Public constructor
      *
      * @param rendererListener listener for UI updating callbacks
-     * @param settings         all the settings for the application.
+     * @param keysHolder       keys pressed holder
      */
     public KeyboardListenerImpl(CirclesRendererListener rendererListener,
-                                Settings settings) {
+                                KeyboardKeysHolder keysHolder,
+                                GraphicsSettings graphicsSettings) {
         mRendererListener = rendererListener;
-        mSettings = settings;
+        mKeysHolder = keysHolder;
+        mGraphicsSettings = graphicsSettings;
     }
 
     @Override
@@ -32,10 +36,10 @@ public class KeyboardListenerImpl implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
-            mSettings.setKeyCtrl(true);
+            mKeysHolder.setKeyCtrl(true);
         }
         if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
-            mSettings.setKeyShift(true);
+            mKeysHolder.setKeyShift(true);
         }
     }
 
@@ -45,15 +49,15 @@ public class KeyboardListenerImpl implements KeyListener {
             mRendererListener.scatterCirclesComputeArcsAndRepaint();
         }
         if (e.getKeyCode() == KeyEvent.VK_G) {
-            mSettings.setGradientEnabled(!mSettings.isGradientEnabled());
+            mGraphicsSettings.setGradientEnabled(!mGraphicsSettings.isGradientEnabled());
             mRendererListener.updateCirclesAndRepaint(null);
         }
         if (e.getKeyCode() == KeyEvent.VK_A) {
-            mSettings.setAntiAliasingEnabled(!mSettings.isAntiAliasingEnabled());
+            mGraphicsSettings.setAntiAliasingEnabled(!mGraphicsSettings.isAntiAliasingEnabled());
             mRendererListener.updateCirclesAndRepaint(null);
         }
         if (e.getKeyCode() == KeyEvent.VK_M) {
-            mSettings.changeDrawingMode();
+            mGraphicsSettings.changeDrawingMode();
             mRendererListener.updateCirclesAndRepaint(null);
         }
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
@@ -63,10 +67,10 @@ public class KeyboardListenerImpl implements KeyListener {
             mRendererListener.toggleFullScreen();
         }
         if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
-            mSettings.setKeyCtrl(false);
+            mKeysHolder.setKeyCtrl(false);
         }
         if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
-            mSettings.setKeyShift(false);
+            mKeysHolder.setKeyShift(false);
         }
     }
 }

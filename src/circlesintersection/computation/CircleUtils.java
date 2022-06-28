@@ -1,4 +1,4 @@
-package circlesintersection.utils;
+package circlesintersection.computation;
 
 import circlesintersection.models.CircleWithArcs;
 
@@ -6,7 +6,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static circlesintersection.utils.geometry.GeometryUtils.computeDistance;
+import static circlesintersection.computation.geometry.GeometryUtils.computeDistance;
 
 /**
  * Utils to assist circles' arcs computation.
@@ -28,21 +28,21 @@ public class CircleUtils {
     /**
      * Randomly locates circles on a screen and defines its diameters.
      *
-     * @param circlesList       list of a circles
-     * @param canvasWidth       width at which x ordinate of a circle is randomly defined
-     * @param canvasHeight      height at which y ordinate of a circle is randomly defined
-     * @param diameterSpan      value within which a circle's diameter is defined
-     * @param diameterIncrement diameter scale
+     * @param circlesList     list of a circles
+     * @param canvasWidth     width at which x ordinate of a circle is randomly defined
+     * @param canvasHeight    height at which y ordinate of a circle is randomly defined
+     * @param diameterSpan    value within which a circle's diameter is defined
+     * @param diameterMinimum minimum diameter
      */
     public static void randomizeCircles(List<CircleWithArcs> circlesList,
                                         int canvasWidth,
                                         int canvasHeight,
                                         int diameterSpan,
-                                        int diameterIncrement) {
+                                        int diameterMinimum) {
         for (CircleWithArcs circle : circlesList) {
             circle.setX((int) (Math.random() * (canvasWidth - diameterSpan * 2) + diameterSpan));
             circle.setY((int) (Math.random() * (canvasHeight - diameterSpan * 2) + diameterSpan));
-            circle.setDiameter(Math.random() * diameterSpan + diameterIncrement);
+            circle.setDiameter(Math.random() * diameterSpan + diameterMinimum);
         }
         setCircleToMousePosition(circlesList.get(circlesList.size() - 1));
     }

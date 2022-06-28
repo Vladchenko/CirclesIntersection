@@ -21,8 +21,10 @@ public class UiUpdateListenerImpl implements UiUpdateListener {
     /**
      * Public constructor.
      *
-     * @param paintComponent    Component that draws the circles and its intersecting arcs.
-     * @param drawingHelper     Utils methods for drawing the shapes on canvas.
+     * @param drawingHelper        Utils methods for drawing the shapes on canvas.
+     * @param debugDrawingHelper   Helper methods to draw a debug info on canvas.
+     * @param circlesDrawingHelper Helper methods for CircleWithArcs list drawing.
+     * @param paintComponent       Component that draws the circles and its intersecting arcs.
      */
     public UiUpdateListenerImpl(DrawingHelper drawingHelper,
                                 DebugDrawingHelper debugDrawingHelper,
