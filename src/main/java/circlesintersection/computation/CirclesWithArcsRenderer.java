@@ -3,7 +3,7 @@ package circlesintersection.computation;
 import circlesintersection.presentation.drawing.FrameTimeCounter;
 import circlesintersection.presentation.UiUpdateListener;
 import circlesintersection.models.CircleWithArcs;
-import com.sun.istack.internal.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.util.List;

@@ -7,6 +7,7 @@ import circlesintersection.utils.Logger;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.List;
+import java.util.logging.Level;
 
 import static circlesintersection.presentation.GraphicsSettings.DEBUG_ENABLED;
 
@@ -14,6 +15,13 @@ import static circlesintersection.presentation.GraphicsSettings.DEBUG_ENABLED;
  * Utils to assist circles' arcs computation.
  */
 public class ArcsUtils {
+
+    /**
+     * Private constructor.
+     */
+    private ArcsUtils() {
+        throw new RuntimeException("ArcsUtils should not be instantiated!");
+    }
 
     /**
      * Remove the redundant arcs (the ones that overlap with others). I.e.
@@ -42,9 +50,8 @@ public class ArcsUtils {
         }
 
         if (DEBUG_ENABLED) {
-            System.out.println("Redundant arcs have been removed:");
+            java.util.logging.Logger.getGlobal().log(Level.INFO, "Redundant arcs have been removed:");
             Logger.printArcs(circlesList);
-            System.out.println();
         }
     }
 
@@ -213,7 +220,7 @@ public class ArcsUtils {
                 }
             }
         } catch (ConcurrentModificationException ex) {
-            System.out.println(ex.getMessage());
+            java.util.logging.Logger.getGlobal().log(Level.SEVERE,ex.getMessage());
         }
     }
 }
