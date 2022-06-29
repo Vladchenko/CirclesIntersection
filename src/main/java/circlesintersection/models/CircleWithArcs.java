@@ -2,6 +2,7 @@ package circlesintersection.models;
 
 import java.awt.geom.Arc2D;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Circle with a list of arcs that do not intersect with other circles.
@@ -23,8 +24,8 @@ public class CircleWithArcs {
      */
     private boolean mExcluded = false;
 
-    private ArrayList<Arc2D> mArcs2D;
-    private ArrayList<Arc> mArcsList;
+    private List<Arc2D> mArcs2D;
+    private List<Arc> mArcsList;
     // endregion fields
 
     /**
@@ -68,19 +69,19 @@ public class CircleWithArcs {
         mExcluded = excluded;
     }
 
-    public ArrayList<Arc2D> getArcs2D() {
+    public List<Arc2D> getArcs2D() {
         return mArcs2D;
     }
 
-    public void setArcs2D(ArrayList<Arc2D> arcs2D) {
+    public void setArcs2D(List<Arc2D> arcs2D) {
         mArcs2D = arcs2D;
     }
 
-    public ArrayList<Arc> getArcsList() {
+    public List<Arc> getArcsList() {
         return mArcsList;
     }
 
-    public void setArcsList(ArrayList<Arc> arcsList) {
+    public void setArcsList(List<Arc> arcsList) {
         mArcsList = arcsList;
     }
     // endregion getters & setters

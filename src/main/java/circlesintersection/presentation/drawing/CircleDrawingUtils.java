@@ -1,9 +1,9 @@
 package circlesintersection.presentation.drawing;
 
+import circlesintersection.IllegalInstantiationException;
 import circlesintersection.models.CircleWithArcs;
 
 import java.awt.*;
-import java.util.List;
 
 /**
  * Utils to draw circles.
@@ -14,7 +14,7 @@ public class CircleDrawingUtils {
      * Private constructor.
      */
     private CircleDrawingUtils() {
-        throw new RuntimeException("CircleDrawingUtils should not be instantiated!");
+        throw new IllegalInstantiationException("CircleDrawingUtils should not be instantiated!");
     }
 
     /**

@@ -1,5 +1,7 @@
 package circlesintersection.presentation.drawing;
 
+import circlesintersection.IllegalInstantiationException;
+
 import java.awt.*;
 
 /**
@@ -17,6 +19,6 @@ public final class DrawingConsts {
     public static final Color SUBJECT_CIRCLE_COLOR = new Color(100, 200, 255);
 
     private DrawingConsts() {
-        throw new RuntimeException("DrawingConsts should not be instantiated!");
+        throw new IllegalInstantiationException("DrawingConsts should not be instantiated!");
     }
 }

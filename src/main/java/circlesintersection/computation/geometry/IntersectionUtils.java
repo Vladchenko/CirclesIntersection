@@ -1,8 +1,9 @@
 package circlesintersection.computation.geometry;
 
+import circlesintersection.IllegalInstantiationException;
 import circlesintersection.models.Arc;
 import circlesintersection.models.CircleWithArcs;
-import circlesintersection.utils.Logger;
+import circlesintersection.utils.CirclesLogger;
 
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class IntersectionUtils {
     private static final boolean DRAW_NOT_INTERSECTED_SOLID = true;
 
     private IntersectionUtils() {
-        throw new RuntimeException("IntersectionUtils should not be instantiated");
+        throw new IllegalInstantiationException("IntersectionUtils should not be instantiated");
     }
 
     /**
@@ -45,7 +46,6 @@ public class IntersectionUtils {
      */
     private static void checkIntersection(List<CircleWithArcs> circlesList) {
 
-        double distance;
         boolean intersected;
 
         excludeInnerCircles(circlesList);
@@ -56,14 +56,7 @@ public class IntersectionUtils {
             // If circle(arc) is not excluded
             if (!circlesList.get(i).isExcluded()) {
                 // Passing through all the circles
-                for (int j = 0; j < circlesList.size(); j++) {
-                    if (i != j && !circlesList.get(j).isExcluded()) {
-                        distance = computeDistance(
-                                circlesList.get(i).getX(), circlesList.get(i).getY(),
-                                circlesList.get(j).getX(), circlesList.get(j).getY());
-                        intersected = createArcsAndMarkIntersected(circlesList, distance, i, j);
-                    }
-                }
+                intersected = checkIfCircleIsIntersectedWithOthers(circlesList, intersected, i);
             }
 
             /*
@@ -79,12 +72,25 @@ public class IntersectionUtils {
         }
 
         if (DEBUG_ENABLED) {
-            Logger.printArcs(circlesList);
+            CirclesLogger.printArcs(circlesList);
         }
         sortArcs(circlesList);
         if (DEBUG_ENABLED) {
-            Logger.printArcs(circlesList);
+            CirclesLogger.printArcs(circlesList);
         }
+    }
+
+    private static boolean checkIfCircleIsIntersectedWithOthers(List<CircleWithArcs> circlesList, boolean intersected, int i) {
+        double distance;
+        for (int j = 0; j < circlesList.size(); j++) {
+            if (i != j && !circlesList.get(j).isExcluded()) {
+                distance = computeDistance(
+                        circlesList.get(i).getX(), circlesList.get(i).getY(),
+                        circlesList.get(j).getX(), circlesList.get(j).getY());
+                intersected = createArcsAndMarkIntersected(circlesList, distance, i, j);
+            }
+        }
+        return intersected;
     }
 
     private static boolean createArcsAndMarkIntersected(List<CircleWithArcs> circlesList, double distance, int i, int j) {

@@ -1,5 +1,6 @@
 package circlesintersection.computation.geometry;
 
+import circlesintersection.IllegalInstantiationException;
 import circlesintersection.models.CircleWithArcs;
 
 /**
@@ -8,7 +9,7 @@ import circlesintersection.models.CircleWithArcs;
 public final class GeometryUtils {
 
     private GeometryUtils() {
-        throw new RuntimeException("Utils class should not be instantiated");
+        throw new IllegalInstantiationException("Utils class should not be instantiated");
     }
 
     /**

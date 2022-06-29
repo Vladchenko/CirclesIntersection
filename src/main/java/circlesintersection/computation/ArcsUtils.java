@@ -1,14 +1,16 @@
 package circlesintersection.computation;
 
+import circlesintersection.IllegalInstantiationException;
 import circlesintersection.models.Arc;
 import circlesintersection.models.CircleWithArcs;
-import circlesintersection.utils.Logger;
+import circlesintersection.utils.CirclesLogger;
 
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.List;
 import java.util.logging.Level;
 
+import static circlesintersection.computation.Arc2dUtils.createArcs2D;
 import static circlesintersection.presentation.GraphicsSettings.DEBUG_ENABLED;
 
 /**
@@ -20,7 +22,7 @@ public class ArcsUtils {
      * Private constructor.
      */
     private ArcsUtils() {
-        throw new RuntimeException("ArcsUtils should not be instantiated!");
+        throw new IllegalInstantiationException("ArcsUtils should not be instantiated!");
     }
 
     /**
@@ -34,24 +36,19 @@ public class ArcsUtils {
         for (CircleWithArcs circleWithArcs : circlesList) {
             arcList = circleWithArcs.getArcsList();
             if (arcList.size() > 1) {
-                for (int j = 0; j < arcList.size() - 1; j++) {
+                int j = 0;
+                while (j < arcList.size() - 1) {
                     if (arcList.get(j).getAngleEnd() >= arcList.get(j + 1).getAngleBegin()) {
-                        if (arcList.get(j).getAngleEnd() >= arcList.get(j + 1).getAngleEnd()) {
-                            arcList.remove(j + 1);
-                            j--;
-                        } else if (arcList.get(j).getAngleEnd() < arcList.get(j + 1).getAngleEnd()) {
-                            arcList.get(j).setAngleEnd(arcList.get(j + 1).getAngleEnd());
-                            arcList.remove(j + 1);
-                            j--;
-                        }
+                        j = removeArcIfItOverlaps(arcList, j);
                     }
+                    j++;
                 }
             }
         }
 
         if (DEBUG_ENABLED) {
             java.util.logging.Logger.getGlobal().log(Level.INFO, "Redundant arcs have been removed:");
-            Logger.printArcs(circlesList);
+            CirclesLogger.printArcs(circlesList);
         }
     }
 
@@ -64,100 +61,15 @@ public class ArcsUtils {
      * @param deltaY      Some shift of y ordinate (used to perform mouse dragging)
      */
     public static void invertArcsAndCreateArcs2D(List<CircleWithArcs> circlesList, int deltaX, int deltaY) {
-
-        Arc arc;
-
         List<Arc> arcList;
         for (CircleWithArcs circleWithArcs : circlesList) {
             arcList = circleWithArcs.getArcsList();
-            for (int j = 0; j < arcList.size(); j++) {
-                arc = new Arc();
-
-                if (arcList.get(j).getAngleBegin() == 0
-                        && arcList.get(j).getAngleEnd() == 360) {
-                    continue;
-                }
-
-                if (arcList.get(j).getAngleBegin() != 0
-                        && arcList.get(j).getAngleEnd() == 360) {
-                    if (arcList.size() > 1
-                            && arcList.size() == j + 1) {
-                        continue;
-                    }
-                    arc.setAngleBegin(0);
-                    arc.setAngleEnd(arcList.get(j).getAngleBegin());
-                    circleWithArcs.addArc2D(arc, deltaX, deltaY);
-                    continue;
-                }
-
-                if (arcList.get(j).getAngleBegin() == 0
-                        && arcList.get(j).getAngleEnd() != 360) {
-                    if (arcList.size() > j
-                            && arcList.size() > 1) {
-                        arc.setAngleBegin(arcList.get(j).getAngleEnd());
-                        arc.setAngleEnd(arcList.get(j + 1).getAngleBegin());
-                        circleWithArcs.addArc2D(arc, deltaX, deltaY);
-                        continue;
-                    }
-                    if (arcList.size() == 1
-                            || arcList.size() == j) {
-                        arc.setAngleBegin(arcList.get(j).getAngleEnd());
-                        arc.setAngleEnd(360);
-                        circleWithArcs.addArc2D(arc, deltaX, deltaY);
-                        continue;
-                    }
-                }
-
-                if (arcList.get(j).getAngleBegin() != 0
-                        && arcList.get(j).getAngleEnd() != 360) {
-
-                    if (j == 0) {
-                        if (arcList.size() == 1) {
-                            arc.setAngleBegin(0);
-                            arc.setAngleEnd(arcList.get(j).getAngleBegin());
-                            circleWithArcs.addArc2D(arc, deltaX, deltaY);
-                            arc = new Arc();
-                            arc.setAngleBegin(arcList.get(j).getAngleEnd());
-                            arc.setAngleEnd(360);
-                            circleWithArcs.addArc2D(arc, deltaX, deltaY);
-                            continue;
-                        }
-                        if (arcList.size() > 1) {
-                            arc.setAngleBegin(0);
-                            arc.setAngleEnd(arcList.get(j).getAngleBegin());
-                            circleWithArcs.addArc2D(arc, deltaX, deltaY);
-                            arc = new Arc();
-                            arc.setAngleBegin(arcList.get(j).getAngleEnd());
-                            arc.setAngleEnd(arcList.get(j + 1).getAngleBegin());
-                            circleWithArcs.addArc2D(arc, deltaX, deltaY);
-                        }
-                    } else {
-                        if (arcList.size() == 2) {
-                            arc.setAngleBegin(arcList.get(j).getAngleEnd());
-                            arc.setAngleEnd(360);
-                            circleWithArcs.addArc2D(arc, deltaX, deltaY);
-                            continue;
-                        }
-                        if (arcList.size() > 2
-                                && arcList.size() != j + 1) {
-                            arc.setAngleBegin(arcList.get(j).getAngleEnd());
-                            arc.setAngleEnd(arcList.get(j + 1).getAngleBegin());
-                            circleWithArcs.addArc2D(arc, deltaX, deltaY);
-                            continue;
-                        }
-                        if (arcList.size() == j + 1) {
-                            arc.setAngleBegin(arcList.get(j).getAngleEnd());
-                            arc.setAngleEnd(360);
-                            circleWithArcs.addArc2D(arc, deltaX, deltaY);
-                        }
-                    }
-                }
-            }
+            createArcs2D(deltaX, deltaY, arcList, circleWithArcs);
             circleWithArcs.setArcsList(new ArrayList<>());
         }
 
         if (DEBUG_ENABLED) {
-            Logger.printArcs2DAngles(circlesList);
+            CirclesLogger.printArcs2DAngles(circlesList);
         }
     }
 
@@ -220,7 +132,21 @@ public class ArcsUtils {
                 }
             }
         } catch (ConcurrentModificationException ex) {
-            java.util.logging.Logger.getGlobal().log(Level.SEVERE,ex.getMessage());
+            java.util.logging.Logger.getGlobal().log(Level.SEVERE, ex.getMessage());
         }
+    }
+
+    private static int removeArcIfItOverlaps(List<Arc> arcList, int position) {
+        // If arc span overlaps with a next one, then remove next one.
+        if (arcList.get(position).getAngleEnd() >= arcList.get(position + 1).getAngleEnd()) {
+            arcList.remove(position + 1);
+            position--;
+            // If arc span doesn't overlap with a next one, then prolong current arc until end of next one.
+        } else if (arcList.get(position).getAngleEnd() < arcList.get(position + 1).getAngleEnd()) {
+            arcList.get(position).setAngleEnd(arcList.get(position + 1).getAngleEnd());
+            arcList.remove(position + 1);
+            position--;
+        }
+        return position;
     }
 }

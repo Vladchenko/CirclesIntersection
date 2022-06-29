@@ -14,8 +14,8 @@ public class Canvas {
 
     private static final String APPLICATION_TITLE = "Circles Intersecting v1.3";
     private static final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    public static final int CANVAS_WIDTH = (int) screenSize.getWidth();// - 10; //- (int) screenSize.getWidth() / 12;
-    public static final int CANVAS_HEIGHT = (int) screenSize.getHeight();// - 8; //- (int) screenSize.getHeight() / 9;
+    public static final int CANVAS_WIDTH = (int) screenSize.getWidth();
+    public static final int CANVAS_HEIGHT = (int) screenSize.getHeight();
 
     private final JFrame mFrame;
 

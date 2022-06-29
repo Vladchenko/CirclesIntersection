@@ -1,10 +1,7 @@
 package circlesintersection.presentation;
 
 /**
- * Represents values needed for the problem domain.
- * FIXME This is an antipattern.
- * https://www.baeldung.com/java-constants-good-practices
- * https://stackoverflow.com/questions/6220726/where-do-you-keep-constants-used-throughout-your-application
+ * Represents values for drawing on a canvas.
  */
 public class GraphicsSettings {
 

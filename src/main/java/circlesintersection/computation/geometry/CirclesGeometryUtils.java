@@ -1,5 +1,6 @@
 package circlesintersection.computation.geometry;
 
+import circlesintersection.IllegalInstantiationException;
 import circlesintersection.models.Arc;
 import circlesintersection.models.CircleWithArcs;
 
@@ -17,7 +18,7 @@ public class CirclesGeometryUtils {
     private static final int SCALE_DISTANCE_DIVISION_FACTOR = 15;
 
     private CirclesGeometryUtils() {
-        throw new RuntimeException("Utils class should not be instantiated");
+        throw new IllegalInstantiationException("Utils class should not be instantiated");
     }
 
     /**

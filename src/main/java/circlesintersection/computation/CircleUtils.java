@@ -1,5 +1,6 @@
 package circlesintersection.computation;
 
+import circlesintersection.IllegalInstantiationException;
 import circlesintersection.models.CircleWithArcs;
 
 import java.awt.*;
@@ -12,6 +13,10 @@ import static circlesintersection.computation.geometry.GeometryUtils.computeDist
  * Utils to assist circles' arcs computation.
  */
 public class CircleUtils {
+
+    private CircleUtils() {
+        throw new IllegalInstantiationException("CircleUtils should not be instantiated");
+    }
 
     /**
      * Populate circles with its instances.

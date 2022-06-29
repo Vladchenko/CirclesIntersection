@@ -1,7 +1,7 @@
 package circlesintersection.presentation.drawing;
 
 /**
- * TODO
+ * Count time taken to draw one frame of circles and arcs on a canvas.
  */
 public class FrameTimeCounter {
 
