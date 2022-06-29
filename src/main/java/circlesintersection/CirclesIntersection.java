@@ -53,13 +53,12 @@ public class CirclesIntersection {
                 sCirclesDrawingHelper,
                 paintComponent);
         final CirclesWithArcsRenderer renderer = new CirclesWithArcsRenderer(circleWithArcsList,
-                uiUpdateListenerImpl,
-                frameTimeCounter);
+                uiUpdateListenerImpl);
         final KeyboardKeysHolder keysHolder = KeyboardKeysHolder.getInstance();
         new Canvas(
                 new JFrame(),
-                new MouseListenerImpl(renderer, keysHolder),
-                new KeyboardListenerImpl(renderer, keysHolder, graphicsSettings),
+                new MouseListenerImpl(keysHolder, frameTimeCounter, renderer),
+                new KeyboardListenerImpl(keysHolder, graphicsSettings, frameTimeCounter, renderer),
                 paintComponent
         ).initializeCanvas();
     }

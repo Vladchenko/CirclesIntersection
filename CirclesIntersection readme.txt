@@ -5,11 +5,10 @@ Release Date:	2014-08-22 (last on 2022-06-07)
 Author:		    Yanchenko Vlad
 
 TODO
-        - Split Settings into smaller ones
         - Turn drawShapesForLastCircle(...) and drawShapesForAllCirclesBeforeLastOne(...) into one method.
         - Unittests
         - Add polymorphism
-            ! Seems useless
+            ! Seems useless, but having it, drawingUtils classes won't have several reasons to modify them.
         ? Maybe there is a way for Arc to extend Arc2D
             ! Then one cannot use Arc2D.Double class to instantiate, so bad idea
         - Move all the hardcoded values into Settings.java

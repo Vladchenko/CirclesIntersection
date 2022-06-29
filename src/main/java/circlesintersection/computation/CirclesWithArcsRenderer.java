@@ -1,6 +1,6 @@
 package circlesintersection.computation;
 
-import circlesintersection.presentation.drawing.FrameTimeCounter;
+import circlesintersection.listeners.CirclesRendererListener;
 import circlesintersection.presentation.UiUpdateListener;
 import circlesintersection.models.CircleWithArcs;
 import org.jetbrains.annotations.Nullable;
@@ -23,7 +23,6 @@ import static circlesintersection.computation.geometry.IntersectionUtils.compute
  */
 public class CirclesWithArcsRenderer implements CirclesRendererListener {
 
-    private final FrameTimeCounter mFrameTimeCounter;
     private final List<CircleWithArcs> mCirclesList;
     private final UiUpdateListener mUiUpdateListener;
 
@@ -32,20 +31,16 @@ public class CirclesWithArcsRenderer implements CirclesRendererListener {
      *
      * @param circlesList      circles and their arcs to be drawn on a canvas.
      * @param uiUpdateListener listener to update UI, when some operation is performed.
-     * @param frameTimeCounter   counter of time spent for one frame.
      */
     public CirclesWithArcsRenderer(List<CircleWithArcs> circlesList,
-                                   UiUpdateListener uiUpdateListener,
-                                   FrameTimeCounter frameTimeCounter) {
+                                   UiUpdateListener uiUpdateListener) {
         mCirclesList = circlesList;
-        mFrameTimeCounter = frameTimeCounter;
         mUiUpdateListener = uiUpdateListener;
         computeIntersections(mCirclesList, 0, 0);
     }
 
     @Override
     public void scatterCirclesComputeArcsAndRepaint() {
-        mFrameTimeCounter.setTimeBegin(System.nanoTime());
         initiateCircles(mCirclesList);
         randomizeCircles(mCirclesList,
                 CANVAS_WIDTH,
@@ -57,7 +52,6 @@ public class CirclesWithArcsRenderer implements CirclesRendererListener {
 
     @Override
     public void updateCirclesAndRepaint(@Nullable Point point) {
-        mFrameTimeCounter.setTimeBegin(System.nanoTime());
         initiateCircles(mCirclesList);
         setCircleToMousePosition(mCirclesList.get(mCirclesList.size() - 1));
         computeIntersectionsAndRepaintCanvas(0, 0);
@@ -65,7 +59,6 @@ public class CirclesWithArcsRenderer implements CirclesRendererListener {
 
     @Override
     public void updateCirclesAndRepaint(Point point, int wheelRotationValue) {
-        mFrameTimeCounter.setTimeBegin(System.nanoTime());
         initiateCircles(mCirclesList);
         CircleWithArcs lastCircle = mCirclesList.get(mCirclesList.size() - 1);
         setCircleToMousePosition(lastCircle);
@@ -75,14 +68,12 @@ public class CirclesWithArcsRenderer implements CirclesRendererListener {
 
     @Override
     public void rotateCirclesAndRepaint(int wheelRotation) {
-        mFrameTimeCounter.setTimeBegin(System.nanoTime());
         rotateCircles(mCirclesList, wheelRotation);
         computeIntersectionsAndRepaintCanvas(0, 0);
     }
 
     @Override
     public void scaleCirclesAndRepaint(int wheelRotation) {
-        mFrameTimeCounter.setTimeBegin(System.nanoTime());
         prepareCirclesWhenRotatedOrScaled(mCirclesList);
         scaleCircles(mCirclesList, wheelRotation);
         computeIntersectionsAndRepaintCanvas(0, 0);
@@ -90,7 +81,6 @@ public class CirclesWithArcsRenderer implements CirclesRendererListener {
 
     @Override
     public void dragCirclesAndRepaint(Point point) {
-        mFrameTimeCounter.setTimeBegin(System.nanoTime());
         prepareCirclesWhenDragged(mCirclesList);
         int deltaX = (int) MOUSE_POINTER.getX() - point.x;
         int deltaY = (int) MOUSE_POINTER.getY() - point.y;
@@ -100,7 +90,6 @@ public class CirclesWithArcsRenderer implements CirclesRendererListener {
 
     @Override
     public void dropCirclesAndRepaint() {
-        mFrameTimeCounter.setTimeBegin(System.nanoTime());
         for (CircleWithArcs circle : mCirclesList) {
             circle.setX(circle.getX() - MOUSE_POINTER_DELTA.getX());
             circle.setY(circle.getY() - MOUSE_POINTER_DELTA.getY());

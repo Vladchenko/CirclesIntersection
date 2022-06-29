@@ -1,4 +1,4 @@
-package circlesintersection.computation;
+package circlesintersection.listeners;
 
 import java.awt.*;
 

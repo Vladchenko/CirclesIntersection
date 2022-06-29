@@ -1,7 +1,7 @@
 package circlesintersection.listeners;
 
-import circlesintersection.computation.CirclesRendererListener;
 import circlesintersection.presentation.GraphicsSettings;
+import circlesintersection.presentation.drawing.FrameTimeCounter;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -11,22 +11,27 @@ import java.awt.event.KeyListener;
  */
 public class KeyboardListenerImpl implements KeyListener {
 
-    private final GraphicsSettings mGraphicsSettings;
     private final KeyboardKeysHolder mKeysHolder;
+    private final FrameTimeCounter mFrameTimeCounter;
+    private final GraphicsSettings mGraphicsSettings;
     private final CirclesRendererListener mRendererListener;
 
     /**
      * Public constructor
      *
-     * @param rendererListener listener for UI updating callbacks
      * @param keysHolder       keys pressed holder
+     * @param graphicsSettings settings for drawings a circles and arcs on a canvas
+     * @param frameTimeCounter counter of time spent for one frame
+     * @param rendererListener listener for UI updating callbacks
      */
-    public KeyboardListenerImpl(CirclesRendererListener rendererListener,
-                                KeyboardKeysHolder keysHolder,
-                                GraphicsSettings graphicsSettings) {
-        mRendererListener = rendererListener;
+    public KeyboardListenerImpl(KeyboardKeysHolder keysHolder,
+                                GraphicsSettings graphicsSettings,
+                                FrameTimeCounter frameTimeCounter,
+                                CirclesRendererListener rendererListener) {
         mKeysHolder = keysHolder;
+        mFrameTimeCounter = frameTimeCounter;
         mGraphicsSettings = graphicsSettings;
+        mRendererListener = rendererListener;
     }
 
     @Override
@@ -46,17 +51,21 @@ public class KeyboardListenerImpl implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+            mFrameTimeCounter.setTimeBegin(System.nanoTime());
             mRendererListener.scatterCirclesComputeArcsAndRepaint();
         }
         if (e.getKeyCode() == KeyEvent.VK_G) {
+            mFrameTimeCounter.setTimeBegin(System.nanoTime());
             mGraphicsSettings.setGradientEnabled(!mGraphicsSettings.isGradientEnabled());
             mRendererListener.updateCirclesAndRepaint(null);
         }
         if (e.getKeyCode() == KeyEvent.VK_A) {
+            mFrameTimeCounter.setTimeBegin(System.nanoTime());
             mGraphicsSettings.setAntiAliasingEnabled(!mGraphicsSettings.isAntiAliasingEnabled());
             mRendererListener.updateCirclesAndRepaint(null);
         }
         if (e.getKeyCode() == KeyEvent.VK_M) {
+            mFrameTimeCounter.setTimeBegin(System.nanoTime());
             mGraphicsSettings.changeDrawingMode();
             mRendererListener.updateCirclesAndRepaint(null);
         }
@@ -64,6 +73,7 @@ public class KeyboardListenerImpl implements KeyListener {
             System.exit(0);
         }
         if (e.getKeyCode() == KeyEvent.VK_F) {
+            mFrameTimeCounter.setTimeBegin(System.nanoTime());
             mRendererListener.toggleFullScreen();
         }
         if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
