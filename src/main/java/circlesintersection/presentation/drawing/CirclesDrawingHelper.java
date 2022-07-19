@@ -64,28 +64,46 @@ public final class CirclesDrawingHelper {
         CircleWithArcs lastCircle = mCirclesList.get(mCirclesList.size() - 1);
         g2d.setColor(ARCS_COLOR);
         for (int i = 0; i < mCirclesList.size() - 1; i++) {
-            drawCircleCenter(g2d, mCirclesList.get(i), (int) MOUSE_POINTER_DELTA.getX(), (int) MOUSE_POINTER_DELTA.getY());
+            drawCircleCenter(g2d,
+                    (int) mCirclesList.get(i).getX() - (int) MOUSE_POINTER_DELTA.getX(),
+                    (int) mCirclesList.get(i).getY() - (int) MOUSE_POINTER_DELTA.getY());
         }
         g2d.setColor(SUBJECT_CIRCLE_COLOR);
-        drawCircleCenter(g2d, lastCircle, (int) MOUSE_POINTER_DELTA.getX(), (int) MOUSE_POINTER_DELTA.getY());
+        drawCircleCenter(g2d,
+                (int) lastCircle.getX() - (int) MOUSE_POINTER_DELTA.getX(),
+                (int) lastCircle.getY() - (int) MOUSE_POINTER_DELTA.getY());
     }
 
     private void drawCircles(Graphics2D g2d) {
         CircleWithArcs lastCircle = mCirclesList.get(mCirclesList.size() - 1);
         g2d.setColor(FADED_ARCS_COLOR);
         for (int i = 0; i < mCirclesList.size() - 1; i++) {
-            drawCircle(g2d, mCirclesList.get(i), (int) MOUSE_POINTER_DELTA.getX(), (int) MOUSE_POINTER_DELTA.getY());
+            drawCircle(g2d,
+                    (int) mCirclesList.get(i).getDiameter(),
+                    (int) mCirclesList.get(i).getX() - (int) MOUSE_POINTER_DELTA.getX(),
+                    (int) mCirclesList.get(i).getY() - (int) MOUSE_POINTER_DELTA.getY());
         }
         g2d.setColor(FADED_SUBJECT_CIRCLE_COLOR);
-        drawCircle(g2d, lastCircle, (int) MOUSE_POINTER_DELTA.getX(), (int) MOUSE_POINTER_DELTA.getY());
+        drawCircle(g2d,
+                (int) lastCircle.getDiameter(),
+                (int) lastCircle.getX() - (int) MOUSE_POINTER_DELTA.getX(),
+                (int) lastCircle.getY() - (int) MOUSE_POINTER_DELTA.getY());
     }
 
     private void drawCirclesGradients(Graphics2D g2d) {
         CircleWithArcs lastCircle = mCirclesList.get(mCirclesList.size() - 1);
         for (int i = 0; i < mCirclesList.size() - 1; i++) {
-            drawCircleGradient(g2d, mCirclesList.get(i), (int) MOUSE_POINTER_DELTA.getX(), (int) MOUSE_POINTER_DELTA.getY(), FADED_ARCS_COLOR);
+            drawCircleGradient(g2d,
+                    (int) mCirclesList.get(i).getDiameter(),
+                    (int) (mCirclesList.get(i).getX() - MOUSE_POINTER_DELTA.getX()),
+                    (int) (mCirclesList.get(i).getY() - MOUSE_POINTER_DELTA.getY()),
+                    FADED_ARCS_COLOR);
         }
-        drawCircleGradient(g2d, lastCircle, (int) MOUSE_POINTER_DELTA.getX(), (int) MOUSE_POINTER_DELTA.getY(), FADED_SUBJECT_CIRCLE_COLOR);
+        drawCircleGradient(g2d,
+                (int) lastCircle.getDiameter(),
+                (int) (lastCircle.getX() - MOUSE_POINTER_DELTA.getX()),
+                (int) (lastCircle.getY() - MOUSE_POINTER_DELTA.getY()),
+                FADED_SUBJECT_CIRCLE_COLOR);
     }
 
     public void setCirclesList(List<CircleWithArcs> circlesList) {

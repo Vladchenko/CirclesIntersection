@@ -1,7 +1,6 @@
 package circlesintersection.presentation.drawing;
 
 import circlesintersection.IllegalInstantiationException;
-import circlesintersection.models.CircleWithArcs;
 
 import java.awt.*;
 
@@ -22,11 +21,8 @@ public class CircleDrawingUtils {
      *
      * @param g2d Graphics component to perform drawing.
      */
-    public static void drawCircleCenter(Graphics2D g2d, CircleWithArcs circleWithArcs, int deltaX, int deltaY) {
-        g2d.drawOval(
-                (int)(circleWithArcs.getX() - deltaX),
-                (int)(circleWithArcs.getY() - deltaY),
-                1, 1);
+    public static void drawCircleCenter(Graphics2D g2d, int x, int y) {
+        g2d.drawOval(x, y, 1, 1);
     }
 
     /**
@@ -34,33 +30,26 @@ public class CircleDrawingUtils {
      *
      * @param g2d Graphics component to perform drawing.
      */
-    public static void drawCircle(Graphics2D g2d, CircleWithArcs circleWithArcs, int mouseX, int mouseY) {
-        g2d.drawOval((int)(circleWithArcs.getX() - mouseX) - (int) (circleWithArcs.getDiameter() / 2),
-                (int)(circleWithArcs.getY() - mouseY) - (int) (circleWithArcs.getDiameter() / 2),
-                (int) circleWithArcs.getDiameter(), (int) circleWithArcs.getDiameter());
+    public static void drawCircle(Graphics2D g2d, int diameter, int x, int y) {
+        g2d.drawOval(x - (diameter / 2), y - (diameter / 2), diameter, diameter);
     }
 
     /**
      * Drawing a circled gradient at the center of circle
      *
      * @param g2d    Graphics component to perform drawing.
-     * @param deltaX Extra X ordinate pixels.
-     * @param deltaY Extra Y ordinate pixels.
+     * @param x Extra X ordinate pixels.
+     * @param y Extra Y ordinate pixels.
      * @param color  Circle's gradient color
      */
-    public static void drawCircleGradient(Graphics2D g2d,
-                                   CircleWithArcs circleWithArcs,
-                                   int deltaX, int deltaY,
-                                   Color color) {
+    public static void drawCircleGradient(Graphics2D g2d, int diameter, int x, int y, Color color) {
         RadialGradientPaint gradientPaint = new RadialGradientPaint(
-                (float) circleWithArcs.getX() - deltaX,
-                (float) circleWithArcs.getY() - deltaY,
-                (float) (circleWithArcs.getDiameter() / 2),
+                x,
+                y,
+                diameter / 2f,
                 new float[]{(float) 0.0, (float) 1.0},
                 new Color[]{color, new Color(0, 0, 0, 0)});
         g2d.setPaint(gradientPaint);
-        g2d.fillOval((int)(circleWithArcs.getX() - deltaX) - (int) (circleWithArcs.getDiameter() / 2),
-                (int)(circleWithArcs.getY() - deltaY) - (int) (circleWithArcs.getDiameter() / 2),
-                (int) circleWithArcs.getDiameter(), (int) circleWithArcs.getDiameter());
+        g2d.fillOval(x - diameter / 2, y - diameter / 2, diameter, diameter);
     }
 }
